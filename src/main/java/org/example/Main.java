@@ -1,32 +1,23 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-        // Program startup
-//        Initializer.startUp();
-
-        StudentInput student = new StudentInput("coding, history, math, physics, biology, chemistry", "", 9, "", false);
+        StudentInput student = new StudentInput("music", "", 9, "university", false);
         ArrayList<String> courses = APIClient.getAPIData(student.getInterests());
-        CourseInfoMapper mapper = new CourseInfoMapper();
+        CourseAssembly mapper = new CourseAssembly();
 
-        for(String i : courses) {
-
-            CourseInfoMapper.Course course = mapper.getCourse(i);
-            String[] prerequisites = course.getPrerequisites();
-            int level = course.getGradeLevel();
-            String track = course.getTrack();
-            int gradRequirement = course.getGraduationRequirement();
-            String courseCode = course.getCourseCode();
-            course.engine(prerequisites, level, track, gradRequirement, courseCode, student);
+        for (String c : courses) {
+            CourseAssembly.Course course = mapper.getCourse(c);
+            if (course != null) {
+                course.engine(student);
+            }
         }
 
-
-        if (courses.isEmpty()) {
-            System.out.print("No courses found, enter more interests or do you want a random generated class schedule?");
-        } else {
-            System.out.println("[" + String.join(", ", courses) + "]");
-        }
+        CourseAssembly.Course.writeRecommendedCoursesToFile();
     }
+
 }

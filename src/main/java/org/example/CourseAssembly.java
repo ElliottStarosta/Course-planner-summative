@@ -3,19 +3,15 @@ package org.example;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Arrays;
+import java.io.*;
+import java.util.*;
 
-public class CourseInfoMapper {
+public class CourseAssembly {
     private static final String FILE_NAME = "src/main/model/CoursesFinal.xlsx";
     private Map<String, Course> courseMap = new HashMap<>();
+    private static Map<Integer, List<String>> recommendedCoursesByGrade = new HashMap<>();
 
-    public CourseInfoMapper() {
+    public CourseAssembly() {
         loadCourseData();
     }
 
@@ -30,16 +26,15 @@ public class CourseInfoMapper {
                 Row row = sheet.getRow(i);
                 if (row != null) {
                     String courseCode = getStringValue(row.getCell(0));
+                    String courseName = getStringValue(row.getCell(1));
                     String courseArea = getStringValue(row.getCell(3));
                     String prerequisites = getStringValue(row.getCell(4));
-
-                    String[] prerequisitesArray = prerequisites.split("\\s*,\\s*");
 
                     int gradeLevel = getIntValue(row.getCell(5));
                     String track = getStringValue(row.getCell(6));
                     int graduationRequirement = getIntValue(row.getCell(7));
 
-                    Course course = new Course(courseCode, courseArea, prerequisitesArray, gradeLevel, track, graduationRequirement);
+                    Course course = new Course(courseCode, courseName, courseArea, prerequisites, gradeLevel, track, graduationRequirement);
                     courseMap.put(courseCode, course);
                 }
             }
@@ -85,27 +80,18 @@ public class CourseInfoMapper {
         }
     }
 
-    public static void main(String[] args) {
-        CourseInfoMapper mapper = new CourseInfoMapper();
-        String courseCode = "PPL4O";
-
-        Course course = mapper.getCourse(courseCode);
-        String[] prerequisites = course.getPrerequisites(); // Get the prerequisites array
-        System.out.println(Arrays.toString(prerequisites)); // Print the array
-
-    }
-
-    // Define Course class encapsulating all attributes
-    static class Course {
+    class Course {
         private String courseCode;
+        private String courseName;
         private String courseArea;
-        private String[] prerequisites;
+        private String prerequisites;
         private int gradeLevel;
         private String track;
         private int graduationRequirement;
 
-        public Course(String courseCode, String courseArea, String[] prerequisites, int gradeLevel, String track, int graduationRequirement) {
+        public Course(String courseCode, String courseName, String courseArea, String prerequisites, int gradeLevel, String track, int graduationRequirement) {
             this.courseCode = courseCode;
+            this.courseName = courseName;
             this.courseArea = courseArea;
             this.prerequisites = prerequisites;
             this.gradeLevel = gradeLevel;
@@ -117,11 +103,15 @@ public class CourseInfoMapper {
             return courseCode;
         }
 
+        public String getCourseName() {
+            return courseName;
+        }
+
         public String getCourseArea() {
             return courseArea;
         }
 
-        public String[] getPrerequisites() {
+        public String getPrerequisites() {
             return prerequisites;
         }
 
@@ -136,10 +126,48 @@ public class CourseInfoMapper {
         public int getGraduationRequirement() {
             return graduationRequirement;
         }
-        // Writes classes to file, maybe return arraylist, i dont know
-        public void engine(String[] prerequisites, int level, String track, int gradRequirement, String courseCode, StudentInput student) {
-            String interests = student.getInterests();
-//            System.out.println(interests);
+
+        public void engine(StudentInput student) {
+            if (student.getGrade() > gradeLevel && !student.getTrack().equals(track.toLowerCase())) {
+                return;
+            }
+
+
+            String[] previousCoursesArray = student.getPreviousCourses().split("\\s*,\\s*");
+            if (Arrays.asList(previousCoursesArray).contains(courseCode)) {
+                return; // course already taken, skip
+            }
+
+            addCourse(courseCode, student);
+            if (!"none".equals(prerequisites)) {
+                Course prerequisiteCourse = getCourse(prerequisites);
+                prerequisiteCourse.engine(student);
+            }
+        }
+
+        private void addCourse(String courseCode, StudentInput student) {
+            int studentGrade = student.getGrade();
+            int courseGrade = getGradeLevel();
+
+            if (courseGrade >= studentGrade) {
+                List<String> coursesForGrade = recommendedCoursesByGrade.computeIfAbsent(courseGrade, k -> new ArrayList<>());
+                if (!coursesForGrade.contains(courseCode)) {
+                    coursesForGrade.add(courseCode);
+//                    coursesForGrade.add(this.getCourseName());
+                }
+            }
+        }
+
+        // Writes the recommended courses by grade to a file
+        public static void writeRecommendedCoursesToFile() {
+            try (FileWriter writer = new FileWriter("src/main/model/recommendedcourses.txt")) {
+                for (Map.Entry<Integer, List<String>> entry : recommendedCoursesByGrade.entrySet()) {
+                    writer.write(entry.getKey() + ": " + entry.getValue() + "\n");
+                }
+                System.out.println("Recommended courses written to recommendedcourses.txt");
+            } catch (IOException e) {
+                System.err.println("Error writing recommended courses to file: " + e.getMessage());
+            }
         }
     }
 }

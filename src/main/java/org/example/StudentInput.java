@@ -53,7 +53,7 @@ public class StudentInput {
 
             this.track = track;
         }
-        public String getpreviousCourses() {
+        public String getPreviousCourses() {
 
             return previousCourses;
         }
