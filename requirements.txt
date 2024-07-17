@@ -1,0 +1,10 @@
+# Required packages
+fastapi
+pydantic
+uvicorn
+pandas
+scikit-learn
+openpyxl
+pyspellchecker
+nltk
+joblib
