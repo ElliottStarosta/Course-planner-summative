@@ -265,12 +265,12 @@ def get_recommendations(interests: str = Query(..., description="Sentence descri
 
     
 # <===++ Main function to run the API ++===>
+multi_w2v = MultiCategoryWord2Vec()
 
 if __name__ == "__main__":
     input_file = "CoursesFinal.xlsx"
     model_file = "courses_model.pkl"
 
-    multi_w2v = MultiCategoryWord2Vec()
 
     # Preprocess and save the course data and trained model.
     data_processor = DataProcessor(input_file)
