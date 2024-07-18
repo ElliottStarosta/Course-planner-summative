@@ -230,12 +230,12 @@ class MultiCategoryWord2Vec:
 
         except Exception as e:
             print(f"Error in preprocessing student interests: {e}")
-            return interests
+            return interests  
 
 
 
 
-        # <==++ FastAPI Endpoint for Course Recommendations ++==>
+# <==++ FastAPI Endpoint for Course Recommendations ++==>
 
 @app.get("/recommend-courses/")
 def get_recommendations(interests: str = Query(..., description="Sentence describing the student's interests.")):
@@ -260,9 +260,9 @@ def get_recommendations(interests: str = Query(..., description="Sentence descri
     except Exception as e:
         # Handle any exceptions that occur during course recommendation process
         return {"error": f"An error occurred: {e}"}
+    
 
-
-
+    
 # <===++ Main function to run the API ++===>
 
 if __name__ == "__main__":
