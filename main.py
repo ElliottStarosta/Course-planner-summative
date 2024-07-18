@@ -1,5 +1,3 @@
-# <===++ Imports ++===>
-
 import pickle
 import pandas as pd
 import uvicorn
@@ -15,8 +13,10 @@ from spellchecker import SpellChecker
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 import nltk
-import os
-import joblib
+from gensim.models import Word2Vec
+from categories import categories
+
+
 
 nltk.download('punkt')
 
@@ -101,12 +101,13 @@ class DataProcessor:
         with open(model_file, "wb") as f:
             pickle.dump((model, tfidf_vectorizer), f)
 
-# <===++ Loads the trained model and course data, and computes then recommends the student their classes ++==>
+# <===++ Loads the trained model and course data, and computes then recommends the student their classes ++===>
 
 class CourseRecommendation:
-    def __init__(self, model_file, df_file):
+    def __init__(self, model_file, df_file, multi_w2v):
         self.model_file = model_file
         self.df_file = df_file
+        self.multi_w2v = multi_w2v
 
     def recommend_classes(self, student_input):
         try:
@@ -116,9 +117,14 @@ class CourseRecommendation:
             # Load the course data from the Excel file
             df = pd.read_excel(self.df_file, sheet_name="Sheet1")
 
-            # Extract student interests from input and transform to TF-IDF vector
-            interests = student_input["interests"]
-            interests_tfidf = tfidf_vectorizer.transform([interests]).toarray()
+            # Preprocess student interests using SpellChecker
+            corrected_interests = SpellCheck.suggest_correct_word(student_input["interests"])
+
+            # Preprocess student interests using Word2Vec for semantic similarity
+            processed_interests = self.multi_w2v.preprocess_student_interests(corrected_interests)
+
+            # Extract TF-IDF for processed student interests
+            interests_tfidf = tfidf_vectorizer.transform([processed_interests]).toarray()
 
             similarities = []
             # Calculate cosine similarity between student interests and each course
@@ -145,7 +151,9 @@ class CourseRecommendation:
             print(f"Error in recommending courses: {e}")
             return -1
 
-# <===++ Spell checks interests ++==>
+
+
+# <===++ SpellCheck class for correcting student interests ++===>
 
 class SpellCheck:
     @staticmethod
@@ -157,23 +165,14 @@ class SpellCheck:
             # Tokenize and convert interests to lowercase
             interests_words = word_tokenize(interests.lower())
 
-            # Define a custom stemming function using PorterStemmer
-            def custom_stem(word):
-                if word.endswith('ing'):
-                    return PorterStemmer().stem(word)
-                else:
-                    return word
-
-            # Apply custom stemming to each word in interests
-            stemmed_words = [custom_stem(word) for word in interests_words]
-
-            # Use the SpellChecker instance to correct each stemmed word
-            corrected_words = [spell.correction(word) if spell.correction(word) is not None else word for word in stemmed_words]
+            # Use the SpellChecker instance to correct each word
+            corrected_words = [spell.correction(word) if spell.unknown([word]) else word for word in interests_words]
 
             # Join corrected words into a sentence
             corrected_sentence = " ".join(corrected_words)
 
             return corrected_sentence
+
 
         except Exception as e:
             # Handle any exceptions that occur during spell checking
@@ -181,19 +180,72 @@ class SpellCheck:
             return interests
 
 
-# <==++ FastAPI Endpoint for Course Recommendations ++==>
+#<==++ Word vectorizing for synonyms & mapping++===>
+class MultiCategoryWord2Vec:
+    def __init__(self, vector_size=100, window=5, min_count=1, workers=4):
+        self.vector_size = vector_size
+        self.window = window
+        self.min_count = min_count
+        self.workers = workers
+        self.categories = categories
+        self.models = self.train_models()
+
+    def train_models(self):
+        models = []
+        for category in self.categories:
+            model = Word2Vec([category], vector_size=self.vector_size, window=self.window,
+                             min_count=self.min_count, workers=self.workers)
+            models.append(model)
+        return models
+
+    def find_similar_words(self, word, topn=3):
+        results = []
+        for idx, model in enumerate(self.models):
+            if word in model.wv.key_to_index:
+                similar_words = model.wv.most_similar(word, topn=topn)
+                results.extend([(word, score) for word, score in similar_words])
+        return results
+
+    def preprocess_student_interests(self, interests, topn=3):
+        try:
+            # Tokenize student interests
+            tokens = word_tokenize(interests.lower())
+
+            # Placeholder for processed interests (using Word2Vec for finding related terms)
+            processed_interests = []
+
+            # Iterate over tokens and find similar words within categories
+            for token in tokens:
+                similar_words = self.find_similar_words(token, topn=topn)
+                if similar_words:
+                    similar_tokens = [word for word, _ in similar_words]
+                    processed_interests.extend([token] + similar_tokens)
+                else:
+                    processed_interests.append(token)  # Keep the original token if no similar word found
+
+            # Join processed interests back into a string
+            preprocessed_interests = " ".join(processed_interests)
+
+            return preprocessed_interests
+
+        except Exception as e:
+            print(f"Error in preprocessing student interests: {e}")
+            return interests
+
+
+
+
+        # <==++ FastAPI Endpoint for Course Recommendations ++==>
 
 @app.get("/recommend-courses/")
 def get_recommendations(interests: str = Query(..., description="Sentence describing the student's interests.")):
     try:
-        # Correct student's interests using SpellCheck class
-        corrected_interests_sentence = SpellCheck.suggest_correct_word(interests)
 
         # Prepare student input dictionary for course recommendation
-        student_input = {"interests": corrected_interests_sentence}
+        student_input = {"interests": interests}
 
         # Initialize CourseRecommendation object with model and data files
-        course_rec = CourseRecommendation(model_file="courses_model.pkl", df_file="CoursesFinal.xlsx")
+        course_rec = CourseRecommendation(model_file="courses_model.pkl", df_file="CoursesFinal.xlsx", multi_w2v=multi_w2v)
 
         # Get recommended courses based on student's corrected interests
         recommended_courses = course_rec.recommend_classes(student_input)
@@ -210,19 +262,21 @@ def get_recommendations(interests: str = Query(..., description="Sentence descri
         return {"error": f"An error occurred: {e}"}
 
 
-# <===++ Main function to run the API ++==>
-import os
+
+# <===++ Main function to run the API ++===>
 
 if __name__ == "__main__":
-    # input_file = "CoursesSummative/src/main/CoursesFinal.xlsx" 
-    # model_file = "CoursesSummative/src/main/courses_model.pkl"
-
     input_file = "CoursesFinal.xlsx"
     model_file = "courses_model.pkl"
+
+    multi_w2v = MultiCategoryWord2Vec()
 
     # Preprocess and save the course data and trained model.
     data_processor = DataProcessor(input_file)
     data_processor.preprocess_and_save(model_file)
+
+    # Initialize CourseRecommendation object with model, data files, and Word2Vec model
+    course_rec = CourseRecommendation(model_file=model_file, df_file=input_file, multi_w2v=multi_w2v)
 
     # Starts the FastAPI server
     uvicorn.run(app, host="127.0.0.1", port=8000)
