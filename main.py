@@ -18,6 +18,7 @@ from categories import categories
 
 
 
+
 nltk.download('punkt')
 
 # <===++ FastAPI setup ++===>
