@@ -109,6 +109,12 @@ class CourseRecommendation:
         self.model_file = model_file
         self.df_file = df_file
         self.multi_w2v = multi_w2v
+        # Courses it cannot recommend 
+        self.excluded_course_codes = [
+            "ENL1W", "MTH1W", "SNC1W", "CGC1W", "ENG2D", "MPM2D", "SNC2D",
+            "CHC2D", "CHV2O", "NBE3U", "MCR3U", "ENG4U", "MHF4U", "MCV4U",
+            "NBE3C", "MBF3C", "ENG4C"
+        ]
 
     def recommend_classes(self, student_input):
         try:
@@ -130,13 +136,17 @@ class CourseRecommendation:
             similarities = []
             # Calculate cosine similarity between student interests and each course
             for index, row in df.iterrows():
-                course_interests_tfidf = tfidf_vectorizer.transform([row["Interests Tags"]]).toarray()
-                similarity = cosine_similarity(interests_tfidf, course_interests_tfidf)[0][0]
-                if similarity:
-                    similarities.append((row["Course Code"], row["Course Name"], similarity))
+                if row["Course Code"] not in self.excluded_course_codes:
+                    course_interests_tfidf = tfidf_vectorizer.transform([row["Interests Tags"]]).toarray()
+                    similarity = cosine_similarity(interests_tfidf, course_interests_tfidf)[0][0]
+                    if similarity:
+                        similarities.append((row["Course Code"], row["Course Name"], similarity))
 
             # Sort courses by similarity in descending order
             similarities.sort(key=lambda x: x[2], reverse=True)
+
+            #Limit the number of recommended courses to 20 (this is the max number of open spots)
+            top_similarities = similarities[:20]
 
             # Handle case where no similar courses are found
             if not similarities:
@@ -144,7 +154,7 @@ class CourseRecommendation:
                 return -1
 
             # Format recommended courses into a list of dictionaries
-            recommended_courses = [{"Course Code": course[0], "Course Name": course[1]} for course in similarities]
+            recommended_courses = [{"Course Code": course[0], "Course Name": course[1]} for course in top_similarities]
 
             return recommended_courses
 
@@ -205,6 +215,7 @@ class MultiCategoryWord2Vec:
             if word in model.wv.key_to_index:
                 similar_words = model.wv.most_similar(word, topn=topn)
                 results.extend([(word, score) for word, score in similar_words])
+        print(results)
         return results
 
     def preprocess_student_interests(self, interests, topn=3):
@@ -280,4 +291,4 @@ if __name__ == "__main__":
     course_rec = CourseRecommendation(model_file=model_file, df_file=input_file, multi_w2v=multi_w2v)
 
     # Starts the FastAPI server
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8001)
