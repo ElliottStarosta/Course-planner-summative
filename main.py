@@ -1,37 +1,38 @@
+# <==++ Standard Library Imports ++==>
 import pickle
+import string
+
+# <==++ Third-Party Library Imports ++==>
 import pandas as pd
 import uvicorn
 from fastapi import FastAPI, Query
+from gensim.models import Word2Vec
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 from pydantic import BaseModel
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
-
 from spellchecker import SpellChecker
-from nltk.stem import PorterStemmer
-from nltk.tokenize import word_tokenize
-import nltk
-from gensim.models import Word2Vec
+
+# <===++ Local Imports ++==>
 from categories import categories
 
-
-
-
+# <===++ Load pre-trained data ++==>
 nltk.download('punkt')
+nltk.download('stopwords')
 
 # <===++ FastAPI setup ++===>
-
 app = FastAPI()
 
 # <==++ Defines the pydantic model that represents incoming requests to the API endpoint ++==>
-
 class RecommendRequest(BaseModel):
     interests: str
 
 # <===++ Handles data preprocessing tasks ++==>
-
 class DataProcessor:
     def __init__(self, file_path):
         self.file_path = file_path
@@ -92,17 +93,12 @@ class DataProcessor:
         model = RandomForestClassifier(random_state=42)
         model.fit(df_final, y)
 
-        y_pred = model.predict(X_test)
-
-        # Calculate accuracy
-        accuracy = accuracy_score(y_test, y_pred)
 
         # Save the model and TF-IDF vectorizer
         with open(model_file, "wb") as f:
             pickle.dump((model, tfidf_vectorizer), f)
 
 # <===++ Loads the trained model and course data, and computes then recommends the student their classes ++===>
-
 class CourseRecommendation:
     def __init__(self, model_file, df_file, multi_w2v):
         self.model_file = model_file
@@ -114,7 +110,7 @@ class CourseRecommendation:
             "CHC2D", "CHV2O", "NBE3U", "MCR3U", "ENG4U", "MHF4U", "MCV4U",
             "NBE3C", "MBF3C", "ENG4C"
         ]
-
+    # <===++ Preprocesses student interests using SpellChecker and Word2Vec for semantic similarity, and then recommend courses ++==>
     def recommend_classes(self, student_input):
         try:
             with open(self.model_file, "rb") as f:
@@ -164,7 +160,6 @@ class CourseRecommendation:
 
 
 # <===++ SpellCheck class for correcting student interests ++===>
-
 class SpellCheck:
     @staticmethod
     def suggest_correct_word(interests):
@@ -174,6 +169,17 @@ class SpellCheck:
 
             # Tokenize and convert interests to lowercase
             interests_words = word_tokenize(interests.lower())
+
+            # Remove punctuation from the tokenized words
+            interests_words = [word for word in interests_words if word not in string.punctuation]
+
+
+             # Remove stopwords from the tokenized words
+            stop_words = set(stopwords.words('english'))
+            stop_words.update(['like']) # custom word for 'like' as it is not in the set...
+
+            interests_words = [word for word in interests_words if word not in stop_words]
+            
 
             # Use the SpellChecker instance to correct each word
             corrected_words = [spell.correction(word) if spell.unknown([word]) else word for word in interests_words]
@@ -190,7 +196,7 @@ class SpellCheck:
             return interests
 
 
-#<==++ Word vectorizing for synonyms & mapping++===>
+#<==++ Word vectorizing for synonyms & mapping ++===>
 class MultiCategoryWord2Vec:
     def __init__(self, vector_size=100, window=5, min_count=1, workers=4):
         self.vector_size = vector_size
@@ -200,6 +206,7 @@ class MultiCategoryWord2Vec:
         self.categories = categories
         self.models = self.train_models()
 
+    #<==++ Train the models based on caloric data ++===>
     def train_models(self):
         models = []
         for category in self.categories:
@@ -208,6 +215,7 @@ class MultiCategoryWord2Vec:
             models.append(model)
         return models
 
+    # <==++ Find similar words within categories using Word2Vec ++===>
     def find_similar_words(self, word, topn=3):
         results = []
         for idx, model in enumerate(self.models):
@@ -216,6 +224,7 @@ class MultiCategoryWord2Vec:
                 results.extend([(word, score) for word, score in similar_words])
         return results
 
+    # <==++ Preprocess student interests by finding similar words within categories using Word2Vec ++===>
     def preprocess_student_interests(self, interests, topn=3):
         try:
             # Tokenize student interests
@@ -227,8 +236,9 @@ class MultiCategoryWord2Vec:
             # Iterate over tokens and find similar words within categories
             for token in tokens:
                 similar_words = self.find_similar_words(token, topn=topn)
+
                 if similar_words:
-                    similar_tokens = [word for word, _ in similar_words]
+                    similar_tokens = [word for word, _ in similar_words[:topn]]
                     processed_interests.extend([token] + similar_tokens)
                 else:
                     processed_interests.append(token)  # Keep the original token if no similar word found
@@ -240,13 +250,12 @@ class MultiCategoryWord2Vec:
 
         except Exception as e:
             print(f"Error in preprocessing student interests: {e}")
-            return interests  
+            return interests
 
 
 
 
 # <==++ FastAPI Endpoint for Course Recommendations ++==>
-
 @app.get("/recommend-courses/")
 def get_recommendations(interests: str = Query(..., description="Sentence describing the student's interests.")):
     try:
