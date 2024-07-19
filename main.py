@@ -96,7 +96,6 @@ class DataProcessor:
 
         # Calculate accuracy
         accuracy = accuracy_score(y_test, y_pred)
-        print(f"Model Accuracy: {accuracy:.2f}")
 
         # Save the model and TF-IDF vectorizer
         with open(model_file, "wb") as f:
@@ -215,7 +214,6 @@ class MultiCategoryWord2Vec:
             if word in model.wv.key_to_index:
                 similar_words = model.wv.most_similar(word, topn=topn)
                 results.extend([(word, score) for word, score in similar_words])
-        print(results)
         return results
 
     def preprocess_student_interests(self, interests, topn=3):
