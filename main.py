@@ -296,6 +296,5 @@ if __name__ == "__main__":
 
     # Initialize CourseRecommendation object with model, data files, and Word2Vec model
     course_rec = CourseRecommendation(model_file=model_file, df_file=input_file, multi_w2v=multi_w2v)
-
     # Starts the FastAPI server
     uvicorn.run(app, host="127.0.0.1", port=8001)
