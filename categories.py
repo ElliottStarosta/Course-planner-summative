@@ -535,5 +535,7 @@ categories = [
     ['nurse', 'biology', 'chemistry', 'health studies'],
     ['programmer', 'computer science', 'physics'],
     ['journalist', 'english', 'history', 'government'],
-    ['social worker', 'psychology', 'sociology', 'english']
+    ['social worker', 'psychology', 'sociology', 'english'],
+    ['chief', 'cook', 'cooking'],
+    ['accountant', 'business', 'accounting'],
 ]
