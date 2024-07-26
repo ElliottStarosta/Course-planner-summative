@@ -409,6 +409,7 @@ categories = [
     ['food', 'organic foods'],
     ['food', 'food microbiology'],
     ['food', 'dietary supplements'],
+    ['food','cooking'],
 
     # Health & Physical Education
     ['health', 'physical fitness'],
