@@ -1,11 +1,13 @@
 package org.example.people;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class User {
@@ -17,12 +19,16 @@ public class User {
 
     public static final String USERS_FILE = "src/main/resources/users.json";
 
-
     // No-argument constructor for Jackson deserialization
     public User() {}
 
     // Constructor with arguments
-    public User(@JsonProperty("username") String username, @JsonProperty("password") String password, @JsonProperty("email") String email, @JsonProperty("firstName") String firstName, @JsonProperty("lastName") String lastName) {
+    @JsonCreator
+    public User(@JsonProperty("username") String username,
+                @JsonProperty("password") String password,
+                @JsonProperty("email") String email,
+                @JsonProperty("firstName") String firstName,
+                @JsonProperty("lastName") String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -57,7 +63,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = new String(Base64.getEncoder().encode(password.getBytes())); // Encode the password
     }
 
     public void setEmail(String email) {

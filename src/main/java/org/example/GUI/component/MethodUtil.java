@@ -2,6 +2,7 @@ package org.example.GUI.component;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.example.GUI.login.PasswordChange;
 import org.example.GUI.manager.FormsManager;
 import org.example.people.User;
@@ -64,7 +65,7 @@ public class MethodUtil {
     // Method to check if the string contains an email address with specified domains
     public static boolean checkEmailAddress(String input) {
         // Define the regex pattern to match common email domains
-        String regex = "\\b[A-Za-z0-9._%+-]+@(gmail|yahoo|hotmail|outlook)\\.com\\b";
+        String regex = "\\b[A-Za-z0-9._%+-]+@(gmail|yahoo|hotmail|outlook|ocdsb)\\.(com|ca)\\b";
 
         // Compile the regex pattern
         Pattern pattern = Pattern.compile(regex);
@@ -124,6 +125,23 @@ public class MethodUtil {
             CourseAssembly.recommendedCoursesByGrade.put(grade, courses);
         }
 
+    }
+
+
+    public static void saveUsersToJson(List<User> users) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+        // Encode passwords before saving (sets the password to be encoded)
+        for (User user : users) {
+            user.setPassword(user.getPassword());
+        }
+
+        try {
+            objectMapper.writeValue(new File(User.USERS_FILE), users);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 public class Login extends JPanel {
@@ -150,15 +151,20 @@ public class Login extends JPanel {
 
     private void handleLogin() {
         String username = usernameField.getText().trim();
-        String password = String.valueOf(passwordField.getPassword()).trim();
+        String password = encodePassword(String.valueOf(passwordField.getPassword()).trim());
+
 
         if (username.isEmpty() || password.isEmpty()) {
             Notifications.getInstance().show(Notifications.Type.WARNING, "Please ensure all fields are completed.");
             return;
         }
 
-        boolean userFound = users.stream()
-                .anyMatch(user -> user.getUsername().equals(username) && user.getPassword().equals(password));
+        Optional<User> foundUser = users.stream()
+                .filter(user -> user.getUsername().equals(username) && user.getPassword().equals(password))
+                .findFirst();
+
+        boolean userFound = foundUser.isPresent();
+        User user = foundUser.orElse(null);
 
         if (userFound) {
             if (rememberMeCheck.isSelected()) {
@@ -167,6 +173,26 @@ public class Login extends JPanel {
                 clearLoginInfo();
             }
             Notifications.getInstance().show(Notifications.Type.SUCCESS, "Login successful");
+
+            // Create a SwingWorker to handle the delay without blocking the UI thread
+            SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+                @Override
+                protected Void doInBackground() throws Exception {
+                    // Introduce a delay
+                    Thread.sleep(3000);
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    // Show the second notification
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS, "Welcome back " + user.getFirstName() + "!");
+                }
+            };
+
+            // Execute the SwingWorker
+            worker.execute();
+
             FormsManager.getInstance().showForm(new MainPage());
         } else {
             Notifications.getInstance().show(Notifications.Type.ERROR, "Incorrect username or password.");
@@ -178,7 +204,7 @@ public class Login extends JPanel {
         Properties properties = new Properties();
         try (FileOutputStream out = new FileOutputStream(PROPERTIES_FILE)) {
             properties.setProperty("username", username);
-            properties.setProperty("password", encodePassword(password));
+            properties.setProperty("password", password);
             properties.store(out, null);
         } catch (IOException e) {
             e.printStackTrace();

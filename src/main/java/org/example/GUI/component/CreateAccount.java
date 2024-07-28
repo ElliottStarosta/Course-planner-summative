@@ -6,6 +6,7 @@ import org.example.people.User;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 public class CreateAccount {
@@ -32,7 +33,7 @@ public class CreateAccount {
 
         User newUser = new User(username, password, email, firstName, lastName);
         users.add(newUser);
-        saveUsersToJson(users);
+        MethodUtil.saveUsersToJson(users);
 
         return AccountCreationStatus.SUCCESS;
     }
@@ -55,13 +56,5 @@ public class CreateAccount {
         return false;
     }
 
-    private void saveUsersToJson(List<User> users) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        try {
-            objectMapper.writeValue(new File(User.USERS_FILE), users);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 }

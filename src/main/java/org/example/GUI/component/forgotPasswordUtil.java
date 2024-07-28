@@ -6,6 +6,7 @@ import org.example.people.User;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 public class forgotPasswordUtil {
@@ -25,17 +26,7 @@ public class forgotPasswordUtil {
     private static void updateUser(User user, String password) {
         user.setPassword(password);
 
-        saveUsersToJson(users);
-    }
-
-    private static void saveUsersToJson(List<User> users) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        try {
-            objectMapper.writeValue(new File(User.USERS_FILE), users);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        MethodUtil.saveUsersToJson(users);
     }
 
 
