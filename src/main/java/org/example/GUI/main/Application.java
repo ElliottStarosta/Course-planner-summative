@@ -28,6 +28,11 @@ public class Application extends JFrame {
 //        setContentPane(new PasswordChange());
         Notifications.getInstance().setJFrame(this);
         FormsManager.getInstance().initApplication(this);
+
+//        Image iconImage = Toolkit.getDefaultToolkit().getImage("src/main/java/org/example/GUI/component/Support.ico");
+//
+//        // Set the icon image to the JFrame
+//        setIconImage(iconImage);
     }
 
     public static void main(String[] args) {

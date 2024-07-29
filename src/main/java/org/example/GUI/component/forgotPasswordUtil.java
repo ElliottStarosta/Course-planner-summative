@@ -26,16 +26,18 @@ public class forgotPasswordUtil {
     private static void updateUser(User user, String password) {
         user.setPassword(password);
 
-        MethodUtil.saveUsersToJson(users);
+        MethodUtil.saveUsersToJsonPassword(users);
     }
 
 
     private static User findUserWithEmail(String email) {
         new forgotPasswordUtil();
         for (User user : users) {
-            if (user.getEmail().equals(email));
-            return user;
+            if (user.getEmail().equals(email)) {
+                return user;
+            }
         }
         return null;
     }
+
 }

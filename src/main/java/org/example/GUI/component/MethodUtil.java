@@ -144,4 +144,17 @@ public class MethodUtil {
         }
     }
 
+
+    public static void saveUsersToJsonPassword(List<User> users) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+
+        try {
+            objectMapper.writeValue(new File(User.USERS_FILE), users);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
