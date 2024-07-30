@@ -44,16 +44,22 @@ public class Login extends JPanel {
         loginButton = new JButton("Login");
 
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 35 45 30 45","fill, 250:280"));
+        panel.setPreferredSize(new Dimension(450, 300));
 
         panel.putClientProperty(FlatClientProperties.STYLE,
                 "arc:20;" +
                 "[light]background:darken(@background,3%);" +
                 "[dark]background:lighten(@background,3%)");
 
+        panel.putClientProperty(FlatClientProperties.STYLE,
+                "arc:20;" +
+                        "[light]background:darken(@background,3%);" +
+                        "[dark]background:lighten(@background,3%)");
+
         passwordField.putClientProperty(FlatClientProperties.STYLE,
                 "showRevealButton:true");
 
-        usernameField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your username");
+        usernameField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your email or username");
         passwordField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your password");
 
         loginButton.putClientProperty(FlatClientProperties.STYLE, "" +
@@ -79,7 +85,7 @@ public class Login extends JPanel {
 
         panel.add(title);
         panel.add(description);
-        panel.add(new JLabel("Username"), "gapy 8");
+        panel.add(new JLabel("Email or username"), "gapy 8");
         panel.add(usernameField);
         panel.add(new JLabel("Password"), "gapy 8");
         panel.add(passwordField);
@@ -160,7 +166,7 @@ public class Login extends JPanel {
         }
 
         Optional<User> foundUser = users.stream()
-                .filter(user -> user.getUsername().equals(username) && user.getPassword().equals(password))
+                .filter(user -> (user.getUsername().equals(username) && user.getPassword().equals(password)) || user.getEmail().equals(username) && user.getPassword().equals(password))
                 .findFirst();
 
         boolean userFound = foundUser.isPresent();

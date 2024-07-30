@@ -39,7 +39,7 @@ public class PasswordStrengthStatus extends JPanel {
         } else if (type == 2) {
             return Color.decode("#FFB04D");
         } else {
-            return Color.decode("#58C359");
+            return Color.decode("#16a34a");
         }
     }
 
@@ -51,11 +51,11 @@ public class PasswordStrengthStatus extends JPanel {
         } else {
             label.setVisible(true);
             if (type == 1) {
-                label.setText("Too weak");
+                label.setText("Weak: Please make your password stronger.");
             } else if (type == 2) {
-                label.setText("Medium");
+                label.setText("Moderate: Consider adding more complexity.");
             } else {
-                label.setText("Strong");
+                label.setText("Strong: Your password is secure.");
             }
             label.setForeground(getStrengthColor(type));
         }
