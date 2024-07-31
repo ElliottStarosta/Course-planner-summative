@@ -1,10 +1,10 @@
 package org.example.utility;
 
+import org.example.GUI.component.NotificationManager;
 import org.example.people.Counselor;
 import org.example.people.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import raven.toast.Notifications;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -74,7 +74,7 @@ public class SendEmail {
                             "</td></tr></table></td></tr>" +
                             "</table></td></tr></table></div></body></html>";
 
-            Notifications.getInstance().show(Notifications.Type.INFO, "Processing Request...");
+            NotificationManager.showNotification(NotificationManager.NotificationType.INFO, "Processing Request...");
             msg.setContent(htmlBody, "text/html");
             msg.setSubject(subject);
             msg.setFrom(new InternetAddress(SENDER_EMAIL));

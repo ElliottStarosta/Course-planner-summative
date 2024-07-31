@@ -4,10 +4,10 @@ package org.example.GUI.login;
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import org.example.GUI.component.MethodUtil;
+import org.example.GUI.component.NotificationManager;
 import org.example.GUI.component.PasswordStrengthStatus;
 import org.example.GUI.component.forgotPasswordUtil;
 import org.example.GUI.manager.FormsManager;
-import raven.toast.Notifications;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,18 +32,20 @@ public class PasswordChange extends JPanel {
         resetPasswordBtn.addActionListener(e -> {
             if (!isFilled()) {
                 // Check if any fields are not filled
-                Notifications.getInstance().show(Notifications.Type.ERROR, "Please ensure all required fields are completed.");
+                NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Please ensure all required fields are completed");
             } else if (!isMatchPassword()) {
                 // Check if passwords do not match
-                Notifications.getInstance().show(Notifications.Type.ERROR, "Passwords do not match. Please try again.");
+                NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Passwords do not match. Please try again");
+
             }else {
                 // Check the password strength
                 int passwordStrength = MethodUtil.checkPasswordStrength(String.valueOf(Password.getPassword()));
                 if (passwordStrength < 3) {
-                    Notifications.getInstance().show(Notifications.Type.ERROR, "Password needs to be stronger.");
+                    NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Password needs to be stronger");
                 } else {
                     forgotPasswordUtil.forgotPassword(email, Password.getText());
-                    Notifications.getInstance().show(Notifications.Type.SUCCESS, "Your password has been successfully updated");
+                    NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Your password has been successfully updated");
+
                     FormsManager.getInstance().showForm(new Login());
 
                 }

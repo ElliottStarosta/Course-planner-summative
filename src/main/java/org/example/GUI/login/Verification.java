@@ -4,8 +4,8 @@ package org.example.GUI.login;
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import org.example.GUI.component.MethodUtil;
+import org.example.GUI.component.NotificationManager;
 import org.example.GUI.component.TwoFactorAuthentication;
-import raven.toast.Notifications;
 
 import javax.swing.*;
 import java.awt.*;
@@ -111,7 +111,8 @@ public class Verification extends JPanel {
                         if (allFieldsFull) {
                             MethodUtil.isCorrectCode(codeFields,generatedCode, email);
                         } else {
-                            Notifications.getInstance().show(Notifications.Type.WARNING, "Please ensure all required fields are completed.");
+                            NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Please ensure all required fields are completed");
+
 
                         }
                     }
@@ -152,15 +153,15 @@ public class Verification extends JPanel {
                 "innerFocusWidth:0;" + "font: bold +2" );
 
         submitBtn.setPreferredSize(new Dimension(submitBtn.getPreferredSize().width, 45));
+        submitBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         submitBtn.addActionListener(e -> {
-            System.out.println("clicked");
             boolean allFieldsFull = TwoFactorAuthentication.areFieldsFull(codeFields);
 
             if (allFieldsFull) {
                 MethodUtil.isCorrectCode(codeFields,generatedCode, email);
             } else {
-                Notifications.getInstance().show(Notifications.Type.WARNING, "Please ensure all required fields are completed.");
+                NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Please ensure all required fields are completed");
 
             }
         });

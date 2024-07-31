@@ -5,9 +5,9 @@ import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import org.example.GUI.component.CreateAccount;
 import org.example.GUI.component.MethodUtil;
+import org.example.GUI.component.NotificationManager;
 import org.example.GUI.component.PasswordStrengthStatus;
 import org.example.GUI.manager.FormsManager;
-import raven.toast.Notifications;
 
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
@@ -129,20 +129,22 @@ public class Register extends JPanel {
 
     private void handleRegister() {
         if (!isFilled()) {
-            Notifications.getInstance().show(Notifications.Type.ERROR, "Please ensure all required fields are completed.");
+            NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Please ensure all required fields are completed");
             if ((Username.getText().length() < 5)) {
-                Notifications.getInstance().show(Notifications.Type.ERROR, "Username must be at least 5 characters long.");
+                NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Username must be at least 5 characters long");
             }
         } else if (!isMatchPassword()) {
             // Check if passwords do not match
-            Notifications.getInstance().show(Notifications.Type.ERROR, "Passwords do not match. Please try again.");
+            NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Passwords do not match. Please try again");
         } else if (!MethodUtil.checkEmailAddress(Email.getText())) {
-            Notifications.getInstance().show(Notifications.Type.ERROR, "Enter a valid email address");
+            NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Enter a valid email address");
+
         } else {
             // Check the password strength
             int passwordStrength = MethodUtil.checkPasswordStrength(String.valueOf(Password.getPassword()));
             if (passwordStrength < 3) {
-                Notifications.getInstance().show(Notifications.Type.ERROR, "Password needs to be stronger.");
+                NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Password needs to be stronge");
+
             } else {
                 // If all fields are filled, passwords match, and password strength is adequate, proceed with account creation
                 String username = Username.getText();
@@ -155,11 +157,15 @@ public class Register extends JPanel {
 
 
                 if (status == CreateAccount.AccountCreationStatus.USERNAME_TAKEN) {
-                    Notifications.getInstance().show(Notifications.Type.ERROR, "This username is already taken. Please select a different username");
+                    NotificationManager.showNotification(NotificationManager.NotificationType.ERROR, "This username is already taken. Please select a different username");
+
                 } else if (status == CreateAccount.AccountCreationStatus.EMAIL_TAKEN) {
-                    Notifications.getInstance().show(Notifications.Type.ERROR, "This email is already being used. Please select a different email");
+                    NotificationManager.showNotification(NotificationManager.NotificationType.ERROR, "This email is already being used. Please select a different email");
+
                 } else {
-                    Notifications.getInstance().show(Notifications.Type.SUCCESS, "Account Created!");
+                    NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Account Created");
+
+
                     FormsManager.getInstance().showForm(new Login());
                 }
             }
@@ -221,7 +227,7 @@ public class Register extends JPanel {
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
                 if (string == null) return;
                 if (fb.getDocument().getLength() + string.length() > maxLength) {
-                    Notifications.getInstance().show(Notifications.Type.ERROR, "Username must be less than 30 characters");
+                    NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Username must be less than 30 characters");
                 } else {
                     super.insertString(fb, offset, string, attr);
                 }
@@ -232,7 +238,7 @@ public class Register extends JPanel {
             public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
                 if (text == null) return;
                 if (fb.getDocument().getLength() - length + text.length() > maxLength) {
-                    Notifications.getInstance().show(Notifications.Type.ERROR, "Username must be less than 30 characters");
+                    NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Username must be less than 30 characters");
                 } else {
                     super.replace(fb, offset, length, text, attrs);
                 }

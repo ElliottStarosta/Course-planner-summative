@@ -1,12 +1,7 @@
 package org.example.GUI.component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.example.people.User;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 
 public class CreateAccount {

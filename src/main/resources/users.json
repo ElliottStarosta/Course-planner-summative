@@ -1,13 +1,19 @@
 [ {
   "username" : "Starlliott",
-  "password" : "UmVteWRvZzIwMjQh",
+  "password" : "VW1WdGVXUnZaekl3TWpRaA==",
   "email" : "JS@gmail.com",
   "firstName" : "Jackson",
   "lastName" : "Spicer"
 }, {
   "username" : "Estarosta",
-  "password" : "SWFtaXJvbjEyIQ==",
+  "password" : "U1dGdGFYSnZiakV5SVE9PQ==",
   "email" : "fenceryounger@gmail.com",
   "firstName" : "E",
   "lastName" : "S"
+}, {
+  "username" : "Starlliott1",
+  "password" : "UmVteWRvZzIwMjIh",
+  "email" : "fenceryoung@gmail.com",
+  "firstName" : "Elliott",
+  "lastName" : "Starosta"
 } ]

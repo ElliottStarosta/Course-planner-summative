@@ -2,9 +2,9 @@ package org.example.GUI.login;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
+import org.example.GUI.component.NotificationManager;
 import org.example.GUI.manager.FormsManager;
 import org.example.people.User;
-import raven.toast.Notifications;
 
 import javax.swing.*;
 import java.awt.*;
@@ -121,7 +121,7 @@ public class Login extends JPanel {
                 "background:null");
         JButton forgotBtn = new JButton("<html><a href=\"#\">Forgot Password?</a></html>");
         forgotBtn.putClientProperty(FlatClientProperties.STYLE, "" +
-                "border:3,3,3,3");
+                "border:3,3,3,5");
         forgotBtn.setContentAreaFilled(false);
         forgotBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         forgotBtn.addActionListener(e -> {
@@ -140,7 +140,7 @@ public class Login extends JPanel {
                 "background:null");
         JButton registerBtn = new JButton("<html><a href=\"#\">Create Account</a></html>");
         registerBtn.putClientProperty(FlatClientProperties.STYLE, "" +
-                "border:3,3,3,3");
+                "border:3,5,3,3");
         registerBtn.setContentAreaFilled(false);
         registerBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         registerBtn.addActionListener(e -> {
@@ -161,7 +161,7 @@ public class Login extends JPanel {
 
 
         if (username.isEmpty() || password.isEmpty()) {
-            Notifications.getInstance().show(Notifications.Type.WARNING, "Please ensure all fields are completed.");
+            NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Please ensure all fields are completed");
             return;
         }
 
@@ -178,7 +178,7 @@ public class Login extends JPanel {
             } else {
                 clearLoginInfo();
             }
-            Notifications.getInstance().show(Notifications.Type.SUCCESS, "Login successful");
+            NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Login successful");
 
             // Create a SwingWorker to handle the delay without blocking the UI thread
             SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
@@ -192,7 +192,8 @@ public class Login extends JPanel {
                 @Override
                 protected void done() {
                     // Show the second notification
-                    Notifications.getInstance().show(Notifications.Type.SUCCESS, "Welcome back " + user.getFirstName() + "!");
+                    NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, String.format("Welcome back %s!", user.getFirstName()));
+
                 }
             };
 
@@ -201,7 +202,7 @@ public class Login extends JPanel {
 
             FormsManager.getInstance().showForm(new MainPage());
         } else {
-            Notifications.getInstance().show(Notifications.Type.ERROR, "Incorrect username or password.");
+            NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "No user found. Check your credentials and try again");
         }
     }
 

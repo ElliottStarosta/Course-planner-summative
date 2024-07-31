@@ -3,16 +3,15 @@ package org.example.GUI.login;
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import org.example.GUI.component.MethodUtil;
+import org.example.GUI.component.NotificationManager;
 import org.example.GUI.component.TwoFactorAuthentication;
 import org.example.GUI.manager.FormsManager;
-import raven.toast.Notifications;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 public class ForgotPassword extends JPanel {
     public ForgotPassword() {
@@ -68,26 +67,19 @@ public class ForgotPassword extends JPanel {
             boolean isEmailRegistered = MethodUtil.emailRegistered(email);
 
             if (!isEmailValid) {
-                Notifications.getInstance().show(Notifications.Type.ERROR, "Enter a valid email address");
+                NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Enter a valid email address");
                 emailBtn.setEnabled(true);
             } else if (!isEmailRegistered) {
-                Notifications.getInstance().show(Notifications.Type.ERROR, "Email not in system, please create an account");
+                NotificationManager.showNotification(NotificationManager.NotificationType.ERROR, "Email not in system, please create an account");
                 emailBtn.setEnabled(true);
             } else {
                 String username = MethodUtil.getUserNameWithEmail(email);
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        Notifications.getInstance().show(Notifications.Type.ERROR, "Verification code expired");
-                    }
-                }, 600000);
 
                 SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
                     @Override
                     protected Void doInBackground() throws Exception {
                         String generatedCode = TwoFactorAuthentication.generateAndSendCode(email, username);
-                        Notifications.getInstance().show(Notifications.Type.SUCCESS, "Verification code sent");
+                        NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Verification code sent");
                         FormsManager.getInstance().showForm(new Verification(generatedCode, emailField.getText()));
                         return null;
                     }

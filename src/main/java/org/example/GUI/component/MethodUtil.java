@@ -8,7 +8,6 @@ import org.example.GUI.manager.FormsManager;
 import org.example.people.User;
 import org.example.utility.Course;
 import org.example.utility.CourseAssembly;
-import raven.toast.Notifications;
 
 import javax.swing.*;
 import java.io.File;
@@ -106,9 +105,10 @@ public class MethodUtil {
         boolean correctCode = TwoFactorAuthentication.verifyCodeAndClose(codeFields, generatedCode);
         if (correctCode) {
             FormsManager.getInstance().showForm(new PasswordChange(email));
-            Notifications.getInstance().show(Notifications.Type.SUCCESS, "Code verified successfully.");
+            NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Code verified successfully");
         } else {
-            Notifications.getInstance().show(Notifications.Type.ERROR, "Please ensure all required fields are completed.");
+            NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Please ensure all required fields are completed");
+
         }
     }
 
