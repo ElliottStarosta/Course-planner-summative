@@ -6,7 +6,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 public class NotificationManager {
-    private static final long COOLDOWN_MILLIS = 5000; // Cooldown period in milliseconds
+    private static final long COOLDOWN_MILLIS = 1000; // Cooldown period in milliseconds
     private static Instant lastNotificationTime = Instant.EPOCH;
 
     public enum NotificationType {

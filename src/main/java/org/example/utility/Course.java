@@ -363,8 +363,7 @@ public class Course {
         }
     }
 
-    public static boolean readRecommendedCoursesFromFile(StudentInput studentInput) {
-        String username = studentInput.getUsername();
+    public static boolean readRecommendedCoursesFromFile(String username) {
         String filePath = "src/main/resources/user_class_info/recommended_course_code_" + username + ".json";
         File file = new File(filePath);
 

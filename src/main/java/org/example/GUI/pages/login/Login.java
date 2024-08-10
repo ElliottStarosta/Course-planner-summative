@@ -1,10 +1,12 @@
-package org.example.GUI.login;
+package org.example.GUI.pages.login;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import org.example.GUI.component.NotificationManager;
 import org.example.GUI.manager.FormsManager;
+import org.example.GUI.pages.main.MainPage;
 import org.example.people.User;
+import raven.drawer.Drawer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,6 +45,9 @@ public class Login extends JPanel {
         passwordField = new JPasswordField();
         loginButton = new JButton("Login");
 
+
+
+
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 35 45 30 45","fill, 250:280"));
         panel.setPreferredSize(new Dimension(450, 300));
 
@@ -67,6 +72,10 @@ public class Login extends JPanel {
                 "[dark]background:lighten(@background,10%);" +
                 "borderWidth:0;" +
                 "innerFocusWidth:0;");
+
+
+
+
         loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
 
@@ -106,8 +115,6 @@ public class Login extends JPanel {
         usernameField.addKeyListener(enterKeyListener);
         passwordField.addKeyListener(enterKeyListener);
         loginButton.addActionListener(e -> handleLogin());
-
-
     }
 
     private Component rememberAndForgot() {
@@ -172,6 +179,7 @@ public class Login extends JPanel {
         boolean userFound = foundUser.isPresent();
         User user = foundUser.orElse(null);
 
+
         if (userFound) {
             if (rememberMeCheck.isSelected()) {
                 saveLoginInfo(username, password);
@@ -188,19 +196,11 @@ public class Login extends JPanel {
                     Thread.sleep(3000);
                     return null;
                 }
-
-                @Override
-                protected void done() {
-                    // Show the second notification
-                    NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, String.format("Welcome back %s!", user.getFirstName()));
-
-                }
             };
 
             // Execute the SwingWorker
             worker.execute();
-
-            FormsManager.getInstance().showForm(new MainPage());
+            FormsManager.getInstance().showForm(new MainPage(user));
         } else {
             NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "No user found. Check your credentials and try again");
         }

@@ -3,7 +3,7 @@ package org.example.GUI.component;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.example.GUI.login.PasswordChange;
+import org.example.GUI.pages.login.PasswordChange;
 import org.example.GUI.manager.FormsManager;
 import org.example.people.User;
 import org.example.utility.Course;
