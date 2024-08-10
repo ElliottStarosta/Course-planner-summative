@@ -5,7 +5,6 @@ import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import org.example.GUI.pages.login.Login;
 import org.example.GUI.manager.FormsManager;
-import raven.popup.GlassPanePopup;
 import raven.toast.Notifications;
 
 import javax.swing.*;
@@ -16,25 +15,19 @@ import java.awt.*;
 public class Application extends JFrame {
 
     public Application() {
-        GlassPanePopup.install(this);
         init();
     }
 
     private void init() {
-
         setTitle("Course Recommender");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(new Dimension(1200, 700));
-//        setResizable(false);
+        setResizable(false);
         setLocationRelativeTo(null);
         setContentPane(new Login());
         Notifications.getInstance().setJFrame(this);
         FormsManager.getInstance().initApplication(this);
 
-//        Image iconImage = Toolkit.getDefaultToolkit().getImage("src/main/java/org/example/GUI/component/Support.ico");
-//
-//        // Set the icon image to the JFrame
-//        setIconImage(iconImage);
     }
 
     public static void main(String[] args) {

@@ -6,7 +6,6 @@ import org.example.GUI.component.NotificationManager;
 import org.example.GUI.manager.FormsManager;
 import org.example.GUI.pages.main.MainPage;
 import org.example.people.User;
-import raven.drawer.Drawer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -248,5 +247,4 @@ public class Login extends JPanel {
     private String decodePassword(String encodedPassword) {
         return new String(Base64.getDecoder().decode(encodedPassword));
     }
-
 }
