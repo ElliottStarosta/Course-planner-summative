@@ -108,7 +108,6 @@ public class CourseAssembly {
 
 
     public CourseAssembly() {
-
         ExcelUtility.loadCourseData();
     }
 

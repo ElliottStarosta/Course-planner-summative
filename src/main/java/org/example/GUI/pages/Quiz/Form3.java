@@ -120,6 +120,9 @@ public class Form3 extends JPanel {
         buttonPanel.setOpaque(false);
         buttonPanel.add(nextButton, BorderLayout.EAST);
 
+        nextButton.addActionListener(e -> handlePage(true));
+
+
         return buttonPanel;
     }
 
@@ -156,8 +159,6 @@ public class Form3 extends JPanel {
 
         buttonPanel.add(backButton, BorderLayout.WEST);  // Place back button on the left
         buttonPanel.add(nextButton, BorderLayout.EAST);  // Place next button on the right
-
-        nextButton.addActionListener(e -> handlePage(true));
 
         return buttonPanel;
     }

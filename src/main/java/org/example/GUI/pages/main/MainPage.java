@@ -5,6 +5,7 @@ import net.miginfocom.swing.MigLayout;
 import org.example.GUI.manager.FormsManager;
 import org.example.GUI.pages.Quiz.DynamicFormLoader;
 import org.example.GUI.pages.Quiz.Form3;
+import org.example.GUI.pages.Quiz.Form5;
 import org.example.people.User;
 import org.example.utility.Course;
 
@@ -31,6 +32,8 @@ public class MainPage extends JPanel {
 
     public MainPage(User user) {
         this.user = user;
+
+        userResponses.put("username", user.getUsername());
         init();
     }
 
@@ -171,8 +174,8 @@ public class MainPage extends JPanel {
         question++;
         Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
         if (formInstance != null) {
-            // Assuming FormsManager can handle form instances without a specific base class
             FormsManager.getInstance().showForm((JComponent) formInstance);
+//            FormsManager.getInstance().showForm((new Form5(userResponses, question)));
         }
     }
 

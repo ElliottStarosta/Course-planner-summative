@@ -2,30 +2,38 @@ package org.example.GUI.pages.Quiz;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
+import org.example.GUI.component.ComboBox;
 import org.example.GUI.component.NotificationManager;
 import org.example.GUI.manager.FormsManager;
+import org.example.people.StudentInput;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.ComboPopup;
 import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.HashMap;
+import java.util.stream.Collectors;
+
+import static org.example.utility.ExcelUtility.getAllCourseNames;
 
 
-public class Form4 extends JPanel {
-    private static final int INITIAL_HEIGHT = 185;
-    private static final int MAX_HEIGHT = 400;
+public class Form5 extends JPanel {
+
     private HashMap<String, String> userResponses;
     private int question;
     private static final int PANEL_WIDTH = 600;
 
 
     private JLabel questionTitle;
-    private JTextArea answerArea;
+    private ComboBox courseComboBox;
+
     private JButton nextButton;
     private JButton backButton;
 
 
 
-    public Form4 (HashMap<String,String> userResponses, int question) {
+    public Form5(HashMap<String,String> userResponses, int question) {
         this.userResponses = userResponses;
         this.question = question;
         init();
@@ -34,13 +42,18 @@ public class Form4 extends JPanel {
     private void init() {
         setLayout(new MigLayout("fill, insets 20", "[center]", "[center]"));
 
+
         JPanel contentPanel = createContentPanel();
         add(contentPanel);
     }
 
+    private void classData(JComboBox combo) {
+        combo.setModel(new javax.swing.DefaultComboBoxModel<>(getAllCourseNames()));
+    }
+
     private JPanel createContentPanel() {
         JPanel contentPanel = new JPanel(new MigLayout("wrap, fillx, insets 35 45 30 45", "[grow]"));
-        contentPanel.setPreferredSize(new Dimension(PANEL_WIDTH, 450));
+        contentPanel.setPreferredSize(new Dimension(PANEL_WIDTH, 300));
         contentPanel.setFocusable(true);
 
         contentPanel.putClientProperty(FlatClientProperties.STYLE,
@@ -50,11 +63,13 @@ public class Form4 extends JPanel {
 
         contentPanel.add(createTitlePanel(), "wrap, align center, gapy 20");
         contentPanel.add(createQuestionLabel(), "wrap, align center, gapy 20");
-        contentPanel.add(createAnswerScrollPane(), "wrap, align center, grow, gapy 45");
+        contentPanel.add(createCourseComboBoxPanel(), "wrap, align center, gapy 20");
         contentPanel.add(question > 1 ? createButtonPanelDoubleArrow() : createButtonPanelSingleArrow(), "span, align right, wrap, gapy 30");
 
         return contentPanel;
     }
+
+
 
     private JPanel createTitlePanel() {
         JPanel topPanel = new JPanel(new BorderLayout());
@@ -69,7 +84,7 @@ public class Form4 extends JPanel {
     }
 
     private JLabel createQuestionLabel() {
-        JLabel questionLabel = new JLabel("What career aspirations do you have for the future?");
+        JLabel questionLabel = new JLabel("Please select all of your previous classes from the dropdown menu below:");
         questionLabel.setHorizontalAlignment(SwingConstants.CENTER);
         questionLabel.putClientProperty(FlatClientProperties.STYLE, "" +
                 "[light]background:darken(@background,10%);" +
@@ -80,28 +95,40 @@ public class Form4 extends JPanel {
         return questionLabel;
     }
 
-    private JScrollPane createAnswerScrollPane() {
-        answerArea = new JTextArea();
+    private JPanel createCourseComboBoxPanel() {
+        JPanel comboBoxPanel = new JPanel();
+        comboBoxPanel.setLayout(new BorderLayout());
 
-        answerArea.putClientProperty(FlatClientProperties.STYLE, "font: bold +5");
+        courseComboBox = new ComboBox();
+        classData(courseComboBox);
+        courseComboBox.setPreferredSize(new Dimension(600, 75));
 
-        answerArea.setBorder(BorderFactory.createCompoundBorder(
-                answerArea.getBorder(),
-                BorderFactory.createEmptyBorder(15, 15, 15, 15)));
-        answerArea.setLineWrap(true);
-        answerArea.setWrapStyleWord(true);
+        // Customizing the popup
+        ComboPopup popup = (ComboPopup) courseComboBox.getUI().getAccessibleChild(courseComboBox, 0);
+        ((JComponent) popup).setPreferredSize(new Dimension(600, 200));
+        ((JComponent) popup).setLayout(new GridLayout(1, 1));
 
-        if (userResponses.containsKey("interests2")) {
-            answerArea.setText(userResponses.get("interests2"));
+        comboBoxPanel.add(courseComboBox, BorderLayout.CENTER);
+
+        comboBoxPanel.putClientProperty(FlatClientProperties.STYLE,
+                "arc:10;" +
+                        "[light]background:darken(@background,5%);" +
+                        "[dark]background:lighten(@background,5%)");
+
+        if (userResponses.containsKey("previousClasses")) {
+            String previousClasses = userResponses.get("previousClasses");
+            List<String> classes = Arrays.asList(previousClasses.split(","));
+
+            for (String c : classes) {
+                courseComboBox.setSelectedItem(c);
+            }
         }
 
-        JScrollPane scrollPane = new JScrollPane(answerArea);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.setPreferredSize(new Dimension(500, INITIAL_HEIGHT));
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); // Allow scroll bars when needed
-
-        return scrollPane;
+        return comboBoxPanel;
     }
+
+
+
 
     private JPanel createButtonPanelSingleArrow() {
         nextButton = new JButton("→");
@@ -127,16 +154,21 @@ public class Form4 extends JPanel {
     }
 
     private JPanel createButtonPanelDoubleArrow() {
-        nextButton = new JButton("→");
-        nextButton.setFont(new Font("Arial", Font.BOLD, 30));
-        nextButton.setPreferredSize(new Dimension(60, 30));
-        nextButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        nextButton.setOpaque(false);
-        nextButton.setContentAreaFilled(false);
-        nextButton.putClientProperty(FlatClientProperties.STYLE,
+
+        nextButton = new JButton("Submit");
+
+
+        nextButton.putClientProperty(FlatClientProperties.STYLE, "" +
+                "[light]background:darken(@background,10%);" +
+                "[dark]background:lighten(@background,10%);" +
                 "borderWidth:0;" +
-                        "foreground: @earlYellow;" +
-                        "innerFocusWidth:0;");
+                "innerFocusWidth:0;" +
+                "font: bold +10");
+
+        nextButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        nextButton.setPreferredSize(new Dimension(100, 30));
+
 
         backButton = new JButton("←");
         backButton.setFont(new Font("Arial", Font.BOLD, 30));
@@ -166,28 +198,55 @@ public class Form4 extends JPanel {
 
 
     private void handlePage(boolean isNext) {
-        String answerText = answerArea.getText().trim();
-        userResponses.put("interests2", answerText);
-        if(isNext) {
-            // Check if the text has at least 10 characters
-            if (answerText.length() >= 10) {
-                question++;
-                Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
-                if (formInstance != null) {
-                    // Assuming FormsManager can handle form instances without a specific base class
-                    FormsManager.getInstance().showForm((JComponent) formInstance);
-                }
-            } else {
-                NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Enter a more detailed response");
+        List<Object> selectedItems = courseComboBox.getSelectedItems();
+        String selectedClasses = selectedItems.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+
+        userResponses.put("previousClasses", selectedClasses);
+
+        // Retrieve values from userResponses hashmap
+        String interests1 = userResponses.get("interests1");
+        String interests2 = userResponses.get("interests2");
+        String track = userResponses.get("track");
+        int grade = Integer.parseInt(userResponses.get("grade"));
+        String username = userResponses.get("username");
+
+        // Combine interests1 and interests2
+        String combinedInterests = interests1 + ", " + interests2;
+
+        // Create StudentInput object
+        StudentInput student = new StudentInput(combinedInterests,selectedClasses,grade,track,username);
+
+        int requiredClasses = 0;
+
+        if (isNext) {
+            switch (grade) {
+                case 10:
+                    requiredClasses = 8;
+                    break;
+                case 11:
+                    requiredClasses = 16;
+                    break;
+                case 12:
+                    requiredClasses = 24;
+                    break;
+                default:
+                    break;
             }
+
+            if (selectedItems.size() < requiredClasses) {
+                NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, String.format("You need to select at least %d classes.", requiredClasses));
+            }
+
         } else {
             question--;
             Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
             if (formInstance != null) {
-                // Assuming FormsManager can handle form instances without a specific base class
                 FormsManager.getInstance().showForm((JComponent) formInstance);
             }
         }
     }
+
 
 }

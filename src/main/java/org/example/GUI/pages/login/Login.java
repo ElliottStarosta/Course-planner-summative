@@ -45,8 +45,6 @@ public class Login extends JPanel {
         loginButton = new JButton("Login");
 
 
-
-
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 35 45 30 45","fill, 250:280"));
         panel.setPreferredSize(new Dimension(450, 300));
 
