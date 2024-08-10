@@ -1,7 +1,9 @@
-package org.example.GUI.login;
+package org.example.GUI.pages;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
+import org.example.GUI.component.Button.RippleEffect;
+import org.example.GUI.component.Button.SpecialButton;
 import org.example.GUI.component.NotificationManager;
 import org.example.GUI.manager.FormsManager;
 import org.example.people.User;
@@ -41,7 +43,18 @@ public class Login extends JPanel {
 
         usernameField = new JTextField();
         passwordField = new JPasswordField();
-        loginButton = new JButton("Login");
+        loginButton = new JButton("Login") {
+            private final RippleEffect ripple = new RippleEffect(this);
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ripple.reder(g, getBounds());
+            }
+        };
+
+
+
 
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 35 45 30 45","fill, 250:280"));
         panel.setPreferredSize(new Dimension(450, 300));
@@ -67,6 +80,10 @@ public class Login extends JPanel {
                 "[dark]background:lighten(@background,10%);" +
                 "borderWidth:0;" +
                 "innerFocusWidth:0;");
+
+
+
+
         loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
 

@@ -1,4 +1,4 @@
-package org.example.GUI.login;
+package org.example.GUI.pages;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
