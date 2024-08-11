@@ -2,6 +2,8 @@ package org.example.utility;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.example.GUI.manager.FormsManager;
+import org.example.GUI.pages.Quiz.FillCourses;
 import org.example.people.StudentInput;
 
 import java.io.File;
@@ -11,6 +13,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static org.example.utility.CourseAssembly.*;
+import java.util.concurrent.CountDownLatch;
+
 
 
 public class Course {
@@ -224,10 +228,20 @@ public class Course {
             return;
         }
 
+        CountDownLatch latch = new CountDownLatch(1);
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Do you have any more interests, the courses have not been filled yet? If not, do you want us to pick some for you? (type 'pick' if you want us to choose)");
-        String studentResponse = scanner.nextLine();
+        FormsManager.getInstance().showForm(new FillCourses(student, latch));
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void getNonFilledClassesResponse(StudentInput student, String studentResponse) {
 
         recommendedCoursesByGrade.forEach((grade, courses) -> {
             Set<String> recommendedCourses = new HashSet<>();

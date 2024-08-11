@@ -158,7 +158,7 @@ public class CourseAssembly {
         Course.writeRecommendedCoursesToFileCourseCode(student); // write course code to respective JSON file
 
         // Send email w/ classes to the student's counselor
-        Counselor.sendCounselorEmail(student, new SendEmail());
+//        Counselor.sendCounselorEmail(student, new SendEmail());
 
 
     }

@@ -2,32 +2,36 @@ package org.example.GUI.pages.Quiz;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
-import org.example.GUI.component.NotificationManager;
-import org.example.GUI.manager.FormsManager;
+import org.example.people.StudentInput;
+import org.example.utility.Course;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.concurrent.CountDownLatch;
 
 
-public class Form4 extends JPanel {
+
+public class FillCourses extends JPanel {
     private static final int INITIAL_HEIGHT = 185;
     private static final int MAX_HEIGHT = 400;
-    private HashMap<String, String> userResponses;
-    private int question;
     private static final int PANEL_WIDTH = 600;
 
 
     private JLabel questionTitle;
     private JTextArea answerArea;
     private JButton nextButton;
-    private JButton backButton;
+
+    private StudentInput student;
+    private CountDownLatch latch;
 
 
 
-    public Form4 (HashMap<String,String> userResponses, int question) {
-        this.userResponses = userResponses;
-        this.question = question;
+
+    public FillCourses(StudentInput student, CountDownLatch latch) {
+        this.student = student;
+        this.latch = latch;
         init();
     }
 
@@ -51,7 +55,7 @@ public class Form4 extends JPanel {
         contentPanel.add(createTitlePanel(), "wrap, align center, gapy 20");
         contentPanel.add(createQuestionLabel(), "wrap, align center, gapy 20");
         contentPanel.add(createAnswerScrollPane(), "wrap, align center, grow, gapy 45");
-        contentPanel.add(question > 1 ? createButtonPanelDoubleArrow() : createButtonPanelSingleArrow(), "span, align right, wrap, gapy 30");
+        contentPanel.add(createButtonPanelSingleArrow(), "span, align right, wrap, gapy 30");
 
         return contentPanel;
     }
@@ -60,7 +64,7 @@ public class Form4 extends JPanel {
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.putClientProperty(FlatClientProperties.STYLE, "background:null");
 
-        questionTitle = new JLabel(String.format("Question #%s", question));
+        questionTitle = new JLabel("Fill Courses");
         questionTitle.setHorizontalAlignment(SwingConstants.CENTER);
         questionTitle.putClientProperty(FlatClientProperties.STYLE, "font: bold +15");
 
@@ -69,7 +73,7 @@ public class Form4 extends JPanel {
     }
 
     private JLabel createQuestionLabel() {
-        JLabel questionLabel = new JLabel("What career aspirations do you have for the future?");
+        JLabel questionLabel = new JLabel("Do you have any more interests, courses are not filled?");
         questionLabel.setHorizontalAlignment(SwingConstants.CENTER);
         questionLabel.putClientProperty(FlatClientProperties.STYLE, "" +
                 "[light]background:darken(@background,10%);" +
@@ -91,9 +95,22 @@ public class Form4 extends JPanel {
         answerArea.setLineWrap(true);
         answerArea.setWrapStyleWord(true);
 
-        if (userResponses.containsKey("interests2")) {
-            answerArea.setText(userResponses.get("interests2"));
-        }
+        answerArea.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (answerArea.getText().equals("Please leave this section blank if you would like us to select your classes for you")) {
+                    answerArea.setText("");
+                    answerArea.setForeground(Color.BLACK);
+                }
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (answerArea.getText().isEmpty()) {
+                    answerArea.setForeground(Color.GRAY);
+                    answerArea.setText("Please leave this section blank if you would like us to select your classes for you");
+                }
+            }
+        });
 
         JScrollPane scrollPane = new JScrollPane(answerArea);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -120,77 +137,21 @@ public class Form4 extends JPanel {
         buttonPanel.setOpaque(false);
         buttonPanel.add(nextButton, BorderLayout.EAST);
 
-        nextButton.addActionListener(e -> handlePage(true));
+        nextButton.addActionListener(e -> handlePage());
 
 
         return buttonPanel;
     }
 
-    private JPanel createButtonPanelDoubleArrow() {
-        nextButton = new JButton("→");
-        nextButton.setFont(new Font("Arial", Font.BOLD, 30));
-        nextButton.setPreferredSize(new Dimension(60, 30));
-        nextButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        nextButton.setOpaque(false);
-        nextButton.setContentAreaFilled(false);
-        nextButton.putClientProperty(FlatClientProperties.STYLE,
-                "borderWidth:0;" +
-                        "foreground: @earlYellow;" +
-                        "innerFocusWidth:0;");
-
-        backButton = new JButton("←");
-        backButton.setFont(new Font("Arial", Font.BOLD, 30));
-        backButton.setPreferredSize(new Dimension(60, 30));
-        backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        backButton.setOpaque(false);
-        backButton.setContentAreaFilled(false);
-        backButton.putClientProperty(FlatClientProperties.STYLE,
-                "borderWidth:0;" +
-                        "foreground: @earlYellow;" +
-                        "innerFocusWidth:0;");
-
-        nextButton.addActionListener(e -> handlePage(true));
-        backButton.addActionListener(e -> handlePage(false));
 
 
-        JPanel buttonPanel = new JPanel(new BorderLayout());
-        buttonPanel.setPreferredSize(new Dimension(900, 30));
-        buttonPanel.setOpaque(false);
-
-        buttonPanel.add(backButton, BorderLayout.WEST);  // Place back button on the left
-        buttonPanel.add(nextButton, BorderLayout.EAST);  // Place next button on the right
-
-        return buttonPanel;
-    }
-
-
-
-    private void handlePage(boolean isNext) {
+    private void handlePage() {
         String answerText = answerArea.getText().trim();
-        userResponses.put("interests2", answerText);
+        Course.getNonFilledClassesResponse(student,answerText);
+        latch.countDown();
 
-        nextButton.setEnabled(false);
-        if(isNext) {
-            // Check if the text has at least 10 characters
-            if (answerText.length() >= 10) {
-                question++;
-                Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
-                if (formInstance != null) {
-                    // Assuming FormsManager can handle form instances without a specific base class
-                    FormsManager.getInstance().showForm((JComponent) formInstance);
-                }
-            } else {
-                NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Enter a more detailed response");
-                nextButton.setEnabled(true);
-            }
-        } else {
-            question--;
-            Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
-            if (formInstance != null) {
-                // Assuming FormsManager can handle form instances without a specific base class
-                FormsManager.getInstance().showForm((JComponent) formInstance);
-            }
-        }
     }
+
+
 
 }
