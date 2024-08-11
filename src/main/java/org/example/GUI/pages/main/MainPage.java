@@ -26,14 +26,23 @@ public class MainPage extends JPanel {
     private HashMap<String, String> userResponses = new HashMap<>();
     private JButton settingsButton;
 
+    private String username;
+
     public MainPage() {
+        init();
+    }
+
+    public MainPage(String username) {
+        this.username = username;
         init();
     }
 
     public MainPage(User user) {
         this.user = user;
 
-        userResponses.put("username", user.getUsername());
+        this.username = user.getUsername();
+
+        userResponses.put("username", username);
         init();
     }
 
@@ -59,7 +68,7 @@ public class MainPage extends JPanel {
         createTopWelcome(panel);
 
         JButton takeQuizButton = (JButton) createQuizButtonPanel();
-        boolean hasRecommendations = Course.readRecommendedCoursesFromFile(user.getUsername());
+        boolean hasRecommendations = Course.readRecommendedCoursesFromFile(username);
         if (!hasRecommendations) {
             panel.add(takeQuizButton, "gapy 40");
         } else {
@@ -199,7 +208,7 @@ public class MainPage extends JPanel {
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.putClientProperty(FlatClientProperties.STYLE, "background:null");
 
-        welcomeLabel = new JLabel(String.format("Welcome back %s!", user.getUsername()));
+        welcomeLabel = new JLabel(String.format("Welcome back %s!", username));
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         welcomeLabel.putClientProperty(FlatClientProperties.STYLE, "font: bold +15");

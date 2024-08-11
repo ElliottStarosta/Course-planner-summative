@@ -5,7 +5,10 @@ import net.miginfocom.swing.MigLayout;
 import org.example.GUI.component.ComboBox;
 import org.example.GUI.component.NotificationManager;
 import org.example.GUI.manager.FormsManager;
+import org.example.GUI.pages.main.MainPage;
 import org.example.people.StudentInput;
+import org.example.utility.Course;
+import org.example.utility.CourseAssembly;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.ComboPopup;
@@ -30,6 +33,8 @@ public class Form5 extends JPanel {
 
     private JButton nextButton;
     private JButton backButton;
+
+    private boolean isSubmitClicked = false;
 
 
 
@@ -216,7 +221,7 @@ public class Form5 extends JPanel {
         String combinedInterests = interests1 + ", " + interests2;
 
         // Create StudentInput object
-        StudentInput student = new StudentInput(combinedInterests,selectedClasses,grade,track,username);
+        StudentInput student = new StudentInput(combinedInterests, selectedClasses, grade, track, username);
 
         int requiredClasses = 0;
 
@@ -237,8 +242,33 @@ public class Form5 extends JPanel {
 
             if (selectedItems.size() < requiredClasses) {
                 NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, String.format("You need to select at least %d classes.", requiredClasses));
+                return;
             }
 
+            if (!isSubmitClicked) {
+                isSubmitClicked = true;
+                nextButton.setEnabled(false);
+
+                // Run the assessment in a separate thread
+                SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        CourseAssembly.runAssessment(student);
+                        return null;
+                    }
+
+                    @Override
+                    protected void done() {
+                        // Re-enable the button or update UI if needed
+                        nextButton.setEnabled(true);
+                        isSubmitClicked = false;
+
+                        // Switch to the main page
+                        FormsManager.getInstance().showForm(new MainPage(username));
+                    }
+                };
+                worker.execute();
+            }
         } else {
             question--;
             Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
@@ -247,6 +277,4 @@ public class Form5 extends JPanel {
             }
         }
     }
-
-
 }

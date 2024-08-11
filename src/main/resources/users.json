@@ -1,7 +1,13 @@
 [ {
   "username" : "Estarro",
-  "password" : "UmVteWRvZzIwMjMh",
+  "password" : "VW1WdGVXUnZaekl3TWpNaA==",
   "email" : "fenceryounger@gmail.com",
+  "firstName" : "Elliott",
+  "lastName" : "Starosta"
+}, {
+  "username" : "Astarro",
+  "password" : "UmVteWRvZzIwMjMh",
+  "email" : "starlliott@gmail.com",
   "firstName" : "Elliott",
   "lastName" : "Starosta"
 } ]
