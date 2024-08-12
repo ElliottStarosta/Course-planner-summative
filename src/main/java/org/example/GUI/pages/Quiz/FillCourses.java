@@ -54,6 +54,7 @@ public class FillCourses extends JPanel {
 
         contentPanel.add(createTitlePanel(), "wrap, align center, gapy 20");
         contentPanel.add(createQuestionLabel(), "wrap, align center, gapy 20");
+        contentPanel.add(createSubtitleLabel(), "wrap, align center, gapy 5");
         contentPanel.add(createAnswerScrollPane(), "wrap, align center, grow, gapy 45");
         contentPanel.add(createButtonPanelSingleArrow(), "span, align right, wrap, gapy 30");
 
@@ -64,7 +65,7 @@ public class FillCourses extends JPanel {
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.putClientProperty(FlatClientProperties.STYLE, "background:null");
 
-        questionTitle = new JLabel("Fill Courses");
+        questionTitle = new JLabel("Extra Section");
         questionTitle.setHorizontalAlignment(SwingConstants.CENTER);
         questionTitle.putClientProperty(FlatClientProperties.STYLE, "font: bold +15");
 
@@ -73,7 +74,7 @@ public class FillCourses extends JPanel {
     }
 
     private JLabel createQuestionLabel() {
-        JLabel questionLabel = new JLabel("Do you have any more interests, courses are not filled?");
+        JLabel questionLabel = new JLabel("Your input was insufficient to fill your courses. Do you have additional interests to share?");
         questionLabel.setHorizontalAlignment(SwingConstants.CENTER);
         questionLabel.putClientProperty(FlatClientProperties.STYLE, "" +
                 "[light]background:darken(@background,10%);" +
@@ -82,6 +83,18 @@ public class FillCourses extends JPanel {
                 "foreground: @accentColor;");
 
         return questionLabel;
+    }
+
+    private JLabel createSubtitleLabel() {
+        JLabel subtitleLabel = new JLabel("Leave the answer blank if you prefer us to select classes for you.");
+        subtitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        subtitleLabel.putClientProperty(FlatClientProperties.STYLE, "" +
+                "[light]background:darken(@background,10%);" +
+                "[dark]background:lighten(@background,10%);" +
+                "font: bold +2;" +
+                "foreground: lighten(@background,30%);");
+
+        return subtitleLabel;
     }
 
     private JScrollPane createAnswerScrollPane() {
@@ -95,22 +108,7 @@ public class FillCourses extends JPanel {
         answerArea.setLineWrap(true);
         answerArea.setWrapStyleWord(true);
 
-        answerArea.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (answerArea.getText().equals("Please leave this section blank if you would like us to select your classes for you")) {
-                    answerArea.setText("");
-                    answerArea.setForeground(Color.BLACK);
-                }
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (answerArea.getText().isEmpty()) {
-                    answerArea.setForeground(Color.GRAY);
-                    answerArea.setText("Please leave this section blank if you would like us to select your classes for you");
-                }
-            }
-        });
+
 
         JScrollPane scrollPane = new JScrollPane(answerArea);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());

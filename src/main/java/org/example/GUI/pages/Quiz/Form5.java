@@ -4,18 +4,18 @@ import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import org.example.GUI.component.ComboBox;
 import org.example.GUI.component.NotificationManager;
+import org.example.GUI.component.PageMenuIndicator;
 import org.example.GUI.manager.FormsManager;
 import org.example.GUI.pages.main.MainPage;
 import org.example.people.StudentInput;
-import org.example.utility.Course;
 import org.example.utility.CourseAssembly;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.ComboPopup;
 import java.awt.*;
 import java.util.Arrays;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.example.utility.ExcelUtility.getAllCourseNames;
@@ -26,6 +26,8 @@ public class Form5 extends JPanel {
     private HashMap<String, String> userResponses;
     private int question;
     private static final int PANEL_WIDTH = 600;
+
+    private PageMenuIndicator indicator;
 
 
     private JLabel questionTitle;
@@ -66,6 +68,10 @@ public class Form5 extends JPanel {
                         "[light]background:darken(@background,3%);" +
                         "[dark]background:lighten(@background,3%)");
 
+        indicator = new PageMenuIndicator();
+        indicator.setPageNumber(4);
+
+        contentPanel.add(indicator, "align left, wrap");
         contentPanel.add(createTitlePanel(), "wrap, align center, gapy 20");
         contentPanel.add(createQuestionLabel(), "wrap, align center, gapy 20");
         contentPanel.add(createCourseComboBoxPanel(), "wrap, align center, gapy 20");

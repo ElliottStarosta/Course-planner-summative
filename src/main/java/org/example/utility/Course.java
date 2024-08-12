@@ -71,7 +71,7 @@ public class Course {
     private void engine(StudentInput student) {
         addInitialCourses(student);
 
-        // checks if course is at or above your grade and if it is on your track
+        // Checks if course is at or above your grade and if it is on your track
         if (track.equals("Open")) {
             if (student.getGrade() > gradeLevel) {
                 return; // does not meet the requirements
@@ -260,40 +260,42 @@ public class Course {
     }
 
     private static String fillCourse(int grade, Set<String> recommendedCourses, Set<String> recommendedCourseArea, String[] courses, String response, StudentInput studentInput) {
-        String[] pickOptions = {"pick", "yes", "y"};
-        if (!Arrays.stream(pickOptions).anyMatch(option -> option.equalsIgnoreCase(response))) {
+        if (response.isEmpty()) {
             // Initialize apiCourses if it's null
             if (!hasAPI.get()) {
                 apiCourses = APIClient.getAPIDataClasses(response);
                 if (apiCourses.size() == 0) {
-                    System.out.println("Could not find any courses, enter other interests: ");
-                    addNonFilledClasses(studentInput);
+                    // If API returns no courses, we will provide random classes
+                    hasAPI.set(true);
+                } else {
+                    hasAPI.set(true);
                 }
-                hasAPI.set(true);
             }
 
+            // If no courses are returned from the API
             List<String> filteredApiCourses = apiCourses.stream()
                     .filter(courseCode -> {
                         Course course = getCourse(courseCode);
                         return course != null && course.getGradeLevel() == grade
-                                && !Arrays.asList(courses).contains(courseCode) && (course.getTrack().equalsIgnoreCase(studentInput.getTrack()) || course.getTrack().equalsIgnoreCase("Open"));
+                                && !Arrays.asList(courses).contains(courseCode)
+                                && (course.getTrack().equalsIgnoreCase(studentInput.getTrack()) || course.getTrack().equalsIgnoreCase("Open"));
                     })
                     .toList();
 
-            for (String courseCode : filteredApiCourses) {
-                Course course = getCourse(courseCode);
-                if (course != null && !recommendedCourses.contains(course.getCourseCode())) {
-                    recommendedCourses.add(course.getCourseCode());
-                    return course.getCourseCode();
+            // If filtered API courses are available, return one
+            if (!filteredApiCourses.isEmpty()) {
+                for (String courseCode : filteredApiCourses) {
+                    Course course = getCourse(courseCode);
+                    if (course != null && !recommendedCourses.contains(course.getCourseCode())) {
+                        recommendedCourses.add(course.getCourseCode());
+                        return course.getCourseCode();
+                    }
                 }
             }
         }
 
-
+        // Provide a random class if no valid API courses found
         Random random = new Random();
-        String randomKey;
-        String courseArea;
-
         List<String> filteredKeys = courseMap.entrySet().stream()
                 .filter(entry -> entry.getValue().getGradeLevel() == grade)
                 .filter(entry -> (entry.getValue().getTrack().equalsIgnoreCase(studentInput.getTrack()) || entry.getValue().getTrack().equalsIgnoreCase("Open")))
@@ -305,6 +307,8 @@ public class Course {
             return "E404"; // Handle case where no courses match the grade level
         }
 
+        String randomKey;
+        String courseArea;
         do {
             randomKey = filteredKeys.get(random.nextInt(filteredKeys.size()));
             courseArea = courseMap.get(randomKey).getCourseArea();
@@ -314,6 +318,7 @@ public class Course {
         recommendedCourseArea.add(courseArea);
         return randomKey;
     }
+
 
 
     public static void writeRecommendedCoursesToFileCourseCode(StudentInput studentInput) {

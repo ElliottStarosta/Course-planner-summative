@@ -3,6 +3,7 @@ package org.example.GUI.pages.Quiz;
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import org.example.GUI.component.NotificationManager;
+import org.example.GUI.component.PageMenuIndicator;
 import org.example.GUI.manager.FormsManager;
 
 import javax.swing.*;
@@ -30,6 +31,9 @@ public class Form1 extends JPanel {
 
     private HashMap<String, String> userResponses;
 
+    private PageMenuIndicator indicator;
+
+
 
     public Form1(HashMap<String, String> userResponses, int question) {
         this.userResponses = userResponses;
@@ -56,9 +60,13 @@ public class Form1 extends JPanel {
                         "[light]background:darken(@background,3%);" +
                         "[dark]background:lighten(@background,3%)");
 
-        contentPanel.add(createTitlePanel(), "wrap, align center, gapy 20");
+        indicator = new PageMenuIndicator();
+        indicator.setPageNumber(0);
+
+        contentPanel.add(indicator, "align left, wrap");
+        contentPanel.add(createTitlePanel(), "wrap, align center, gapy 75");
         contentPanel.add(createQuestionLabel(), "wrap, align center, gapy 20");
-        contentPanel.add(pathSelect(), "wrap, align center, grow, gapy 45");
+        contentPanel.add(pathSelect(), "wrap, align center, grow, gapy 20");
         contentPanel.add(question > 1 ? createButtonPanelDoubleArrow() : createButtonPanelSingleArrow(), "span, align right, wrap, gapy 30");
 
         return contentPanel;
