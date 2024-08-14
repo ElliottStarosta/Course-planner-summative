@@ -38,10 +38,10 @@ class RecommendRequest(BaseModel):
 # <===++ Handles data preprocessing tasks ++==>
 class DataProcessor:
     def __init__(self, file_path):
-        self.file_path = file_path
+        self.__file_path = file_path
 
     def preprocess_and_save(self, model_file):
-        df = pd.read_excel(self.file_path, sheet_name="Sheet1")
+        df = pd.read_excel(self.__file_path, sheet_name="Sheet1")
 
         # Encode Course Name as categorical IDs
         df["Course Code"] = pd.Categorical(df["Course Code"])
@@ -104,11 +104,11 @@ class DataProcessor:
 # <===++ Loads the trained model and course data, and computes then recommends the student their classes ++===>
 class CourseRecommendation:
     def __init__(self, model_file, df_file, multi_w2v):
-        self.model_file = model_file
-        self.df_file = df_file
-        self.multi_w2v = multi_w2v
+        self.__model_file = model_file
+        self.__df_file = df_file
+        self.__multi_w2v = multi_w2v
         # Courses it cannot recommend
-        self.excluded_course_codes = [
+        self.__excluded_course_codes = [
             "ENL1W",
             "MTH1W",
             "SNC1W",
@@ -128,14 +128,14 @@ class CourseRecommendation:
             "ENG4C",
         ]
 
-    # <===++ Preprocesses student interests using SpellChecker and Word2Vec for semantic similarity, and then recommend courses ++==>
+    # <===++ Preprocess student interests using SpellChecker and Word2Vec for semantic similarity, and then recommend courses ++==>
     def recommend_classes(self, student_input):
         try:
-            with open(self.model_file, "rb") as f:
+            with open(self.__model_file, "rb") as f:
                 model, tfidf_vectorizer = pickle.load(f)
 
             # Load the course data from the Excel file
-            df = pd.read_excel(self.df_file, sheet_name="Sheet1")
+            df = pd.read_excel(self.__df_file, sheet_name="Sheet1")
 
             # Preprocess student interests using SpellChecker
             corrected_interests = SpellCheck.suggest_correct_word(
@@ -143,7 +143,7 @@ class CourseRecommendation:
             )
 
             # Preprocess student interests using Word2Vec for semantic similarity
-            processed_interests = self.multi_w2v.preprocess_student_interests(
+            processed_interests = self.__multi_w2v.preprocess_student_interests(
                 corrected_interests
             )
 
@@ -155,7 +155,7 @@ class CourseRecommendation:
             similarities = []
             # Calculate cosine similarity between student interests and each course
             for index, row in df.iterrows():
-                if row["Course Code"] not in self.excluded_course_codes:
+                if row["Course Code"] not in self.__excluded_course_codes:
                     course_interests_tfidf = tfidf_vectorizer.transform(
                         [row["Interests Tags"]]
                     ).toarray()
@@ -241,31 +241,31 @@ class SpellCheck:
 # <==++ Word vectorizing for synonyms & mapping ++===>
 class MultiCategoryWord2Vec:
     def __init__(self, vector_size=100, window=5, min_count=1, workers=4):
-        self.vector_size = vector_size
-        self.window = window
-        self.min_count = min_count
-        self.workers = workers
-        self.categories = categories
-        self.models = self.train_models()
+        self.__vector_size = vector_size
+        self.__window = window
+        self.__min_count = min_count
+        self.__workers = workers
+        self.__categories = categories
+        self.__models = self.__train_models()
 
     # <==++ Train the models based on caloric data ++===>
-    def train_models(self):
+    def __train_models(self):
         models = []
-        for category in self.categories:
+        for category in self.__categories:
             model = Word2Vec(
                 [category],
-                vector_size=self.vector_size,
-                window=self.window,
-                min_count=self.min_count,
-                workers=self.workers,
+                vector_size=self.__vector_size,
+                window=self.__window,
+                min_count=self.__min_count,
+                workers=self.__workers,
             )
             models.append(model)
         return models
 
     # <==++ Find similar words within categories using Word2Vec ++===>
-    def find_similar_words(self, word, topn=3):
+    def __find_similar_words(self, word, topn=3):
         results = []
-        for idx, model in enumerate(self.models):
+        for idx, model in enumerate(self.__models):
             if word in model.wv.key_to_index:
                 similar_words = model.wv.most_similar(word, topn=topn)
                 results.extend([(word, score) for word, score in similar_words])
@@ -282,7 +282,7 @@ class MultiCategoryWord2Vec:
 
             # Iterate over tokens and find similar words within categories
             for token in tokens:
-                similar_words = self.find_similar_words(token, topn=topn)
+                similar_words = self.__find_similar_words(token, topn=topn)
 
                 if similar_words:
                     similar_tokens = [word for word, _ in similar_words[:topn]]
@@ -290,7 +290,7 @@ class MultiCategoryWord2Vec:
                 else:
                     processed_interests.append(
                         token
-                    )  # Keep the original token if no similar word found
+                    )  # Keep the original token if no similar word was found
 
             # Join processed interests back into a string
             preprocessed_interests = " ".join(processed_interests)
