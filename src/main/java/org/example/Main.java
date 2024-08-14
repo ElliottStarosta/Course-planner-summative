@@ -3,9 +3,9 @@ package org.example;
 
 
 import org.example.people.StudentInput;
-import org.example.utility.APIClient;
-import org.example.utility.Course;
-import org.example.utility.CourseAssembly;
+import org.example.utility.api.APIClient;
+import org.example.utility.courses.Course;
+import org.example.utility.courses.CourseAssembly;
 
 
 

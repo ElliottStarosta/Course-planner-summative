@@ -1,6 +1,6 @@
 package org.example.people;
 
-import org.example.utility.SendEmail;
+import org.example.utility.api.SendEmail;
 
 import java.util.HashMap;
 import java.util.List;
