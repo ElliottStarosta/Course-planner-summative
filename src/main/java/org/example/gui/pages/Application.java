@@ -11,7 +11,6 @@ import javax.swing.*;
 import java.awt.*;
 
 
-
 public class Application extends JFrame {
 
     public Application() {
