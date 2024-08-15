@@ -36,24 +36,24 @@ git clone https://github.com/ElliottStarosta/CoursesSummative.git
 
 ### Maven Dependency Installation
 
-```shell
+```bash
 cd CourseSummative
 mvn install
 ```
-### Usage
+## Usage
 
 Run **org.example.gui.pages.Application** to start the program.
 
-### Features
+## Features
 
 - Personalized course recommendations based on user profiles and preferences.
 - Integration of machine learning algorithms for accurate suggestions.
 - User-friendly interface for easy interaction and navigation.
 - Counselor contact to arrange your classes.
 
-### UML Diagram
+## UML Diagram
 
 
-### License
+## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
