@@ -147,7 +147,6 @@ public class SendEmail {
     }
 
 
-
     private class SMTPAuthenticator extends javax.mail.Authenticator {
         public PasswordAuthentication getPasswordAuthentication() {
             return new PasswordAuthentication(SENDER_EMAIL, SENDER_PASSWORD);

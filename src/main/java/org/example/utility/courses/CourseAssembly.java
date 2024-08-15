@@ -11,9 +11,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
 
 
-
-//TODO: Take out french immersion classes from workbook
-
 public class CourseAssembly {
     protected static Map<String, Course> courseMap = new HashMap<>();
     public static Map<Integer, String[]> recommendedCoursesByGrade = new HashMap<Integer, String[]>();
@@ -106,7 +103,6 @@ public class CourseAssembly {
         }
     }
 
-
     public CourseAssembly() {
         ExcelUtility.loadCourseData();
     }
@@ -133,7 +129,6 @@ public class CourseAssembly {
             return new String[] {null, null};
         }
     }
-
 
     public static void runAssessment(StudentInput student) {
 

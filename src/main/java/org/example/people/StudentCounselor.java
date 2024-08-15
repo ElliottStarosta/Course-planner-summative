@@ -5,18 +5,6 @@ import java.util.Map;
 
 public class StudentCounselor {
 
-    public static void main(String[] args) {
-
-
-        String lastName = "Starosta";
-        Counselor counselor = findCounselor(lastName);
-        if (counselor != null) {
-            System.out.println("Counselor: " + counselor.getName());
-            System.out.println("Email: " + counselor.getEmail());
-        } else {
-            System.out.println("Counselor not found for last name: " + lastName);
-        }
-    }
 
     public static Counselor findCounselor(String lastName) {
         // Initialize the map with counselors' information

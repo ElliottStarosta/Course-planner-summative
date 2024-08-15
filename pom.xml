@@ -99,16 +99,20 @@
             <version>1.6.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.kenai.nbpwr/org-jdesktop-animation-timing -->
-        <dependency>
+        <dependency>x
             <groupId>com.kenai.nbpwr</groupId>
             <artifactId>org-jdesktop-animation-timing</artifactId>
             <version>1.0-201002281504</version>
         </dependency>
 
-
-
-
-
+        <!-- Swing Toast Notifications -->
+        <dependency>
+            <groupId>raven.toast</groupId>
+            <artifactId>swing-toast-notifications</artifactId>
+            <version>1.0.3</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/swing-toast-notifications-1.0.3.jar</systemPath>
+        </dependency>
 
     </dependencies>
 </project>
