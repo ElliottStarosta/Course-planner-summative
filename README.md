@@ -1,6 +1,6 @@
 # Welcome to EOM Course Recommender Repo
 
-![EOM Logo]<img src="https://github.com/ElliottStarosta/CoursesSummative/blob/master/src/main/resources/assets/EOM_Logo.png" alt="EOM Logo" width="450"/>
+<img src="https://github.com/ElliottStarosta/CoursesSummative/blob/master/src/main/resources/assets/EOM_Logo.png" alt="EOM Logo" width="100"/>
 
 ## Badges
 
