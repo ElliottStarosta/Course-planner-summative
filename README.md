@@ -1,4 +1,4 @@
-<img src="https://github.com/ElliottStarosta/CoursesSummative/blob/master/src/main/resources/assets/EOM_Logo.png" alt="EOM Logo" width="450"/>
+<img src="https://github.com/ElliottStarosta/CoursesSummative/blob/master/src/main/resources/assets/EOM_Logo.png" alt="EOM Logo" width="100"/>
 
 # Welcome to EOM Course Recommender!
 
@@ -36,7 +36,7 @@ git clone https://github.com/ElliottStarosta/CoursesSummative.git
 
 ### Maven Dependency Installation
 
-```bash
+```shell
 cd CourseSummative
 mvn install
 ```
