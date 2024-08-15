@@ -5,7 +5,7 @@
 
 ## Badges
 
-![Build Status](https://img.shields.io/github/actions/workflow/status/your_username/your_repo/build.yml)
+![Build Status](https://img.shields.io/github/actions/workflow/status/Elliott/CourseRecommender)
 ![License](https://img.shields.io/github/license/your_username/your_repo)
 ![Java Version](https://img.shields.io/badge/Java-17-blue)
 
