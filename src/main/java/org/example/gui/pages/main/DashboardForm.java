@@ -45,13 +45,11 @@ public class DashboardForm extends JPanel {
     }
 
     private void init() {
-        setLayout(new BorderLayout());
-
-        // Create and configure the settings button
-        settingsButton = (JButton) createSettingsButton();
+        setLayout(new MigLayout("fill, insets 20","[center]","[center]"));
 
         // Panel for main content
-        panel = new JPanel(new MigLayout("wrap,fillx,insets 35 45 30 45", "fill, 400:600"));
+        panel = new JPanel(new MigLayout("wrap,fillx,insets 40 45 40 45","fill, 250:280"));
+        panel.setPreferredSize(new Dimension(600, 300));
         panel.setOpaque(false); // Make the panel background transparent
         panel.putClientProperty(FlatClientProperties.STYLE,
                 "arc:20;" +
@@ -68,39 +66,12 @@ public class DashboardForm extends JPanel {
         JButton takeQuizButton = (JButton) createQuizButtonPanel();
         boolean hasRecommendations = Course.readRecommendedCoursesFromFile(username);
         if (!hasRecommendations) {
-            panel.add(takeQuizButton, "gapy 40");
+            panel.add(takeQuizButton, "gapy 50");
         } else {
-            panel.add(createContentPanel(), "gapy 40");
+            panel.add(createContentPanel(), "gapy 75");
         }
 
-        JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBorder(BorderFactory.createEmptyBorder(60, 0, 0, 0));
-
-
-        // Create a container panel to manage the size of the main panel
-        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0,0));
-        centerPanel.setOpaque(false); // Make it transparent
-        centerPanel.setPreferredSize(new Dimension(300, 300));
-
-        centerPanel.add(panel);
-
-        wrapper.add(centerPanel, BorderLayout.CENTER);
-
-
-
-        wrapper.setBorder(BorderFactory.createEmptyBorder(200, 0, 0, 0));
-
-        add(wrapper, BorderLayout.CENTER);
-
-
-        // Create a top-right panel to hold the settings button
-        JPanel topRightPanel = new JPanel(new BorderLayout());
-        topRightPanel.setOpaque(false); // Make it transparent
-        topRightPanel.add(settingsButton, BorderLayout.EAST);
-        topRightPanel.setPreferredSize(new Dimension(0, 40));
-
-        // Add the top-right panel to the top of the MainPage
-        add(topRightPanel, BorderLayout.NORTH);
+        add(panel);
 
         // Add KeyListener to the panel
         KeyAdapter enterKeyListener = new KeyAdapter() {
@@ -130,35 +101,6 @@ public class DashboardForm extends JPanel {
         // Ensure the panel is focused
         requestFocusInWindow();
     }
-
-    private Component createSettingsButton() {
-        int iconSize = 35;
-        ImageIcon icon = new ImageIcon(((new ImageIcon("src/main/resources/assets/hamburger.png")).getImage()).getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH));
-
-        // Set up the button with the icon
-        settingsButton = new JButton(icon);
-
-        // Calculate the preferred size to include padding (20px on all sides)
-        int padding = 20;
-        settingsButton.setPreferredSize(new Dimension(iconSize + padding * 2, iconSize + padding * 2));
-
-        // Set transparent border to create padding without affecting centering
-        settingsButton.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
-
-        // Set the icon's position to the center of the button
-        settingsButton.setHorizontalAlignment(SwingConstants.CENTER);
-        settingsButton.setVerticalAlignment(SwingConstants.CENTER);
-
-//        // Other button settings
-        settingsButton.setContentAreaFilled(false);
-//        settingsButton.setBackground(Color.RED);
-        settingsButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        settingsButton.addActionListener(e -> FormsManager.getInstance().showForm(new SettingsForm()));
-
-        return settingsButton;
-    }
-
-
 
 
     private Component createContentPanel() {
@@ -199,20 +141,25 @@ public class DashboardForm extends JPanel {
         takeQuizButton.setPreferredSize(new Dimension(takeQuizButton.getPreferredSize().width, 50));
         takeQuizButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+
         return takeQuizButton;
     }
+
 
     private void createTopWelcome(JPanel panel) {
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.putClientProperty(FlatClientProperties.STYLE, "background:null");
 
+
         welcomeLabel = new JLabel(String.format("Welcome back %s!", username));
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
 
         welcomeLabel.putClientProperty(FlatClientProperties.STYLE, "font: bold +15");
         topPanel.add(welcomeLabel, BorderLayout.CENTER);
 
+
         // Add the top panel to the center of the main panel
-        panel.add(topPanel, "wrap, align center, gapy 20");
+        panel.add(topPanel, "wrap, align center, gapy 45");
     }
 }
