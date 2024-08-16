@@ -19,7 +19,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'adopt'
+          distribution: 'temurin'  # 'adopt' is deprecated, use 'temurin'
           java-version: '11'  # Or your preferred Java version
 
       - name: Cache Maven packages
