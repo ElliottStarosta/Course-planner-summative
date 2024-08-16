@@ -1,7 +1,7 @@
 <img src="https://github.com/ElliottStarosta/CoursesSummative/blob/master/src/main/resources/assets/EOM_Logo.png" alt="EOM Logo" width="100"/>
 
 # Welcome to EOM Course Recommender!
-![Build Status](https://img.shields.io/github/actions/workflow/status/ElliottStarosta/CoursesSummative/maven-publish.yml)
+![Build Status](https://img.shields.io/github/actions/workflow/status/elliottstarosta/CoursesSummative/maven-publish.yml)
 ## Description
 
 The **EOM Course Recommender** is a Java-based application designed to help students find suitable courses based on their preferences and requirements. The application uses a machine learning recommendation algorithm to suggest courses that align with user interests, previous classes, and future career goals, providing a personalized learning experience.
