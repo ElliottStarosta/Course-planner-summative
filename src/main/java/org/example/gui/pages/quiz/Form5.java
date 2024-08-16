@@ -126,6 +126,7 @@ public class Form5 extends JPanel {
                 "arc:10;" +
                         "[light]background:darken(@background,5%);" +
                         "[dark]background:lighten(@background,5%)");
+        comboBoxPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         if (userResponses.containsKey("previousClasses")) {
             String previousClasses = userResponses.get("previousClasses");

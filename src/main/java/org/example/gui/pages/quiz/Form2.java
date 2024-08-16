@@ -115,15 +115,24 @@ public class Form2 extends JPanel {
         universityButton.putClientProperty(FlatClientProperties.STYLE,
                 "font: bold +5; " +
                         "iconTextGap: 10;");
+        universityButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+
         collegeButton.putClientProperty(FlatClientProperties.STYLE,
                 "font: bold +5; " +
                         "iconTextGap: 10;");
+        collegeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
         tradeButton.putClientProperty(FlatClientProperties.STYLE,
                 "font: bold +5; " +
                         "iconTextGap: 10;");
+        tradeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
         dontKnowButton.putClientProperty(FlatClientProperties.STYLE,
                 "font: bold +5; " +
                         "iconTextGap: 10;");
+        dontKnowButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
 
         String track = "";
 

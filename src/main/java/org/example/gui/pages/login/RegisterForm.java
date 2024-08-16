@@ -102,6 +102,8 @@ public class RegisterForm extends JPanel {
                 "focusWidth:0;" +
                 "innerFocusWidth:0");
 
+        registerBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
 
         JLabel title = new JLabel("Welcome to EOM Course Recommender");
         JLabel description = new JLabel("Discover the perfect courses for your high school journey with our personalized recommendations—join us today!");

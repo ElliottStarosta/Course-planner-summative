@@ -117,15 +117,24 @@ public class Form1 extends JPanel {
         grade9Button.putClientProperty(FlatClientProperties.STYLE,
                 "font: bold +5; " +
                         "iconTextGap: 10;");
+        grade9Button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
         grade10Button.putClientProperty(FlatClientProperties.STYLE,
                 "font: bold +5; " +
                         "iconTextGap: 10;");
+        grade10Button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
         grade11Button.putClientProperty(FlatClientProperties.STYLE,
                 "font: bold +5; " +
                         "iconTextGap: 10;");
+        grade11Button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
         grade12Button.putClientProperty(FlatClientProperties.STYLE,
                 "font: bold +5; " +
                         "iconTextGap: 10;");
+
+        grade12Button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
 
         // Create a ButtonGroup to ensure only one button can be selected at a time
         ButtonGroup group = new ButtonGroup();
@@ -133,6 +142,7 @@ public class Form1 extends JPanel {
         group.add(grade10Button);
         group.add(grade11Button);
         group.add(grade12Button);
+
 
         // Add ActionListeners to capture clicks
         grade9Button.addActionListener(new ButtonClickListener());

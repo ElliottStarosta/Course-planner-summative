@@ -9,10 +9,13 @@ public class StudentCounselor {
     public static Counselor findCounselor(String lastName) {
         // Initialize the map with counselors' information
         Map<String, Counselor> counselors = new HashMap<>(){{
-//            put("A-Elgo", new Counselor("Mr. Bobby Howe", "robert.howe@ocdsb.ca"));
-//            put("Elha-Lin", new Counselor("Mr. Scheepers", "greg.scheepers@ocdsb.ca"));
-//            put("Ling-Shar", new Counselor("Ms. Walter", "michelle.walter@ocdsb.ca"));
-//            put("Shaw-Z", new Counselor("Ms. Lisak", "dubravka.lisak@ocdsb.ca"));
+            /*
+            Actual counselor's email addresses...
+            put("A-Elgo", new Counselor("Mr. Bobby Howe", "robert.howe@ocdsb.ca"));
+            put("Elha-Lin", new Counselor("Mr. Scheepers", "greg.scheepers@ocdsb.ca"));
+            put("Ling-Shar", new Counselor("Ms. Walter", "michelle.walter@ocdsb.ca"));
+            put("Shaw-Z", new Counselor("Ms. Lisak", "dubravka.lisak@ocdsb.ca"));
+             */
 
             put("A-Elgo", new Counselor("Mr. Bobby Howe", "fenceryounger@gmail.com"));
             put("Elha-Lin", new Counselor("Mr. Scheepers", "fenceryounger@gmail.com"));

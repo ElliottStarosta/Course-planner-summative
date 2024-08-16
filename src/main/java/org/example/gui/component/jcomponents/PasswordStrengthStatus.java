@@ -13,7 +13,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 
-public class PasswordStrengthStatus extends JPanel {
+public class    PasswordStrengthStatus extends JPanel {
 
     private JPasswordField passwordField;
     private DocumentListener documentListener;
