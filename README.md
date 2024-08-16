@@ -2,7 +2,7 @@
 
 # Welcome to EOM Course Recommender!
 
-[![Java](https://img.shields.io/badge/Java-Completed-blue?logo=java)](https://your-link-here)
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
  <img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue" />  
 [![School Project](https://img.shields.io/badge/School%20Project-Completed-orange)](https://your-link-here)
 
