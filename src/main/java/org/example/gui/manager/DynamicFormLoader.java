@@ -7,8 +7,7 @@ import java.util.HashMap;
 public class DynamicFormLoader {
 
     public static Object loadForm(int question, HashMap<String, String> userResponses) {
-        String formClassName = "org.example.GUI.pages.Quiz.Form" + question;
-
+        String formClassName = "org.example.gui.pages.quiz.Form" + question;
         try {
             // Load the class dynamically
             Class<?> formClass = Class.forName(formClassName);
