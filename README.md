@@ -2,6 +2,10 @@
 
 # Welcome to EOM Course Recommender!
 
+[![Java](https://img.shields.io/badge/Java-Completed-blue?logo=java)](https://your-link-here)
+[![Python](https://img.shields.io/badge/Python-Completed-green?logo=python)](https://your-link-here)
+[![School Project](https://img.shields.io/badge/School%20Project-Completed-orange)](https://your-link-here)
+
 ## Description
 
 The **EOM Course Recommender** is a Java-based application designed to help students find suitable courses based on their preferences and requirements. The application uses a machine learning recommendation algorithm to suggest courses that align with user interests, previous classes, and future career goals, providing a personalized learning experience.
