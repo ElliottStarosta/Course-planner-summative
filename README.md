@@ -3,10 +3,9 @@
 # Welcome to EOM Course Recommender!
 
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
-![Python](https://img.shields.io/badge/Python-4584b6?style=for-the-badge&logo=python&logoColor=blue)
+![Python](https://img.shields.io/badge/Python-4584b6?style=for-the-badge&logo=python&logoColor=ffde57)
 ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white
 )
-[![School Project](https://img.shields.io/badge/School%20Project-Completed-orange)](https://your-link-here)
 
 ## Description
 
