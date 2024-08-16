@@ -5,6 +5,7 @@ import net.miginfocom.swing.MigLayout;
 import org.example.gui.manager.FormsManager;
 import org.example.gui.manager.DynamicFormLoader;
 import org.example.people.User;
+import org.example.utility.api.APIClient;
 import org.example.utility.courses.Course;
 
 import javax.swing.*;
@@ -68,6 +69,7 @@ public class DashboardForm extends JPanel {
         JButton takeQuizButton = (JButton) createQuizButtonPanel();
         boolean hasRecommendations = Course.readRecommendedCoursesFromFile(username);
         if (!hasRecommendations) {
+            APIClient.deployAPI();
             panel.add(takeQuizButton, "gapy 40");
         } else {
             panel.add(createContentPanel(), "gapy 40");

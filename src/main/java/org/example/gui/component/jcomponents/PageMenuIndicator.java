@@ -71,7 +71,7 @@ public class PageMenuIndicator extends JPanel {
             super.paintComponent(g);
             int width = getWidth();
             int height = getHeight();
-            int size = (int) (height * 0.3f); // Size of the indicators
+            int size = (int) (height * 0.5f); // Size of the indicators
             Graphics2D g2 = (Graphics2D) g.create();
             FlatUIUtils.setRenderingHints(g2);
             int gap = UIScale.scale(5);

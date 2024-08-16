@@ -98,6 +98,7 @@ public class APIClient {
                 courses.add(courseCode);
             }
         } catch (Exception e) {
+            // If no data from the API (cant parse any data to JSON)
             System.out.println("No valid response");
         }
     }

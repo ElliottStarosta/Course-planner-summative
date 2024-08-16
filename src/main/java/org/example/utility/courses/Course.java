@@ -265,7 +265,7 @@ public class Course {
             // Initialize apiCourses if it's null
             if (!hasAPI.get()) {
                 apiCourses = APIClient.getAPIDataClasses(response);
-                if (apiCourses.size() == 0) {
+                if (apiCourses.isEmpty()) {
                     // If API returns no courses, we will provide random classes
                     hasAPI.set(true);
                 } else {

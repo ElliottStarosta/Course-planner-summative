@@ -92,7 +92,8 @@ public class Form3 extends JPanel {
     private JScrollPane createAnswerScrollPane() {
         answerArea = new JTextArea();
 
-        answerArea.putClientProperty(FlatClientProperties.STYLE, "font: bold +5");
+        answerArea.putClientProperty(FlatClientProperties.STYLE, "" +
+                "font: bold +5");
 
         answerArea.setBorder(BorderFactory.createCompoundBorder(
                 answerArea.getBorder(),
@@ -178,8 +179,8 @@ public class Form3 extends JPanel {
         String answerText = answerArea.getText().trim();
         userResponses.put("interests1", answerText);
         if(isNext) {
-            // Check if the text has at least 10 characters
-            if (answerText.length() >= 10) {
+            // Check if the text has at least 3 characters
+            if (answerText.length() >= 3) {
                 question++;
                 Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
                 if (formInstance != null) {

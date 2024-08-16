@@ -103,7 +103,8 @@ public class Form2 extends JPanel {
                 "[light]background:darken(@background,10%);" +
                 "[dark]background:lighten(@background,10%);" +
                 "font: bold +2;" +
-                "foreground: @accentColor;");
+                "foreground: @accentColor;" +
+                "arc: 15;");
 
         universityButton = new JCheckBox("University");
         collegeButton = new JCheckBox("College");

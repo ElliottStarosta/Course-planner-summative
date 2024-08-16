@@ -105,7 +105,8 @@ public class Form1 extends JPanel {
                 "[light]background:darken(@background,10%);" +
                 "[dark]background:lighten(@background,10%);" +
                 "font: bold +2;" +
-                "foreground: @accentColor;");
+                "foreground: @accentColor;" +
+                "arc: 15;");
 
         grade9Button = new JCheckBox("Grade 9");
         grade10Button = new JCheckBox("Grade 10");

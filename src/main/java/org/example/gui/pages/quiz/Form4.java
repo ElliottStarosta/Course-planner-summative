@@ -180,8 +180,8 @@ public class Form4 extends JPanel {
 
         nextButton.setEnabled(false);
         if(isNext) {
-            // Check if the text has at least 10 characters
-            if (answerText.length() >= 10) {
+            // Check if the text has at least 3 characters
+            if (answerText.length() >= 3) {
                 question++;
                 Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
                 if (formInstance != null) {

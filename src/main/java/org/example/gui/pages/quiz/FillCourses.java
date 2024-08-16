@@ -143,11 +143,8 @@ public class FillCourses extends JPanel {
 
     private void handlePage() {
         String answerText = answerArea.getText().trim();
-        Course.getNonFilledClassesResponse(student,answerText);
+        Course.getNonFilledClassesResponse(student,answerText); // FIll the user's courses with their new interests
         latch.countDown();
-
     }
-
-
 
 }
