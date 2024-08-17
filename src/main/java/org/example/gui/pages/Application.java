@@ -20,7 +20,8 @@ public class Application extends JFrame {
     private void init() {
         setTitle("Course Recommender");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(new Dimension(1200, 700));
+//        setSize(new Dimension(1200, 700));
+        setSize(new Dimension(1500, 900));
         setResizable(false);
         setLocationRelativeTo(null);
         setContentPane(new LoginForm());

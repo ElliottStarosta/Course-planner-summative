@@ -320,34 +320,6 @@ public class Course {
         return randomKey;
     }
 
-
-
-    public static void writeRecommendedCoursesToFileCourseCode(StudentInput studentInput) {
-        try {
-            String username = studentInput.getUsername();
-
-            // Construct file path based on the username
-            String filePath = "src/main/resources/user_class_info/recommended_course_code_" + username + ".json";
-
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.enable(SerializationFeature.INDENT_OUTPUT);
-
-            List<Map<String, Object>> coursesList = new ArrayList<>();
-            for (Map.Entry<Integer, String[]> entry : recommendedCoursesByGrade.entrySet()) {
-                Map<String, Object> courseMap = new HashMap<>();
-                courseMap.put("grade", entry.getKey());
-                courseMap.put("courses", String.join(", ", entry.getValue()));
-                coursesList.add(courseMap);
-            }
-
-            // Write to the JSON file based on the constructed file path
-            mapper.writeValue(new File(filePath), coursesList);
-            System.out.println("Recommended courses written to " + filePath);
-        } catch (IOException e) {
-            System.err.println("Error writing recommended courses to file: " + e.getMessage());
-        }
-    }
-
     public static void writeRecommendedCoursesToFileCourseName(StudentInput studentInput) {
         try {
             String username = studentInput.getUsername();
@@ -365,7 +337,7 @@ public class Course {
                 for (String c : entry.getValue()) {
                     Course course = getCourse(c);
                     if (course != null) {
-                        courseNames.add(course.getCourseName());
+                        courseNames.add(String.format("%s - %s",course.getCourseCode(), course.getCourseName()));
 
                     }
                 }
@@ -384,7 +356,7 @@ public class Course {
     }
 
     public static boolean readRecommendedCoursesFromFile(String username) {
-        String filePath = "src/main/resources/user_class_info/recommended_course_code_" + username + ".json";
+        String filePath = "src/main/resources/user_class_info/recommended_course_name_" + username + ".json";
         File file = new File(filePath);
 
         if (!file.exists()) {
@@ -400,7 +372,6 @@ public class Course {
                 return false;
             }
 
-            // Assuming recommendedCoursesByGrade is declared somewhere accessible
             for (FileCourseData courseData : courseDataList) {
                 recommendedCoursesByGrade.put(courseData.getGrade(), courseData.getCourses().split(", "));
             }

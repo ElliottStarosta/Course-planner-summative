@@ -2,19 +2,21 @@ package org.example.gui.pages.main;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
+import org.example.gui.component.MethodUtil;
 import org.example.gui.manager.FormsManager;
 import org.example.gui.manager.DynamicFormLoader;
 import org.example.people.User;
 import org.example.utility.api.APIClient;
 import org.example.utility.courses.Course;
+import org.example.utility.courses.ExcelUtility;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.HashMap;
+import java.util.Map;
+
 
 public class DashboardForm extends JPanel {
     private int question = 0;
@@ -26,6 +28,16 @@ public class DashboardForm extends JPanel {
     private JButton settingsButton;
 
     private String username;
+    private String[][] data;
+
+    private JComboBox[] courseName;
+
+    private final String[] courses = ExcelUtility.getAllCourseNames();
+
+    private boolean isEditing = false;
+    private JButton editButton;
+    private Map<JButton, String[]> gradeEditMap = new HashMap<>();
+
 
     public DashboardForm() {
         init();
@@ -38,15 +50,16 @@ public class DashboardForm extends JPanel {
 
     public DashboardForm(User user) {
         this.user = user;
-
         this.username = user.getUsername();
 
         userResponses.put("username", username);
         init();
     }
 
+
     private void init() {
         setLayout(new BorderLayout());
+
 
         // Create and configure the settings button
         settingsButton = (JButton) createSettingsButton();
@@ -58,6 +71,9 @@ public class DashboardForm extends JPanel {
                 "arc:20;" +
                         "[light]background:darken(@background,3%);" +
                         "[dark]background:lighten(@background,3%)");
+//        panel.setBackground(Color.RED);
+
+
 
         JLabel description = new JLabel("Please sign in below to access your account");
         description.putClientProperty(FlatClientProperties.STYLE,
@@ -72,11 +88,16 @@ public class DashboardForm extends JPanel {
             APIClient.deployAPI();
             panel.add(takeQuizButton, "gapy 40");
         } else {
-            panel.add(createContentPanel(), "gapy 40");
+            data = MethodUtil.readRecommendedCoursesToMatrix(this.username);
+            for (String[] gradeData : data) {
+                panel.add(createGradePanel(gradeData),"gapy 10");
+            }
+
+            //TODO: add two buttons @ the button that say: Send to counselors and save as PDP
         }
 
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBorder(BorderFactory.createEmptyBorder(60, 0, 0, 0));
+        wrapper.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
 
 
         // Create a container panel to manage the size of the main panel
@@ -87,10 +108,6 @@ public class DashboardForm extends JPanel {
         centerPanel.add(panel);
 
         wrapper.add(centerPanel, BorderLayout.CENTER);
-
-
-
-        wrapper.setBorder(BorderFactory.createEmptyBorder(200, 0, 0, 0));
 
         add(wrapper, BorderLayout.CENTER);
 
@@ -131,6 +148,17 @@ public class DashboardForm extends JPanel {
 
         // Ensure the panel is focused
         requestFocusInWindow();
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                int parentWidth = getWidth();
+                int panelWidth = parentWidth - 40;
+                panel.setPreferredSize(new Dimension(panelWidth, 700));
+                panel.revalidate();
+                panel.repaint();
+            }
+        });
     }
 
     private Component createSettingsButton() {
@@ -163,21 +191,52 @@ public class DashboardForm extends JPanel {
 
 
 
-    private Component createContentPanel() {
-        JButton displayRecommendationsButton = new JButton("Display recommendations");
+    private JPanel createGradePanel(String[] gradeData) {
+        JPanel gradePanel = new JPanel(new MigLayout("wrap 1", "[left]"));
+        gradePanel.putClientProperty(FlatClientProperties.STYLE, "" +
+                "arc:20;" +
+                "[light]background:darken(@background,3%);" +
+                "[dark]background:lighten(@background,3%)");
 
-        displayRecommendationsButton.putClientProperty(FlatClientProperties.STYLE,
-                "[light]background:darken(@background,10%);" +
-                        "[dark]background:lighten(@background,10%);" +
-                        "borderWidth:0;" +
-                        "focusWidth:0;" +
-                        "innerFocusWidth:0");
+        JLabel gradeLabel = new JLabel(gradeData[0]);
+        gradeLabel.putClientProperty(FlatClientProperties.STYLE, "font: bold +12;");
+        gradePanel.setOpaque(false);
+        gradePanel.add(gradeLabel);
 
-        displayRecommendationsButton.setPreferredSize(new Dimension(displayRecommendationsButton.getPreferredSize().width, 50));
-        displayRecommendationsButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        return displayRecommendationsButton;
+
+        JPanel coursePanel = new JPanel(new GridLayout(1, 6, 10, 0));
+        coursePanel.putClientProperty(FlatClientProperties.STYLE,
+                "arc:20;" +
+                        "[light]background:darken(@background,3%);" +
+                        "[dark]background:lighten(@background,3%)");
+        coursePanel.setOpaque(false);
+
+        courseName = new JComboBox[8];
+
+        for (int i = 0; i < 8; i++) {
+            courseName[i] = new JComboBox<>(courses);
+            courseName[i].setSelectedItem(gradeData[i + 1]);
+            courseName[i].setMinimumSize(new Dimension(20, 30));
+            courseName[i].setEnabled(false);
+            courseName[i].setFont(new Font("Arial", Font.BOLD, 10));
+            courseName[i].putClientProperty(FlatClientProperties.STYLE, "arc:0;");
+            courseName[i].setCursor(new Cursor(Cursor.HAND_CURSOR));
+            coursePanel.add(courseName[i]);
+        }
+
+        gradePanel.add(coursePanel);
+
+        editButton = new JButton("Edit");
+        editButton.addActionListener(new EditButtonListener(gradeData, courseName, editButton));
+        editButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        gradePanel.add(editButton,"gapy 10, gapx 5");
+        gradeEditMap.put(editButton, gradeData);
+
+        return gradePanel;
     }
+
 
     private void handleLogin() {
         question++;

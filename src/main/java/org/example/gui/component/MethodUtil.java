@@ -10,9 +10,13 @@ import org.example.gui.manager.FormsManager;
 import org.example.people.User;
 import org.example.utility.courses.Course;
 import org.example.utility.courses.CourseAssembly;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.swing.*;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -157,5 +161,44 @@ public class MethodUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String[][] readRecommendedCoursesToMatrix(String username) {
+        JSONArray jsonArray;
+        try {
+            jsonArray = readJsonFromFile(username);
+        } catch (Exception e) {
+            return new String[0][0]; // Return an empty array on error
+        }
+
+        String[][] data = new String[jsonArray.length()][9];
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            int grade = jsonObject.getInt("grade");
+            String courses = jsonObject.getString("courses");
+            String[] courseArray = courses.split(", ");
+
+            data[i][0] = "Grade " + grade;
+            for (int j = 0; j < Math.min(courseArray.length, 8); j++) {
+                data[i][j + 1] = courseArray[j];
+            }
+        }
+
+        return data;
+    }
+
+
+    private static JSONArray readJsonFromFile(String username) throws IOException {
+        String filePath = "src/main/resources/user_class_info/recommended_course_name_" + username + ".json";
+
+        StringBuilder jsonString = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                jsonString.append(line);
+            }
+        }
+
+        return new JSONArray(jsonString.toString());
     }
 }

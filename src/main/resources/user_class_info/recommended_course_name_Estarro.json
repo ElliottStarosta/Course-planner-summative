@@ -1,0 +1,13 @@
+[ {
+  "courses" : "ENL1W - English Grade 9, MTH1W - Grade 9 Mathematics, SNC1W - Grade 9 Science, CGC1W - Geography of Canada, FSF1D - Core French, TAS1O - Exploring Technologies, PPL1O - Healthy Active Living, ATC1O - Exploring Dance",
+  "grade" : 9
+}, {
+  "courses" : "ENG2D - English Grade 10, MPM2D - Grade 10 Mathematics, SNC2D - Grade 10 Science, CHC2D - Canadian History, CHV2O - Civics and Careers, ASM2O - Media Arts, HFN2O - Food & Nutrition, ADA2O - Drama",
+  "grade" : 10
+}, {
+  "courses" : "NBE3U - English Grade 11 - Understanding Contemporary First Nations, Métis, and Inuit Voices, MCR3U - Functions, SBI3U - Biology, SPH3U - Physics, ADA3M - Drama, HFC3M - Food & Culture, ATC3M - Advanced Dance Skills, HRT3M - World Religions",
+  "grade" : 11
+}, {
+  "courses" : "ENG4U - English Grade 12, MHF4U - Advanced Functions, MCV4U - Calculus and Vectors, SBI4U - Biology, SPH4U - Physics, ADA4M - Drama, HFA4U - Nutrition & Health, ATD4M - Dance Composition",
+  "grade" : 12
+} ]

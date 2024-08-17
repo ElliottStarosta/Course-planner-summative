@@ -150,7 +150,6 @@ public class CourseAssembly {
 //        Course.findAndReplaceCourse(cc, rcp);
 
         Course.writeRecommendedCoursesToFileCourseName(student); // write course name to respective JSON file
-        Course.writeRecommendedCoursesToFileCourseCode(student); // write course code to respective JSON file
 
         // Send email w/ classes to the student's counselor
 //        Counselor.sendCounselorEmail(student, new SendEmail());
