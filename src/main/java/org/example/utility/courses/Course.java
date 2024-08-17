@@ -376,7 +376,6 @@ public class Course {
                 recommendedCoursesByGrade.put(courseData.getGrade(), courseData.getCourses().split(", "));
             }
 
-            System.out.println("Recommended courses read from " + filePath);
         } catch (IOException e) {
             System.out.println("Error reading file: " + filePath);
             e.printStackTrace();

@@ -2,6 +2,7 @@ package org.example.gui.pages.quiz;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
+import org.example.gui.component.MethodUtil;
 import org.example.gui.component.jcomponents.ComboBox;
 import org.example.gui.manager.DynamicFormLoader;
 import org.example.gui.manager.NotificationManager;
@@ -9,6 +10,7 @@ import org.example.gui.component.jcomponents.PageMenuIndicator;
 import org.example.gui.manager.FormsManager;
 import org.example.gui.pages.main.DashboardForm;
 import org.example.people.StudentInput;
+import org.example.people.User;
 import org.example.utility.courses.CourseAssembly;
 
 import javax.swing.*;
@@ -272,7 +274,9 @@ public class Form5 extends JPanel {
                         isSubmitClicked = false;
 
                         // Switch to the main page
-                        FormsManager.getInstance().showForm(new DashboardForm(username));
+                        User user = MethodUtil.getUserWithUsername(username);
+                        String name = user.getFirstName();
+                        FormsManager.getInstance().showForm(new DashboardForm(username,name));
                     }
                 };
                 worker.execute();

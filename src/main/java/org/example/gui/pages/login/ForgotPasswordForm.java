@@ -76,7 +76,7 @@ public class ForgotPasswordForm extends JPanel {
                 NotificationManager.showNotification(NotificationManager.NotificationType.ERROR, "Email not in system, please create an account");
                 emailBtn.setEnabled(true);
             } else {
-                String username = MethodUtil.getUserNameWithEmail(email);
+                String username = MethodUtil.getUsernameWithEmail(email);
 
                 SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
                     @Override

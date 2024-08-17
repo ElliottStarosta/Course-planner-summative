@@ -95,7 +95,7 @@ public class MethodUtil {
         return false;
     }
 
-    public static String getUserNameWithEmail(String emailAddress) {
+    public static String getUsernameWithEmail(String emailAddress) {
         List<User> users;
         users = User.readUsersFromJson();
 
@@ -105,6 +105,18 @@ public class MethodUtil {
             }
         }
         return "";
+    }
+
+    public static User getUserWithUsername(String username) {
+        List<User> users;
+        users = User.readUsersFromJson();
+
+        for (User user : users) {
+            if (user.getUsername().equalsIgnoreCase(username)) {
+                return user;
+            }
+        }
+        return null;
     }
 
     public static void isCorrectCode(JTextField[] codeFields, String generatedCode, String email) {
@@ -171,21 +183,28 @@ public class MethodUtil {
             return new String[0][0]; // Return an empty array on error
         }
 
-        String[][] data = new String[jsonArray.length()][9];
-        for (int i = 0; i < jsonArray.length(); i++) {
+        // Create a 2D array with the required number of rows and columns
+        int numRows = jsonArray.length();
+        String[][] data = new String[numRows][9];
+
+        // Iterate over each JSON object
+        for (int i = 0; i < numRows; i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             int grade = jsonObject.getInt("grade");
             String courses = jsonObject.getString("courses");
             String[] courseArray = courses.split(", ");
 
+            // Set the grade in the first column
             data[i][0] = "Grade " + grade;
-            for (int j = 0; j < Math.min(courseArray.length, 8); j++) {
-                data[i][j + 1] = courseArray[j];
-            }
+
+            // Fill up to 8 courses in the remaining columns
+            int numCourses = Math.min(courseArray.length, 8);
+            System.arraycopy(courseArray, 0, data[i], 1, numCourses);
         }
 
         return data;
     }
+
 
 
     private static JSONArray readJsonFromFile(String username) throws IOException {

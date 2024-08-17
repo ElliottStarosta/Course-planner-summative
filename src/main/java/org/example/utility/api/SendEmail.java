@@ -102,7 +102,7 @@ public class SendEmail {
             Session session = Session.getInstance(props, auth);
             MimeMessage msg = new MimeMessage(session);
 
-            String filePath = "src/main/resources/user_class_info/recommended_course_code_" + user.getUsername() + ".json";
+            String filePath = "src/main/resources/user_class_info/recommended_course_name_" + user.getUsername() + ".json";
             String jsonData = new String(Files.readAllBytes(Paths.get(filePath)));
             JSONArray jsonArray = new JSONArray(jsonData);
 
@@ -140,7 +140,7 @@ public class SendEmail {
             msg.setFrom(new InternetAddress(SENDER_EMAIL));
             msg.addRecipient(Message.RecipientType.TO, new InternetAddress(counselor.getEmail()));
             Transport.send(msg);
-            System.out.println("Message sent successfully");
+            NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Successfully sent your courses to your counselor");
         } catch (Exception e) {
             e.printStackTrace();
         }

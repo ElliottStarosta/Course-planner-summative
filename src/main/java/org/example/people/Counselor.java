@@ -25,12 +25,14 @@ public class Counselor {
     }
 
     // Method to send email to a counselor based on student input
-    public static void sendCounselorEmail(StudentInput student, SendEmail emailSender) {
+    public static void sendCounselorEmail(String username) {
+        SendEmail emailSender = new SendEmail();
+
         List<User> users = User.readUsersFromJson();
         Map<String, User> userMap = createUserMap(users);
 
         // Find the user by username
-        User user = Optional.ofNullable(userMap.get(student.getUsername().toLowerCase()))
+        User user = Optional.ofNullable(userMap.get(username.toLowerCase()))
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         // Find the counselor based on the user's last name

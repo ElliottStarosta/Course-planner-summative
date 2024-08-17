@@ -3,17 +3,21 @@ package org.example.gui.pages.main;
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import org.example.gui.component.MethodUtil;
-import org.example.gui.manager.FormsManager;
 import org.example.gui.manager.DynamicFormLoader;
+import org.example.gui.manager.FormsManager;
+import org.example.people.Counselor;
 import org.example.people.User;
 import org.example.utility.api.APIClient;
 import org.example.utility.courses.Course;
+import org.example.utility.courses.CourseAssembly;
 import org.example.utility.courses.ExcelUtility;
+import org.example.utility.courses.JsonToPdfConverter;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,10 +28,12 @@ public class DashboardForm extends JPanel {
     private JPanel panel;
     private JLabel welcomeLabel;
     private JButton takeQuizButton;
+    private JPanel buttonPanel;
     private HashMap<String, String> userResponses = new HashMap<>();
     private JButton settingsButton;
 
     private String username;
+    private String name;
     private String[][] data;
 
     private JComboBox[] courseName;
@@ -39,18 +45,17 @@ public class DashboardForm extends JPanel {
     private Map<JButton, String[]> gradeEditMap = new HashMap<>();
 
 
-    public DashboardForm() {
-        init();
-    }
 
-    public DashboardForm(String username) {
+    public DashboardForm(String username, String name) {
         this.username = username;
+        this.name = name;
         init();
     }
 
     public DashboardForm(User user) {
         this.user = user;
         this.username = user.getUsername();
+        this.name = user.getFirstName();
 
         userResponses.put("username", username);
         init();
@@ -93,7 +98,12 @@ public class DashboardForm extends JPanel {
                 panel.add(createGradePanel(gradeData),"gapy 10");
             }
 
-            //TODO: add two buttons @ the button that say: Send to counselors and save as PDP
+            //TODO: add two buttons @ the button that say: Send to counselors and save as PDF
+            buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            buttonPanel.setOpaque(false);
+            buttonPanel.add(additonalButtons());
+
+            panel.add(buttonPanel, "align right");
         }
 
         JPanel wrapper = new JPanel(new BorderLayout());
@@ -154,7 +164,7 @@ public class DashboardForm extends JPanel {
             public void componentResized(ComponentEvent e) {
                 int parentWidth = getWidth();
                 int panelWidth = parentWidth - 40;
-                panel.setPreferredSize(new Dimension(panelWidth, 700));
+                panel.setPreferredSize(new Dimension(panelWidth, 750));
                 panel.revalidate();
                 panel.repaint();
             }
@@ -214,8 +224,12 @@ public class DashboardForm extends JPanel {
 
         courseName = new JComboBox[8];
 
+        int grade = Integer.parseInt(gradeData[0].replaceAll("\\D", ""));
+
+        String[] gradeCourses = filterCoursesByGrade(courses, grade);
+
         for (int i = 0; i < 8; i++) {
-            courseName[i] = new JComboBox<>(courses);
+            courseName[i] = new JComboBox<>(gradeCourses);
             courseName[i].setSelectedItem(gradeData[i + 1]);
             courseName[i].setMinimumSize(new Dimension(20, 30));
             courseName[i].setEnabled(false);
@@ -228,13 +242,81 @@ public class DashboardForm extends JPanel {
         gradePanel.add(coursePanel);
 
         editButton = new JButton("Edit");
-        editButton.addActionListener(new EditButtonListener(gradeData, courseName, editButton));
+        editButton.addActionListener(new EditButtonListener(gradeData, courseName, editButton, username, data));
         editButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         gradePanel.add(editButton,"gapy 10, gapx 5");
         gradeEditMap.put(editButton, gradeData);
 
         return gradePanel;
+    }
+
+
+
+    public String[] filterCoursesByGrade(String[] courses, int targetGrade) {
+        new CourseAssembly();
+        // Use streams to filter and map courses
+        return Arrays.stream(courses)
+                .map(courseString -> courseString.split(" - ")[0]) // Extract course code
+                .map(CourseAssembly::getCourse) // Convert code to Course object
+                .filter(course -> course != null && course.getGradeLevel() == targetGrade) // Filter by grade
+                .map(course -> course.getCourseCode() + " - " + course.getCourseName()) // Format the course string
+                .toArray(String[]::new); // Collect results into an array
+    }
+
+
+    private Component additonalButtons() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT,5,0));
+
+        panel.setOpaque(false);
+
+        JButton saveBtn = new JButton("Export as PDF");
+        JButton sendCounselorBtn = new JButton("Send to Counselor");
+
+
+        saveBtn.putClientProperty(FlatClientProperties.STYLE, "" +
+                "[light]background:darken(@background,10%);" +
+                "[dark]background:lighten(@background,10%);" +
+                "borderWidth:0;" +
+                "innerFocusWidth:0;" +
+                "arc: 10;" +
+                "font: bold +2");
+
+        sendCounselorBtn.putClientProperty(FlatClientProperties.STYLE, "" +
+                "[light]background:darken(@background,10%);" +
+                "[dark]background:lighten(@background,10%);" +
+                "borderWidth:0;" +
+                "innerFocusWidth:0;" +
+                "arc: 10;"
+                + "font: bold +2");
+
+
+        saveBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        sendCounselorBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        Dimension saveBtnSize = saveBtn.getPreferredSize();
+        Dimension sendCounselorBtnSize = sendCounselorBtn.getPreferredSize();
+
+        saveBtn.setPreferredSize(new Dimension(saveBtnSize.width + 30, saveBtnSize.height + 10));
+        sendCounselorBtn.setPreferredSize(new Dimension(sendCounselorBtnSize.width + 30, sendCounselorBtnSize.height + 10));
+
+
+
+        panel.add(saveBtn);
+        panel.add(sendCounselorBtn);
+
+        sendCounselorBtn.addActionListener(e -> Counselor.sendCounselorEmail(username));
+
+        saveBtn.addActionListener(e -> {
+            try {
+                JsonToPdfConverter.convertJsonToPdf(name,username);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        return panel;
+
     }
 
 
