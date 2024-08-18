@@ -5,6 +5,7 @@ import net.miginfocom.swing.MigLayout;
 import org.example.gui.component.MethodUtil;
 import org.example.gui.manager.DynamicFormLoader;
 import org.example.gui.manager.FormsManager;
+import org.example.gui.pages.login.LoginForm;
 import org.example.people.Counselor;
 import org.example.people.User;
 import org.example.utility.api.APIClient;
@@ -14,6 +15,7 @@ import org.example.utility.courses.ExcelUtility;
 import org.example.utility.courses.JsonToPdfConverter;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -30,7 +32,7 @@ public class DashboardForm extends JPanel {
     private JButton takeQuizButton;
     private JPanel buttonPanel;
     private HashMap<String, String> userResponses = new HashMap<>();
-    private JButton settingsButton;
+    private JButton logoutBtn;
 
     private String username;
     private String name;
@@ -49,6 +51,9 @@ public class DashboardForm extends JPanel {
     public DashboardForm(String username, String name) {
         this.username = username;
         this.name = name;
+
+        new CourseAssembly();
+
         init();
     }
 
@@ -58,6 +63,9 @@ public class DashboardForm extends JPanel {
         this.name = user.getFirstName();
 
         userResponses.put("username", username);
+
+        new CourseAssembly();
+
         init();
     }
 
@@ -67,7 +75,7 @@ public class DashboardForm extends JPanel {
 
 
         // Create and configure the settings button
-        settingsButton = (JButton) createSettingsButton();
+        logoutBtn = (JButton) createLogoutButton();
 
         // Panel for main content
         panel = new JPanel(new MigLayout("wrap,fillx,insets 35 45 30 45", "fill, 400:600"));
@@ -125,11 +133,16 @@ public class DashboardForm extends JPanel {
         // Create a top-right panel to hold the settings button
         JPanel topRightPanel = new JPanel(new BorderLayout());
         topRightPanel.setOpaque(false); // Make it transparent
-        topRightPanel.add(settingsButton, BorderLayout.EAST);
+        topRightPanel.add(logoutBtn, BorderLayout.EAST);
         topRightPanel.setPreferredSize(new Dimension(0, 40));
 
+        JPanel wrapperTopPanel = new JPanel(new BorderLayout());
+        wrapperTopPanel.setOpaque(false); // Make it transparent
+        wrapperTopPanel.setBorder(new EmptyBorder(15, 0, 0, 20)); // Top and right margin
+        wrapperTopPanel.add(topRightPanel, BorderLayout.CENTER);
+
         // Add the top-right panel to the top of the MainPage
-        add(topRightPanel, BorderLayout.NORTH);
+        add(wrapperTopPanel, BorderLayout.NORTH);
 
         // Add KeyListener to the panel
         KeyAdapter enterKeyListener = new KeyAdapter() {
@@ -171,31 +184,22 @@ public class DashboardForm extends JPanel {
         });
     }
 
-    private Component createSettingsButton() {
-        int iconSize = 35;
-        ImageIcon icon = new ImageIcon(((new ImageIcon("src/main/resources/assets/hamburger.png")).getImage()).getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH));
+    private Component createLogoutButton() {
 
-        // Set up the button with the icon
-        settingsButton = new JButton(icon);
+        logoutBtn = new JButton("Logout");
 
-        // Calculate the preferred size to include padding (20px on all sides)
-        int padding = 20;
-        settingsButton.setPreferredSize(new Dimension(iconSize + padding * 2, iconSize + padding * 2));
+        logoutBtn.putClientProperty(FlatClientProperties.STYLE, "" +
+                "[light]background:darken(@background,10%);" +
+                "[dark]background:lighten(@background,10%);" +
+                "borderWidth:0;" +
+                "innerFocusWidth:0;" + "font: bold +2" );
 
-        // Set transparent border to create padding without affecting centering
-        settingsButton.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
+        logoutBtn.setPreferredSize(new Dimension(logoutBtn.getPreferredSize().width, 45));
 
-        // Set the icon's position to the center of the button
-        settingsButton.setHorizontalAlignment(SwingConstants.CENTER);
-        settingsButton.setVerticalAlignment(SwingConstants.CENTER);
+        logoutBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        logoutBtn.addActionListener(e -> FormsManager.getInstance().showForm(new LoginForm()));
 
-//        // Other button settings
-        settingsButton.setContentAreaFilled(false);
-//        settingsButton.setBackground(Color.RED);
-        settingsButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        settingsButton.addActionListener(e -> FormsManager.getInstance().showForm(new SettingsForm()));
-
-        return settingsButton;
+        return logoutBtn;
     }
 
 
@@ -254,7 +258,7 @@ public class DashboardForm extends JPanel {
 
 
     public String[] filterCoursesByGrade(String[] courses, int targetGrade) {
-        new CourseAssembly();
+
         // Use streams to filter and map courses
         return Arrays.stream(courses)
                 .map(courseString -> courseString.split(" - ")[0]) // Extract course code

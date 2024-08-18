@@ -243,6 +243,7 @@ public class Course {
     }
 
     public static void getNonFilledClassesResponse(StudentInput student, String studentResponse) {
+        System.out.println("filling");
 
         recommendedCoursesByGrade.forEach((grade, courses) -> {
             Set<String> recommendedCourses = new HashSet<>();
@@ -261,11 +262,12 @@ public class Course {
     }
 
     private static String fillCourse(int grade, Set<String> recommendedCourses, Set<String> recommendedCourseArea, String[] courses, String response, StudentInput studentInput) {
-        if (response.isEmpty()) {
+        if (!response.isEmpty()) {
             // Initialize apiCourses if it's null
             if (!hasAPI.get()) {
                 apiCourses = APIClient.getAPIDataClasses(response);
                 if (apiCourses.isEmpty()) {
+
                     // If API returns no courses, we will provide random classes
                     hasAPI.set(true);
                 } else {

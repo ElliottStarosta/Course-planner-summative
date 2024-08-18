@@ -23,9 +23,9 @@ public class APIClient {
         ArrayList<String> courses = new ArrayList<>();
 
         // First URL
-        String firstUrl = "https://coursesapi-84sd.onrender.com/recommend-courses/";
+        String firstUrl = "http://127.0.0.1:8000/recommend-courses/";
         // Second URL (backup)
-        String secondUrl = "http://127.0.0.1:8000/recommend-courses/";
+        String secondUrl = "https://coursesapi-84sd.onrender.com/recommend-courses/";
 
         // Create executor service for concurrent tasks
         ExecutorService executorService = Executors.newFixedThreadPool(2);
