@@ -8,7 +8,7 @@ import org.example.utility.courses.Course;
 import org.example.utility.courses.CourseAssembly;
 
 
-
+// Maybe use this API for random user data; simulating random users: "url: 'https://randomuser.me/api/"
 /*
 NOTE: When signing up ask them for everything in StudentInput class. During this process ask them for their interests, and run the script
 NOTE: When logging in, read their file and display info
