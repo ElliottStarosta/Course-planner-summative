@@ -126,7 +126,7 @@ public class MethodUtil {
             FormsManager.getInstance().showForm(new PasswordChangeForm(email));
             NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Code verified successfully");
         } else {
-            NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Please ensure all required fields are completed");
+            NotificationManager.showNotification(NotificationManager.NotificationType.ERROR, "Incorrect code. Please check to make sure the information was entered correctly");
 
         }
     }

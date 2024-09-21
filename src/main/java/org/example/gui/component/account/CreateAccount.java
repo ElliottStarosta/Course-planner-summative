@@ -16,7 +16,8 @@ public class CreateAccount {
     public enum AccountCreationStatus {
         SUCCESS,
         USERNAME_TAKEN,
-        EMAIL_TAKEN
+        EMAIL_TAKEN,
+        USERNAME_INCORRECT_FORMAT
     }
 
      public AccountCreationStatus createAccount(String username, String password, String email, String firstName, String lastName) {
@@ -25,6 +26,8 @@ public class CreateAccount {
             return AccountCreationStatus.USERNAME_TAKEN;
         } else if (isEmailTaken(email)) {
             return AccountCreationStatus.EMAIL_TAKEN;
+        } else if(isUsernameFormatCorrect(username)) {
+            return AccountCreationStatus.USERNAME_INCORRECT_FORMAT;
         }
 
         User newUser = new User(username, password, email, firstName, lastName);
@@ -48,6 +51,13 @@ public class CreateAccount {
             if (user.getEmail().equals(email)) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    private boolean isUsernameFormatCorrect(String username) {
+        if (username.contains(" ")) {
+            return true;
         }
         return false;
     }

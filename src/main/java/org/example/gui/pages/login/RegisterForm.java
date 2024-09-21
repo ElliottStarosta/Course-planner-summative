@@ -156,7 +156,7 @@ public class RegisterForm extends JPanel {
             // Check the password strength
             int passwordStrength = MethodUtil.checkPasswordStrength(String.valueOf(passwordField.getPassword()));
             if (passwordStrength < 3) {
-                NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Password needs to be stronge");
+                NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Password needs to be stronger");
 
             } else {
                 // If all fields are filled, passwords match, and password strength is adequate, proceed with account creation
@@ -175,9 +175,10 @@ public class RegisterForm extends JPanel {
                 } else if (status == CreateAccount.AccountCreationStatus.EMAIL_TAKEN) {
                     NotificationManager.showNotification(NotificationManager.NotificationType.ERROR, "This email is already being used. Please select a different email");
 
-                } else {
+                } else if (status == CreateAccount.AccountCreationStatus.USERNAME_INCORRECT_FORMAT) {
+                    NotificationManager.showNotification(NotificationManager.NotificationType.ERROR, "Username contains spaces. Please select a different username");
+                }else {
                     NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Account Created");
-
 
                     FormsManager.getInstance().showForm(new LoginForm());
                 }
