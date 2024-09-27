@@ -83,7 +83,7 @@ public class ForgotPasswordForm extends JPanel {
                     protected Void doInBackground() throws Exception {
                         String generatedCode = TwoFactorAuthentication.generateAndSendCode(email, username);
                         NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Verification code sent");
-                        FormsManager.getInstance().showForm(new VerificationForm(generatedCode, emailField.getText()));
+                        FormsManager.getInstance().showForm(new VerificationForm(generatedCode, emailField.getText(),false));
                         return null;
                     }
                 };

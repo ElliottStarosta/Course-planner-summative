@@ -5,6 +5,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import org.example.gui.component.account.CreateAccount;
 import org.example.gui.component.MethodUtil;
+import org.example.gui.component.account.TwoFactorAuthentication;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.jcomponents.PasswordStrengthStatus;
 import org.example.gui.manager.FormsManager;
@@ -178,9 +179,10 @@ public class RegisterForm extends JPanel {
                 } else if (status == CreateAccount.AccountCreationStatus.USERNAME_INCORRECT_FORMAT) {
                     NotificationManager.showNotification(NotificationManager.NotificationType.ERROR, "Username contains spaces. Please select a different username");
                 }else {
-                    NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Account Created");
-
-                    FormsManager.getInstance().showForm(new LoginForm());
+                    NotificationManager.showNotification(NotificationManager.NotificationType.INFO, "Making 2FA Verification Code...");
+                    String generatedCode = TwoFactorAuthentication.generateAndSendCode(email, usernameTxt);
+                    NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Verification code sent");
+                    FormsManager.getInstance().showForm(new VerificationForm(generatedCode, emailField.getText(),true));
                 }
             }
         }

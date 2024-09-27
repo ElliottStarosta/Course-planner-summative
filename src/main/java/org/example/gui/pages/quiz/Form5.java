@@ -16,13 +16,17 @@ import org.example.utility.courses.CourseAssembly;
 import javax.swing.*;
 import javax.swing.plaf.basic.ComboPopup;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.example.utility.courses.ExcelUtility.getAllCourseNames;
 
+// TODO : Make the combo box only show courses in which your grade can take; Your grade and all the courses without preqs
 
 public class Form5 extends JPanel {
 
@@ -72,7 +76,7 @@ public class Form5 extends JPanel {
                         "[dark]background:lighten(@background,3%)");
 
         indicator = new PageMenuIndicator();
-        indicator.setPageNumber(4);
+        indicator.setPageNumber(question - 1);
 
         contentPanel.add(indicator, "align left, wrap");
         contentPanel.add(createTitlePanel(), "wrap, align center, gapy 20");
@@ -132,11 +136,26 @@ public class Form5 extends JPanel {
 
         if (userResponses.containsKey("previousClasses")) {
             String previousClasses = userResponses.get("previousClasses");
-            List<String> classes = Arrays.asList(previousClasses.split(","));
-
-            for (String c : classes) {
-                courseComboBox.setSelectedItem(c);
+            List<String> classes = new ArrayList<>();
+            Matcher matcher = Pattern.compile("\"([^\"]*)\"|[^,]+").matcher(previousClasses);
+            while (matcher.find()) {
+                String className;
+                if (matcher.group(1) != null) {
+                    // Matched a quoted class name, remove quotes
+                    className = matcher.group(1);
+                } else {
+                    // Matched a regular class name, no quotes
+                    className = matcher.group();
+                }
+                classes.add(className.trim());
             }
+
+            if (!previousClasses.isEmpty()) {
+                for (String c : classes) {
+                    courseComboBox.setSelectedItem(c);
+                }
+            }
+
         }
 
         return comboBoxPanel;
@@ -216,6 +235,7 @@ public class Form5 extends JPanel {
         List<Object> selectedItems = courseComboBox.getSelectedItems();
         String selectedClasses = selectedItems.stream()
                 .map(Object::toString)
+                .map(c -> c.contains(",") ? "\"" + c + "\"" : c)
                 .collect(Collectors.joining(", "));
 
         userResponses.put("previousClasses", selectedClasses);
@@ -230,8 +250,7 @@ public class Form5 extends JPanel {
         // Combine interests1 and interests2
         String combinedInterests = interests1 + ", " + interests2;
 
-        // Create StudentInput object
-        StudentInput student = new StudentInput(combinedInterests, selectedClasses, grade, track, username);
+
 
         int requiredClasses = 0;
 
@@ -258,6 +277,14 @@ public class Form5 extends JPanel {
             if (!isSubmitClicked) {
                 isSubmitClicked = true;
                 nextButton.setEnabled(false);
+
+                selectedClasses = selectedItems.stream()
+                        .map(Object::toString)
+                        .map(c -> c.replace("\"", ""))
+                        .collect(Collectors.joining(", "));
+
+                // Create StudentInput object
+                StudentInput student = new StudentInput(combinedInterests, selectedClasses, grade, track, username);
 
                 // Run the assessment in a separate thread
                 SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {

@@ -19,9 +19,12 @@ public class VerificationForm extends JPanel {
     private JButton submitBtn;
     private String email;
 
-    public VerificationForm(String generatedCode, String email) {
+    private boolean is2FALogin;
+
+    public VerificationForm(String generatedCode, String email, boolean is2FALogin) {
         this.generatedCode = generatedCode;
         this.email = email;
+        this.is2FALogin = is2FALogin;
         init();
     }
 
@@ -109,7 +112,7 @@ public class VerificationForm extends JPanel {
                         boolean allFieldsFull = TwoFactorAuthentication.areFieldsFull(codeFields);
 
                         if (allFieldsFull) {
-                            MethodUtil.isCorrectCode(codeFields,generatedCode, email);
+                            MethodUtil.isCorrectCode(codeFields,generatedCode, email,is2FALogin);
                         } else {
                             NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Please ensure all required fields are completed");
 
@@ -131,7 +134,7 @@ public class VerificationForm extends JPanel {
                         for (int i = 0; i < 6; i++) {
                             codeFields[i].setText(text.substring(i, i + 1));
                         }
-                        MethodUtil.isCorrectCode(codeFields,generatedCode, email);
+                        MethodUtil.isCorrectCode(codeFields,generatedCode, email, is2FALogin);
                         codeFields[5].requestFocus();
 
                     } else {
@@ -159,7 +162,7 @@ public class VerificationForm extends JPanel {
             boolean allFieldsFull = TwoFactorAuthentication.areFieldsFull(codeFields);
 
             if (allFieldsFull) {
-                MethodUtil.isCorrectCode(codeFields,generatedCode, email);
+                MethodUtil.isCorrectCode(codeFields,generatedCode, email,is2FALogin);
             } else {
                 NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Please ensure all required fields are completed");
 

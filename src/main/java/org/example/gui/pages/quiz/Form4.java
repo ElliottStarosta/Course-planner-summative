@@ -54,7 +54,7 @@ public class Form4 extends JPanel {
                         "[dark]background:lighten(@background,3%)");
 
         indicator = new PageMenuIndicator();
-        indicator.setPageNumber(3);
+        indicator.setPageNumber(question - 1);
 
         contentPanel.add(indicator, "align left, wrap");
         contentPanel.add(createTitlePanel(), "wrap, align center, gapy 20");

@@ -60,7 +60,7 @@ public class Form2 extends JPanel {
                         "[dark]background:lighten(@background,3%)");
 
         indicator = new PageMenuIndicator();
-        indicator.setPageNumber(1);
+        indicator.setPageNumber(question - 1);
 
         contentPanel.add(indicator, "align left, wrap");
         contentPanel.add(createTitlePanel(), "wrap, align center, gapy 75");

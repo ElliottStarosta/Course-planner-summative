@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.example.gui.component.account.TwoFactorAuthentication;
 import org.example.gui.manager.NotificationManager;
+import org.example.gui.pages.login.LoginForm;
 import org.example.gui.pages.login.PasswordChangeForm;
 import org.example.gui.manager.FormsManager;
 import org.example.people.User;
@@ -120,10 +121,15 @@ public class MethodUtil {
         return null;
     }
 
-    public static void isCorrectCode(JTextField[] codeFields, String generatedCode, String email) {
+    public static void isCorrectCode(JTextField[] codeFields, String generatedCode, String email, boolean is2FALogin) {
         boolean correctCode = TwoFactorAuthentication.verifyCodeAndClose(codeFields, generatedCode);
         if (correctCode) {
-            FormsManager.getInstance().showForm(new PasswordChangeForm(email));
+            if (!is2FALogin) {
+                FormsManager.getInstance().showForm(new PasswordChangeForm(email));
+            } else {
+                FormsManager.getInstance().showForm(new LoginForm());
+                NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Account Created");
+            }
             NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Code verified successfully");
         } else {
             NotificationManager.showNotification(NotificationManager.NotificationType.ERROR, "Incorrect code. Please check to make sure the information was entered correctly");

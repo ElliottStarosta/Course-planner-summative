@@ -70,5 +70,4 @@ public class StudentInput {
 
         this.username = username;
     }
-
-    }
+}
