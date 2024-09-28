@@ -37,7 +37,7 @@
   "keyToString": {
     "Application.Application.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "API",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/fence/Desktop/Computer Science/CoursesSummative",
     "project.structure.last.edited": "Libraries",
@@ -185,77 +185,22 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/gui/pages/login/RegisterForm.java</url>
-          <line>143</line>
-          <properties class="org.example.gui.pages.login.RegisterForm" method="handleRegister">
+          <line>144</line>
+          <properties class="org.example.gui.pages.login.RegisterForm">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/gui/pages/quiz/Form5.java</url>
-          <line>49</line>
-          <properties class="org.example.gui.pages.quiz.Form5" method="&lt;init&gt;">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/gui/pages/quiz/Form5.java</url>
-          <line>55</line>
-          <properties class="org.example.gui.pages.quiz.Form5" method="init">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/gui/pages/quiz/Form5.java</url>
-          <line>67</line>
-          <properties class="org.example.gui.pages.quiz.Form5" method="createContentPanel">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="21" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/gui/pages/quiz/Form5.java</url>
-          <line>115</line>
-          <properties class="org.example.gui.pages.quiz.Form5" method="createCourseComboBoxPanel">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="22" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/gui/pages/quiz/Form5.java</url>
-          <line>233</line>
-          <properties class="org.example.gui.pages.quiz.Form5" method="handlePage">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="24" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/gui/pages/login/VerificationForm.java</url>
-          <line>160</line>
+          <line>163</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/gui/pages/login/ForgotPasswordForm.java</url>
           <line>84</line>
           <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/gui/pages/quiz/Form5.java</url>
-          <line>30</line>
-          <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/gui/pages/quiz/Form5.java</url>
-          <line>276</line>
-          <option name="timeStamp" value="25" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
