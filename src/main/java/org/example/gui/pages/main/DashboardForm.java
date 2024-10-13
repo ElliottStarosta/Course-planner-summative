@@ -76,27 +76,21 @@ public class DashboardForm extends JPanel {
 
         // Create and configure the settings button
         logoutBtn = (JButton) createLogoutButton();
+        boolean hasRecommendations = Course.readRecommendedCoursesFromFile(username);
 
         // Panel for main content
+
         panel = new JPanel(new MigLayout("wrap,fillx,insets 35 45 30 45", "fill, 400:600"));
         panel.setOpaque(false); // Make the panel background transparent
         panel.putClientProperty(FlatClientProperties.STYLE,
                 "arc:20;" +
                         "[light]background:darken(@background,3%);" +
                         "[dark]background:lighten(@background,3%)");
-//        panel.setBackground(Color.RED);
 
-
-
-        JLabel description = new JLabel("Please sign in below to access your account");
-        description.putClientProperty(FlatClientProperties.STYLE,
-                "[light]foreground:lighten(@foreground,30%);" +
-                        "[dark]foreground:darken(@foreground,30%)");
-
-        createTopWelcome(panel);
+        createTopWelcome(panel, hasRecommendations);
 
         JButton takeQuizButton = (JButton) createQuizButtonPanel();
-        boolean hasRecommendations = Course.readRecommendedCoursesFromFile(username);
+
         if (!hasRecommendations) {
             APIClient.deployAPI();
             panel.add(takeQuizButton, "gapy 40");
@@ -109,25 +103,30 @@ public class DashboardForm extends JPanel {
             //TODO: add two buttons @ the button that say: Send to counselors and save as PDF
             buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             buttonPanel.setOpaque(false);
-            buttonPanel.add(additonalButtons());
+            buttonPanel.add(additionalButtons());
 
             panel.add(buttonPanel, "align right");
         }
 
-        JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
+        JPanel wrapper = new JPanel(new GridBagLayout()); // Use GridBagLayout for flexible layout
+        wrapper.setOpaque(false);
+
+        // Create GridBagConstraints with adjustments
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;   // Center horizontally
+        gbc.gridy = 0;   // This controls vertical positioning
+        gbc.anchor = GridBagConstraints.CENTER; // Center the panel horizontally
+        if (!hasRecommendations) {
+            gbc.insets = new Insets(-150, 0, 0, 0);
+        } else {
+            gbc.insets = new Insets(-45, 0, 0, 0);
+        }
 
 
-        // Create a container panel to manage the size of the main panel
-        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0,0));
-        centerPanel.setOpaque(false); // Make it transparent
-        centerPanel.setPreferredSize(new Dimension(300, 300));
-
-        centerPanel.add(panel);
-
-        wrapper.add(centerPanel, BorderLayout.CENTER);
+        wrapper.add(panel, gbc);
 
         add(wrapper, BorderLayout.CENTER);
+
 
 
         // Create a top-right panel to hold the settings button
@@ -176,8 +175,14 @@ public class DashboardForm extends JPanel {
             @Override
             public void componentResized(ComponentEvent e) {
                 int parentWidth = getWidth();
-                int panelWidth = parentWidth - 40;
-                panel.setPreferredSize(new Dimension(panelWidth, 750));
+
+                if (!hasRecommendations) {
+                    int panelWidth = parentWidth - 300;
+                    panel.setPreferredSize(new Dimension(panelWidth, 250));
+                } else {
+                    int panelWidth = parentWidth - 40;
+                    panel.setPreferredSize(new Dimension(panelWidth, 742));
+                }
                 panel.revalidate();
                 panel.repaint();
             }
@@ -246,6 +251,10 @@ public class DashboardForm extends JPanel {
         gradePanel.add(coursePanel);
 
         editButton = new JButton("Edit");
+        editButton.putClientProperty(FlatClientProperties.STYLE,
+                "arc:5;" +
+                        "[light]background:darken(@background,3%);" +
+                        "[dark]background:lighten(@background,25%)");
         editButton.addActionListener(new EditButtonListener(gradeData, courseName, editButton, username, data));
         editButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
@@ -269,7 +278,7 @@ public class DashboardForm extends JPanel {
     }
 
 
-    private Component additonalButtons() {
+    private Component additionalButtons() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT,5,0));
 
         panel.setOpaque(false);
@@ -349,11 +358,12 @@ public class DashboardForm extends JPanel {
         return takeQuizButton;
     }
 
-    private void createTopWelcome(JPanel panel) {
+    private void createTopWelcome(JPanel panel, boolean hasRecs) {
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.putClientProperty(FlatClientProperties.STYLE, "background:null");
 
-        welcomeLabel = new JLabel(String.format("Welcome back %s!", username));
+
+        welcomeLabel = (hasRecs) ? new JLabel(String.format("Welcome back %s!", username)) :  new JLabel(String.format("Welcome to EOM Course Recommender, %s!", username));
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         welcomeLabel.putClientProperty(FlatClientProperties.STYLE, "font: bold +15");
