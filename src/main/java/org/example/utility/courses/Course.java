@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.example.utility.courses.CourseAssembly.*;
@@ -440,7 +442,21 @@ public class Course {
        }
     }
 
-    public static void main(String[] args) {
+    public static String[] cleanPreviousCourses(String previousClasses) {
+        // Remove the surrounding brackets and quotes
+        String cleanedString = previousClasses.replace("[", "").replace("]", "");
+
+        Pattern pattern = Pattern.compile("\"([^\"]*)\"");
+        Matcher matcher = pattern.matcher(cleanedString);
+
+        // Store each matched item in a list
+        ArrayList<String> classList = new ArrayList<>();
+        while (matcher.find()) {
+            classList.add(matcher.group(1));
+        }
+
+        // Convert list to array if needed
+        return classList.toArray(new String[0]);
 
     }
 }

@@ -57,9 +57,13 @@ public class CourseAssembly {
             }
 
 
-            List<String> previousCourses = new ArrayList<>(Arrays.asList(student.getPreviousCourses().split("\\s*,\\s*|\\s+")));
+            List<String> previousCoursesTemp = new ArrayList<>(Arrays.asList(Course.cleanPreviousCourses(student.getPreviousCourses())));
 
-
+            ArrayList<String> previousCourses = new ArrayList<>();
+            for (String course : previousCoursesTemp) {
+                String courseCode = course.split(" - ")[0];
+                previousCourses.add(courseCode);
+            }
             previousCourses.forEach(courseCode -> {
                 Course course = getCourse(courseCode);
 
@@ -143,11 +147,7 @@ public class CourseAssembly {
 
         Course.addNonFilledClasses(student); // Add non filled classes with random classes
 
-        // TODO : Make it so that the user enters data here for it for the acutal GUI
-//        String cc = "Sph3u"; // course code
-//        String rcp = "AMI3M"; // replacement course code
-//
-//        Course.findAndReplaceCourse(cc, rcp);
+
 
         Course.writeRecommendedCoursesToFileCourseName(student); // write course name to respective JSON file
 

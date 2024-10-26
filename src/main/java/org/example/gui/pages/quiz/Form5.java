@@ -11,6 +11,7 @@ import org.example.gui.manager.FormsManager;
 import org.example.gui.pages.main.DashboardForm;
 import org.example.people.StudentInput;
 import org.example.people.User;
+import org.example.utility.courses.Course;
 import org.example.utility.courses.CourseAssembly;
 
 import javax.swing.*;
@@ -136,30 +137,19 @@ public class Form5 extends JPanel {
 
         if (userResponses.containsKey("previousClasses")) {
             String previousClasses = userResponses.get("previousClasses");
-            List<String> classes = new ArrayList<>();
-            Matcher matcher = Pattern.compile("\"([^\"]*)\"|[^,]+").matcher(previousClasses);
-            while (matcher.find()) {
-                String className;
-                if (matcher.group(1) != null) {
-                    // Matched a quoted class name, remove quotes
-                    className = matcher.group(1);
-                } else {
-                    // Matched a regular class name, no quotes
-                    className = matcher.group();
-                }
-                classes.add(className.trim());
-            }
 
-            if (!previousClasses.isEmpty()) {
-                for (String c : classes) {
-                    courseComboBox.setSelectedItem(c);
-                }
+            // Convert list to array if needed
+            String[] classesArray = Course.cleanPreviousCourses(previousClasses);
+
+            for (String c: classesArray) {
+                courseComboBox.setSelectedItem(c);
             }
 
         }
 
         return comboBoxPanel;
     }
+
 
 
 
@@ -233,12 +223,12 @@ public class Form5 extends JPanel {
 
     private void handlePage(boolean isNext) {
         List<Object> selectedItems = courseComboBox.getSelectedItems();
-        String selectedClasses = selectedItems.stream()
-                .map(Object::toString)
-                .map(c -> c.contains(",") ? "\"" + c + "\"" : c)
-                .collect(Collectors.joining(", "));
 
-        userResponses.put("previousClasses", selectedClasses);
+        List<String> selectedClasses = selectedItems.stream()
+                .map(item -> "\"" + item + "\"")
+                .collect(Collectors.toList());
+
+        userResponses.put("previousClasses", selectedClasses.toString());
 
         // Retrieve values from userResponses hashmap
         String interests1 = userResponses.get("interests1");
@@ -278,13 +268,8 @@ public class Form5 extends JPanel {
                 isSubmitClicked = true;
                 nextButton.setEnabled(false);
 
-                selectedClasses = selectedItems.stream()
-                        .map(Object::toString)
-                        .map(c -> c.replace("\"", ""))
-                        .collect(Collectors.joining(", "));
-
                 // Create StudentInput object
-                StudentInput student = new StudentInput(combinedInterests, selectedClasses, grade, track, username);
+                StudentInput student = new StudentInput(combinedInterests, selectedClasses.toString(), grade, track, username);
 
                 // Run the assessment in a separate thread
                 SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
