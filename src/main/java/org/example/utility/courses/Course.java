@@ -72,7 +72,6 @@ public class Course {
     }
 
     private void engine(StudentInput student) {
-        addInitialCourses(student);
 
         // Checks if course is at or above your grade and if it is on your track
         if (track.equals("Open")) {
@@ -107,15 +106,6 @@ public class Course {
         int courseGrade = getGradeLevel();
 
         String courseCode = getCourseCode();
-        String courseType = getCourseArea();
-        String gradRequirement = getGraduationRequirement();
-
-        if (credits.containsKey(courseType) && credits.get(courseType) > 0) {
-
-            credits.put(courseType, credits.get(courseType) - 1); // put the course subtracted one credit
-        } else if (credits.containsKey(gradRequirement) && credits.get(gradRequirement) > 0) {
-            credits.put(gradRequirement, credits.get(gradRequirement) - 1); // put the course subtracted one credit
-        }
 
         if (courseGrade >= studentGrade) {
             String[] coursesForGrade = recommendedCoursesByGrade.get(courseGrade);
@@ -132,8 +122,6 @@ public class Course {
                 }
             }
         }
-
-
     }
 
 
@@ -145,43 +133,60 @@ public class Course {
         Set<String> recommendedCourses = new HashSet<>();
         Set<String> recommendedGradCredits = new HashSet<>();
 
-        int courseGrade = findOpenSpotInRecommendedCourses(); // Start with the initial course grade
+        List<Integer> openSpots = findOpenSpotsInRecommendedCourses(); // Start with the initial course grades
 
         for (String course : courses) {
-            Course addedCourse = findNextCourseWithNoPrerequisites(course, courseGrade, recommendedCourses, recommendedGradCredits);
+            Course addedCourse = null;
+            int courseGrade = 9;
 
+            // Loop to find an available grade level with an open spot
+            for (int index = 0; index < openSpots.size(); index++) {
+                int currentCourseGrade = openSpots.get(index);
+
+                // Attempt to add the course without prerequisites at the current grade level
+                addedCourse = findNextCourseWithNoPrerequisites(course, currentCourseGrade, recommendedCourses, recommendedGradCredits);
+
+                if (addedCourse != null) {
+                    courseGrade = currentCourseGrade;
+                    break; // Exit the loop if we successfully add a course
+                }
+            }
+
+            if (addedCourse == null) {
+                System.out.println("No available grade level found for course " + course);
+                continue; // Move to the next course if this one can't be added
+            }
+
+            // Get courses for the selected grade level
             String[] coursesForGrade = recommendedCoursesByGrade.get(courseGrade);
 
-            if (addedCourse != null) {
-                // Add to recommended courses set
-                recommendedCourses.add(addedCourse.getCourseCode());
-                recommendedGradCredits.add(course);
+            // Add to recommended courses set
+            recommendedCourses.add(addedCourse.getCourseCode());
+            recommendedGradCredits.add(course);
 
-                if (credits.containsKey(addedCourse.getCourseArea()) && credits.get(addedCourse.getCourseArea()) > 0) {
-                    credits.put(addedCourse.getCourseArea(), credits.get(addedCourse.getCourseArea()) - 1); // Subtract one credit
-                } else if (credits.containsKey(addedCourse.getGraduationRequirement()) && credits.get(addedCourse.getGraduationRequirement()) > 0) {
-                    credits.put(addedCourse.getGraduationRequirement(), credits.get(addedCourse.getGraduationRequirement()) - 1); // Subtract one credit
-                }
+            // Subtract credit for the added course
+            if (credits.containsKey(addedCourse.getCourseArea()) && credits.get(addedCourse.getCourseArea()) > 0) {
+                credits.put(addedCourse.getCourseArea(), credits.get(addedCourse.getCourseArea()) - 1);
+            } else if (credits.containsKey(addedCourse.getGraduationRequirement()) && credits.get(addedCourse.getGraduationRequirement()) > 0) {
+                credits.put(addedCourse.getGraduationRequirement(), credits.get(addedCourse.getGraduationRequirement()) - 1);
+            }
 
-                // Adds the course to the empty slot
-                boolean added = false;
-                for (int i = 0; i < MAX_COURSES_PER_GRADE; i++) {
-                    if (coursesForGrade[i] == null) {
-                        coursesForGrade[i] = addedCourse.getCourseCode();
-                        added = true;
-                        courseGrade = findOpenSpotInRecommendedCourses();
-                        break;
-                    }
+            // Adds the course to the first available slot in the grade
+            boolean added = false;
+            for (int i = 0; i < MAX_COURSES_PER_GRADE; i++) {
+                if (coursesForGrade[i] == null) {
+                    coursesForGrade[i] = addedCourse.getCourseCode();
+                    added = true;
+                    break;
                 }
+            }
 
-                if (!added) {
-                    System.out.println("No space available to add course for grade level " + courseGrade);
-                }
-            } else {
-                courseGrade++;
+            if (!added) {
+                System.out.println("No space available to add course for grade level " + courseGrade);
             }
         }
     }
+
 
 
     private static Course findNextCourseWithNoPrerequisites(String courseArea, int courseGrade, Set<String> recommendedCourses, Set<String> recommendedGradCredits) {
@@ -199,17 +204,23 @@ public class Course {
     }
 
 
-    private static int findOpenSpotInRecommendedCourses() {
+    private static List<Integer> findOpenSpotsInRecommendedCourses() {
+        List<Integer> openGrades = new ArrayList<>();
+
         for (Map.Entry<Integer, String[]> entry : recommendedCoursesByGrade.entrySet()) {
             String[] courses = entry.getValue();
+
             for (String course : courses) {
                 if (course == null) {
-                    return entry.getKey();
+                    openGrades.add(entry.getKey());
+                    break; // Move to the next grade after finding an open spot in the current one
                 }
             }
         }
-        return -1;
+
+        return openGrades;
     }
+
 
     private static String[] findUnfulfilledCredits() {
         ArrayList<String> result = new ArrayList<>();
@@ -269,7 +280,6 @@ public class Course {
             if (!hasAPI.get()) {
                 apiCourses = APIClient.getAPIDataClasses(response);
                 if (apiCourses.isEmpty()) {
-
                     // If API returns no courses, we will provide random classes
                     hasAPI.set(true);
                 } else {
@@ -417,29 +427,6 @@ public class Course {
             return grade;
         }
 
-        public void setGrade(int grade) {
-            this.grade = grade;
-        }
-    }
-
-    public static void findAndReplaceCourse(String courseCode, String replacementCourseCode) {
-        Course course = getCourse(courseCode.toUpperCase());
-
-        Course replacementCourse = getCourse(replacementCourseCode.toUpperCase());
-
-        int courseMapKey = course.getGradeLevel();
-
-        String[] courseArray = recommendedCoursesByGrade.get(courseMapKey);
-
-        if (replacementCourse == null || course.getGradeLevel() != replacementCourse.getGradeLevel() || Arrays.asList(courseArray).contains(replacementCourse.getCourseCode())) {
-            return;
-        }
-
-
-
-       for (int i = 0; i < courseArray.length; i++) {
-           courseArray[i] = courseArray[i].equalsIgnoreCase(courseCode) ? replacementCourseCode : courseArray[i];
-       }
     }
 
     public static String[] cleanPreviousCourses(String previousClasses) {

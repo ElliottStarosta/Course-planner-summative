@@ -17,9 +17,6 @@ public class CourseAssembly {
     static final String CREDENTIALS_FILE = "C:\\Users\\fence\\OneDrive\\Desktop\\credentials.txt";
 
 
-    private static AtomicBoolean coursesInitialized = new AtomicBoolean(false);
-
-
     // Required Credits to Graduate
     public static HashMap<String, Integer> credits = new HashMap<>() {{
 
@@ -35,76 +32,70 @@ public class CourseAssembly {
 
 
     public static void addInitialCourses(StudentInput student) {
-        if (!coursesInitialized.get()) {
-            // Add courses based on track
-            if ("university".equals(student.getTrack().toLowerCase())) {
+        // Add courses based on track
+        if ("university".equals(student.getTrack().toLowerCase())) {
 
-                // University
-                recommendedCoursesByGrade = new HashMap<>() {{
-                    put(9, new String[]{"ENL1W", "MTH1W", "SNC1W", "CGC1W", null, null, null, null});
-                    put(10, new String[]{"ENG2D", "MPM2D", "SNC2D", "CHC2D", "CHV2O", null, null, null});
-                    put(11, new String[]{"NBE3U", "MCR3U", null, null, null, null, null, null});
-                    put(12, new String[]{"ENG4U", "MHF4U", "MCV4U", null, null, null, null, null});
-                }};
+            // University
+            recommendedCoursesByGrade = new HashMap<>() {{
+                put(9, new String[]{"ENL1W", "MTH1W", "SNC1W", "CGC1W", null, null, null, null});
+                put(10, new String[]{"ENG2D", "MPM2D", "SNC2D", "CHC2D", "CHV2O", null, null, null});
+                put(11, new String[]{"NBE3U", "MCR3U", null, null, null, null, null, null});
+                put(12, new String[]{"ENG4U", "MHF4U", "MCV4U", null, null, null, null, null});
+            }};
 
-            } else { // College
-                recommendedCoursesByGrade = new HashMap<>() {{
-                    put(9, new String[]{"ENL1W", "MTH1W", "SNC1W", "CGC1W", null, null, null, null});
-                    put(10, new String[]{"ENG2D", "MPM2D", "SNC2D", "CHC2D", "CHV2O", null, null, null});
-                    put(11, new String[]{"NBE3C", "MBF3C", null, null, null, null, null, null});
-                    put(12, new String[]{"ENG4C", null, null, null, null, null, null, null});
-                }};
-            }
-
-
-            List<String> previousCoursesTemp = new ArrayList<>(Arrays.asList(Course.cleanPreviousCourses(student.getPreviousCourses())));
-
-            ArrayList<String> previousCourses = new ArrayList<>();
-            for (String course : previousCoursesTemp) {
-                String courseCode = course.split(" - ")[0];
-                previousCourses.add(courseCode);
-            }
-            previousCourses.forEach(courseCode -> {
-                Course course = getCourse(courseCode);
-
-                if (course != null) {
-                    int courseGradeLevel = course.getGradeLevel();
-                    String courseType = course.getCourseArea();
-                    String gradRequirement = course.getGraduationRequirement();
-
-                    // Find the corresponding grade key and array
-                    String[] coursesArray = recommendedCoursesByGrade.get(courseGradeLevel);
-
-                    if (coursesArray != null) {
-                        // Check if the course is already in the array
-                        boolean courseAlreadyAdded = Arrays.stream(coursesArray)
-                                .filter(Objects::nonNull)
-                                .anyMatch(existingCourseCode -> existingCourseCode.equals(course.getCourseCode()));
+        } else { // College
+            recommendedCoursesByGrade = new HashMap<>() {{
+                put(9, new String[]{"ENL1W", "MTH1W", "SNC1W", "CGC1W", null, null, null, null});
+                put(10, new String[]{"ENG2D", "MPM2D", "SNC2D", "CHC2D", "CHV2O", null, null, null});
+                put(11, new String[]{"NBE3C", "MBF3C", null, null, null, null, null, null});
+                put(12, new String[]{"ENG4C", null, null, null, null, null, null, null});
+            }};
+        }
 
 
-                        if (!courseAlreadyAdded) {
-                            // Find the first available slot and add the course
-                            IntStream.range(0, coursesArray.length)
-                                    .filter(i -> coursesArray[i] == null)
-                                    .findFirst()
-                                    .ifPresent(index -> coursesArray[index] = course.getCourseCode());
+        List<String> previousCoursesTemp = new ArrayList<>(Arrays.asList(Course.cleanPreviousCourses(student.getPreviousCourses())));
 
-                            // Update credits
-                            if (credits.containsKey(courseType) && credits.get(courseType) > 0) {
-                                credits.put(courseType, credits.get(courseType) - 1); // Subtract one credit for the course type
-                            } else if (credits.containsKey(gradRequirement) && credits.get(gradRequirement) > 0) {
-                                credits.put(gradRequirement, credits.get(gradRequirement) - 1); // Subtract one credit for the graduation requirement
-                            }
+        ArrayList<String> previousCourses = new ArrayList<>();
+        for (String course : previousCoursesTemp) {
+            String courseCode = course.split(" - ")[0];
+            previousCourses.add(courseCode);
+        }
+        previousCourses.forEach(courseCode -> {
+            Course course = getCourse(courseCode);
+
+            if (course != null) {
+                int courseGradeLevel = course.getGradeLevel();
+                String courseType = course.getCourseArea();
+                String gradRequirement = course.getGraduationRequirement();
+
+                // Find the corresponding grade key and array
+                String[] coursesArray = recommendedCoursesByGrade.get(courseGradeLevel);
+
+                if (coursesArray != null) {
+                    // Check if the course is already in the array
+                    boolean courseAlreadyAdded = Arrays.stream(coursesArray)
+                            .filter(Objects::nonNull)
+                            .anyMatch(existingCourseCode -> existingCourseCode.equals(course.getCourseCode()));
+
+
+                    if (!courseAlreadyAdded) {
+                        // Find the first available slot and add the course
+                        IntStream.range(0, coursesArray.length)
+                                .filter(i -> coursesArray[i] == null)
+                                .findFirst()
+                                .ifPresent(index -> coursesArray[index] = course.getCourseCode());
+
+                        // Update credits
+                        if (credits.containsKey(courseType) && credits.get(courseType) > 0) {
+                            credits.put(courseType, credits.get(courseType) - 1); // Subtract one credit for the course type
+                        } else if (credits.containsKey(gradRequirement) && credits.get(gradRequirement) > 0) {
+                            credits.put(gradRequirement, credits.get(gradRequirement) - 1); // Subtract one credit for the graduation requirement
                         }
-
                     }
 
                 }
-            });
-
-            coursesInitialized.set(true);
-
-        }
+            }
+        });
     }
 
     public CourseAssembly() {
@@ -147,12 +138,7 @@ public class CourseAssembly {
 
         Course.addNonFilledClasses(student); // Add non filled classes with random classes
 
-
-
         Course.writeRecommendedCoursesToFileCourseName(student); // write course name to respective JSON file
-
-        // Send email w/ classes to the student's counselor
-//        Counselor.sendCounselorEmail(student, new SendEmail());
 
 
     }
