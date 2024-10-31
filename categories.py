@@ -241,6 +241,8 @@ categories = [
     ["technology", "digital media"],
     ["technology", "software engineering"],
     ["technology", "hardware"],
+    ["stem", "technology", "engineering"],
+    ["tech", "technology"],
     # Arts
     ["arts", "art"],
     ["arts", "printmaking"],
@@ -263,6 +265,7 @@ categories = [
     ["arts", "playwriting"],
     ["arts", "choreography"],
     ["arts", "opera"],
+    ["reading", "writing", "books"],
     # Music
     ["music", "classical"],
     ["music", "jazz"],
