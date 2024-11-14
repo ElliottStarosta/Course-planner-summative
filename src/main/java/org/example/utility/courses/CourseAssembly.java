@@ -20,9 +20,9 @@ public class CourseAssembly {
     // Required Credits to Graduate
     public static HashMap<String, Integer> credits = new HashMap<>() {{
 
-        put("Arts", 1);                          // 1 credit in the Arts
+        put("Arts", 1); // 1 credit in the Arts
         put("Health & Physical Education", 1); // 1 credit in Health and Physical Education
-        put("French", 1);                        // 1 credit in French as a Second Language
+        put("French", 1); // 1 credit in French as a Second Language
 
         // Group credits
         put("1.0", 1); // 1 additional credit from Group 1

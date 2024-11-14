@@ -1,7 +1,7 @@
 package org.example.gui.component.account;
 
-import org.example.gui.component.MethodUtil;
 import org.example.people.User;
+import org.example.utility.JSON.JsonUtil;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ public class ForgotPasswordUtil {
     private static List<User> users;
 
     public ForgotPasswordUtil() {
-        this.users = User.readUsersFromJson();
+        this.users = JsonUtil.readUsersFromJson();
     }
 
     public static void forgotPassword(String email, String newPassword) {
@@ -22,7 +22,7 @@ public class ForgotPasswordUtil {
     private static void updateUser(User user, String password) {
         user.setPassword(password);
 
-        MethodUtil.saveUsersToJsonPassword(users);
+        JsonUtil.saveUsersToJsonPassword(users);
     }
 
 

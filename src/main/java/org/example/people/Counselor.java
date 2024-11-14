@@ -1,6 +1,7 @@
 package org.example.people;
 
-import org.example.utility.api.SendEmail;
+import org.example.utility.JSON.JsonUtil;
+import org.example.utility.api.email.SendEmail;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,7 @@ public class Counselor {
     public static void sendCounselorEmail(String username) {
         SendEmail emailSender = new SendEmail();
 
-        List<User> users = User.readUsersFromJson();
+        List<User> users = JsonUtil.readUsersFromJson();
         Map<String, User> userMap = createUserMap(users);
 
         // Find the user by username

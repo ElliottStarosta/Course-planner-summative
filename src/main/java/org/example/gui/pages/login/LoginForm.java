@@ -2,6 +2,7 @@ package org.example.gui.pages.login;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
+import org.example.utility.encrpytion.EncryptionUtil;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.manager.FormsManager;
 import org.example.gui.pages.main.DashboardForm;
@@ -15,7 +16,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -161,7 +161,7 @@ public class LoginForm extends JPanel {
 
     private void handleLogin() {
         String username = usernameField.getText().trim();
-        String password = encodePassword(String.valueOf(passwordField.getPassword()).trim());
+        String password = EncryptionUtil.encodePassword(String.valueOf(passwordField.getPassword()).trim());
 
 
         if (username.isEmpty() || password.isEmpty()) {
@@ -223,7 +223,7 @@ public class LoginForm extends JPanel {
             String savedPassword = properties.getProperty("password");
             if (savedUsername != null && savedPassword != null) {
                 usernameField.setText(savedUsername);
-                passwordField.setText(decodePassword(savedPassword));
+                passwordField.setText(EncryptionUtil.decodePassword(savedPassword));
                 rememberMeCheck.setSelected(true);
             }
         } catch (IOException e) {
@@ -238,11 +238,13 @@ public class LoginForm extends JPanel {
         }
     }
 
-    private String encodePassword(String password) {
-        return Base64.getEncoder().encodeToString(password.getBytes());
-    }
+//    private String encodePassword(String password) {
+//        return Base64.getEncoder().encodeToString(password.getBytes());
+//    }
+//
+//    private String decodePassword(String encodedPassword) {
+//        return new String(Base64.getDecoder().decode(encodedPassword));
+//    }
 
-    private String decodePassword(String encodedPassword) {
-        return new String(Base64.getDecoder().decode(encodedPassword));
-    }
+
 }

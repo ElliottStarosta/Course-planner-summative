@@ -2,7 +2,6 @@ package org.example.gui.pages.quiz;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
-import org.example.gui.component.MethodUtil;
 import org.example.gui.component.jcomponents.ComboBox;
 import org.example.gui.manager.DynamicFormLoader;
 import org.example.gui.manager.NotificationManager;
@@ -13,16 +12,13 @@ import org.example.people.StudentInput;
 import org.example.people.User;
 import org.example.utility.courses.Course;
 import org.example.utility.courses.CourseAssembly;
+import org.example.utility.users.UsersUtil;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.ComboPopup;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.example.utility.courses.ExcelUtility.getAllCourseNames;
@@ -286,7 +282,7 @@ public class Form5 extends JPanel {
                         isSubmitClicked = false;
 
                         // Switch to the main page
-                        User user = MethodUtil.getUserWithUsername(username);
+                        User user = UsersUtil.getUserWithUsername(username);
                         String name = user.getFirstName();
                         FormsManager.getInstance().showForm(new DashboardForm(username,name));
                     }

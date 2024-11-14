@@ -2,10 +2,10 @@ package org.example.gui.pages.login;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
-import org.example.gui.component.MethodUtil;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.account.TwoFactorAuthentication;
 import org.example.gui.manager.FormsManager;
+import org.example.utility.api.email.EmailUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,8 +66,8 @@ public class ForgotPasswordForm extends JPanel {
             emailBtn.setEnabled(false);
 
             String email = emailField.getText();
-            boolean isEmailValid = MethodUtil.checkEmailAddress(email);
-            boolean isEmailRegistered = MethodUtil.emailRegistered(email);
+            boolean isEmailValid = EmailUtil.checkEmailAddress(email);
+            boolean isEmailRegistered = EmailUtil.emailRegistered(email);
 
             if (!isEmailValid) {
                 NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Enter a valid email address");
@@ -76,13 +76,12 @@ public class ForgotPasswordForm extends JPanel {
                 NotificationManager.showNotification(NotificationManager.NotificationType.ERROR, "Email not in system, please create an account");
                 emailBtn.setEnabled(true);
             } else {
-                String username = MethodUtil.getUsernameWithEmail(email);
+                String username = EmailUtil.getUsernameWithEmail(email);
 
                 SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
                     @Override
                     protected Void doInBackground() throws Exception {
                         String generatedCode = TwoFactorAuthentication.generateAndSendCode(email, username);
-                        NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Verification code sent");
                         FormsManager.getInstance().showForm(new VerificationForm(generatedCode, emailField.getText(),false));
                         return null;
                     }

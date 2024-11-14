@@ -2,12 +2,12 @@ package org.example.gui.pages.main;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
-import org.example.gui.component.MethodUtil;
 import org.example.gui.manager.DynamicFormLoader;
 import org.example.gui.manager.FormsManager;
 import org.example.gui.pages.login.LoginForm;
 import org.example.people.Counselor;
 import org.example.people.User;
+import org.example.utility.JSON.JsonUtil;
 import org.example.utility.api.APIClient;
 import org.example.utility.courses.Course;
 import org.example.utility.courses.CourseAssembly;
@@ -95,7 +95,7 @@ public class DashboardForm extends JPanel {
             APIClient.deployAPI();
             panel.add(takeQuizButton, "gapy 40");
         } else {
-            data = MethodUtil.readRecommendedCoursesToMatrix(this.username);
+            data = JsonUtil.readRecommendedCoursesToMatrix(this.username);
             for (String[] gradeData : data) {
                 panel.add(createGradePanel(gradeData),"gapy 10");
             }

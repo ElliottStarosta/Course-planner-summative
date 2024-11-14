@@ -1,6 +1,6 @@
 package org.example.gui.component.account;
 
-import org.example.utility.api.SendEmail;
+import org.example.utility.api.email.SendEmail;
 
 import javax.swing.*;
 import java.util.Random;

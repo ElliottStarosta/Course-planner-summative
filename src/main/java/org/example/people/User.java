@@ -3,11 +3,11 @@ package org.example.people;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.utility.encrpytion.EncryptionUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 public class User {
@@ -63,7 +63,8 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = new String(Base64.getEncoder().encode(password.getBytes())); // Encode the password
+//        this.password = new String(Base64.getEncoder().encode(password.getBytes())); // Encode the password
+        this.password = new String(EncryptionUtil.encodePassword(password));
     }
 
     public void setEmail(String email) {

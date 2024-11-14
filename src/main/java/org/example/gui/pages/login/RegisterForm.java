@@ -4,11 +4,11 @@ package org.example.gui.pages.login;
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import org.example.gui.component.account.CreateAccount;
-import org.example.gui.component.MethodUtil;
 import org.example.gui.component.account.TwoFactorAuthentication;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.jcomponents.PasswordStrengthStatus;
 import org.example.gui.manager.FormsManager;
+import org.example.utility.api.email.EmailUtil;
 
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
@@ -150,12 +150,12 @@ public class RegisterForm extends JPanel {
         } else if (!isMatchPassword()) {
             // Check if passwords do not match
             NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Passwords do not match. Please try again");
-        } else if (!MethodUtil.checkEmailAddress(emailField.getText())) {
+        } else if (!EmailUtil.checkEmailAddress(emailField.getText())) {
             NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Enter a valid email address");
 
         } else {
             // Check the password strength
-            int passwordStrength = MethodUtil.checkPasswordStrength(String.valueOf(passwordField.getPassword()));
+            int passwordStrength = PasswordStrengthStatus.checkPasswordStrength(String.valueOf(passwordField.getPassword()));
             if (passwordStrength < 3) {
                 NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Password needs to be stronger");
 

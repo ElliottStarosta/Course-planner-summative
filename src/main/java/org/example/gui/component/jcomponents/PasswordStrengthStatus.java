@@ -6,14 +6,13 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.MigLayout;
-import org.example.gui.component.MethodUtil;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 
-public class    PasswordStrengthStatus extends JPanel {
+public class PasswordStrengthStatus extends JPanel {
 
     private JPasswordField passwordField;
     private DocumentListener documentListener;
@@ -45,7 +44,7 @@ public class    PasswordStrengthStatus extends JPanel {
     }
 
     private void checkPassword(String password) {
-        this.type = password.isEmpty() ? 0 : MethodUtil.checkPasswordStrength(password);
+        this.type = password.isEmpty() ? 0 : checkPasswordStrength(password);
         if (type == 0) {
             label.setText("none");
             label.setVisible(false);
@@ -122,6 +121,48 @@ public class    PasswordStrengthStatus extends JPanel {
             }
             FlatUIUtils.paintComponentBackground(g2, (w + gap) * 2, y, w, size, 0, 999);
             g2.dispose();
+        }
+    }
+
+    public static int checkPasswordStrength(String password) {
+        int score = 0; // Initialize score to 0
+
+        // Check if the password length is at least 8 characters
+        if (password.length() >= 8) {
+            score++; // Increment score if the length criterion is met
+        }
+
+        // Check if the password contains at least one uppercase letter
+        boolean hasUppercase = !password.equals(password.toLowerCase());
+        if (hasUppercase) {
+            score++; // Increment score if an uppercase letter is present
+        }
+
+        // Check if the password contains at least one lowercase letter
+        boolean hasLowercase = !password.equals(password.toUpperCase());
+        if (hasLowercase) {
+            score++; // Increment score if a lowercase letter is present
+        }
+
+        // Check if the password contains at least one digit
+        boolean hasDigit = password.matches(".*\\d.*");
+        if (hasDigit) {
+            score++; // Increment score if a digit is present
+        }
+
+        // Check if the password contains at least one special character
+        boolean hasSpecialChar = !password.matches("[A-Za-z0-9]*");
+        if (hasSpecialChar) {
+            score++; // Increment score if a special character is present
+        }
+
+        // Determine the strength of the password based on the final score
+        if (score < 3) {
+            return 1; // Weak password
+        } else if (score < 5) {
+            return 2; // Moderate password
+        } else {
+            return 3; // Strong password
         }
     }
 }

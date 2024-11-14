@@ -3,9 +3,9 @@ package org.example.gui.pages.login;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
-import org.example.gui.component.MethodUtil;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.account.TwoFactorAuthentication;
+import org.example.utility.encrpytion.EncryptionUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -112,7 +112,7 @@ public class VerificationForm extends JPanel {
                         boolean allFieldsFull = TwoFactorAuthentication.areFieldsFull(codeFields);
 
                         if (allFieldsFull) {
-                            MethodUtil.isCorrectCode(codeFields,generatedCode, email,is2FALogin);
+                            EncryptionUtil.isCorrectCode(codeFields,generatedCode, email,is2FALogin);
                         } else {
                             NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Please ensure all required fields are completed");
 
@@ -134,7 +134,7 @@ public class VerificationForm extends JPanel {
                         for (int i = 0; i < 6; i++) {
                             codeFields[i].setText(text.substring(i, i + 1));
                         }
-                        MethodUtil.isCorrectCode(codeFields,generatedCode, email, is2FALogin);
+                        EncryptionUtil.isCorrectCode(codeFields,generatedCode, email, is2FALogin);
                         codeFields[5].requestFocus();
 
                     } else {
@@ -162,14 +162,12 @@ public class VerificationForm extends JPanel {
             boolean allFieldsFull = TwoFactorAuthentication.areFieldsFull(codeFields);
 
             if (allFieldsFull) {
-                MethodUtil.isCorrectCode(codeFields,generatedCode, email,is2FALogin);
+                EncryptionUtil.isCorrectCode(codeFields,generatedCode, email,is2FALogin);
             } else {
                 NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Please ensure all required fields are completed");
 
             }
         });
-
-
 
         panel.add(submitBtn, "gapy 15");
         add(panel);

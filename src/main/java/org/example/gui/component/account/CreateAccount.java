@@ -1,7 +1,7 @@
 package org.example.gui.component.account;
 
-import org.example.gui.component.MethodUtil;
 import org.example.people.User;
+import org.example.utility.JSON.JsonUtil;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class CreateAccount {
 
         User newUser = new User(username, password, email, firstName, lastName);
         users.add(newUser);
-        MethodUtil.saveUsersToJson(users);
+        JsonUtil.saveUsersToJson(users);
 
         return AccountCreationStatus.SUCCESS;
     }

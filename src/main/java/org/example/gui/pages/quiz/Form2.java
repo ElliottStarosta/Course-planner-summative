@@ -280,7 +280,3 @@ public class Form2 extends JPanel {
         }
     }
 }
-
-
-
-

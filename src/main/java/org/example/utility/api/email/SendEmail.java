@@ -1,4 +1,4 @@
-package org.example.utility.api;
+package org.example.utility.api.email;
 
 import org.example.gui.manager.NotificationManager;
 import org.example.people.Counselor;
@@ -20,13 +20,6 @@ public class SendEmail {
     final String SENDER_PASSWORD = CourseAssembly.readCredentialsFromFile()[0];
     final String EMAIL_SMTPSERVER = "smtp.gmail.com";
     final String EMAIL_SERVER_PORT = "465";
-
-
-    public SendEmail() {
-        // Constructor left empty for now; no initialization needed here
-    }
-
-
 
     public void send2FA(String receiverEmail, String username, String subject, String generatedCode) {
         SwingWorker<Void,Void> worker = new SwingWorker<Void, Void>() {
@@ -164,11 +157,6 @@ public class SendEmail {
         public PasswordAuthentication getPasswordAuthentication() {
             return new PasswordAuthentication(SENDER_EMAIL, SENDER_PASSWORD);
         }
-    }
-
-    public static void main(String[] args) {
-        SendEmail emailSender = new SendEmail();
-        emailSender.send2FA("starlliott@gmail.com", "Elliott","Course Recommender - 2FA Code", "759235");
     }
 
 }

@@ -3,7 +3,6 @@ package org.example.gui.pages.login;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
-import org.example.gui.component.MethodUtil;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.jcomponents.PasswordStrengthStatus;
 import org.example.gui.component.account.ForgotPasswordUtil;
@@ -44,7 +43,7 @@ public class PasswordChangeForm extends JPanel {    private JPasswordField Passw
 
             }else {
                 // Check the password strength
-                int passwordStrength = MethodUtil.checkPasswordStrength(String.valueOf(Password.getPassword()));
+                int passwordStrength = PasswordStrengthStatus.checkPasswordStrength(String.valueOf(Password.getPassword()));
                 if (passwordStrength < 3) {
                     NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Password needs to be stronger");
                 } else {
