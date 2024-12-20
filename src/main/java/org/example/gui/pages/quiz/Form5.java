@@ -8,11 +8,11 @@ import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.jcomponents.PageMenuIndicator;
 import org.example.gui.manager.FormsManager;
 import org.example.gui.pages.main.DashboardForm;
-import org.example.people.StudentInput;
+import org.example.people.UserInput;
 import org.example.people.User;
 import org.example.utility.courses.Course;
 import org.example.utility.courses.CourseAssembly;
-import org.example.utility.users.UsersUtil;
+import org.example.utility.UsersUtil;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.ComboPopup;
@@ -265,7 +265,7 @@ public class Form5 extends JPanel {
                 nextButton.setEnabled(false);
 
                 // Create StudentInput object
-                StudentInput student = new StudentInput(combinedInterests, selectedClasses.toString(), grade, track, username);
+                UserInput student = new UserInput(combinedInterests, selectedClasses.toString(), grade, track, username);
 
                 // Run the assessment in a separate thread
                 SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {

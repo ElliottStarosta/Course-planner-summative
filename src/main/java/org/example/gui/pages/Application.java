@@ -22,7 +22,7 @@ public class Application extends JFrame {
         setTitle("Course Recommender");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(new Dimension(1500, 900));
-        setResizable(false);
+//        setResizable(false);
         setLocationRelativeTo(null);
         setContentPane(new LoginForm());
         Notifications.getInstance().setJFrame(this);
@@ -35,7 +35,7 @@ public class Application extends JFrame {
         FlatLaf.registerCustomDefaultsSource("themes");
         UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13));
         FlatMacDarkLaf.setup();
-        PythonAPI.runPythonAPI();
+        PythonAPI.runAPI();
         EventQueue.invokeLater(() -> new Application().setVisible(true));
     }
 }

@@ -142,12 +142,16 @@
             <artifactId>slf4j-api</artifactId>
             <version>2.0.9</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-javadoc-plugin -->
+
+
 
 
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Exec Maven Plugin -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -156,8 +160,20 @@
                     <mainClass>org.example.gui.pages.Application</mainClass>
                 </configuration>
             </plugin>
+
+            <!-- Maven Javadoc Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.11.2</version>
+                <configuration>
+                    <outputDirectory>C:/Users/fence/Desktop/Computer Science/CoursesSummative/out</outputDirectory>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+
 
 
 </project>

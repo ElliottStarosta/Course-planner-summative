@@ -143,14 +143,15 @@ public class RegisterForm extends JPanel {
 
     private void handleRegister() {
         if (!isFilled()) {
-            NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Please ensure all required fields are completed");
             if ((username.getText().length() < 5)) {
                 NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Username must be at least 5 characters long");
+            } else {
+                NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Please ensure all required fields are completed");
             }
         } else if (!isMatchPassword()) {
             // Check if passwords do not match
             NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Passwords do not match. Please try again");
-        } else if (!EmailUtil.checkEmailAddress(emailField.getText())) {
+        } else if (!EmailUtil.checkEmailAddress(emailField.getText().toLowerCase())) {
             NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Enter a valid email address");
 
         } else {
@@ -165,7 +166,7 @@ public class RegisterForm extends JPanel {
                 String password = String.valueOf(passwordField.getPassword());
                 String firstNameTxt = firstName.getText();
                 String lastNameTxt = lastName.getText();
-                String email = emailField.getText();
+                String email = emailField.getText().toLowerCase();
                 CreateAccount createAccount = new CreateAccount();
                 CreateAccount.AccountCreationStatus status = createAccount.createAccount(usernameTxt, password, email, firstNameTxt, lastNameTxt);
 
@@ -224,7 +225,7 @@ public class RegisterForm extends JPanel {
         String password = passwordField.getText();
         String firstNameTxt = firstName.getText();
         String lastNameTxt = lastName.getText();
-        String email = emailField.getText();
+        String email = emailField.getText().toLowerCase();
 
 
         // Check if any of the fields are empty

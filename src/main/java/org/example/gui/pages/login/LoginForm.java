@@ -2,7 +2,7 @@ package org.example.gui.pages.login;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
-import org.example.utility.encrpytion.EncryptionUtil;
+import org.example.utility.EncryptionUtil;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.manager.FormsManager;
 import org.example.gui.pages.main.DashboardForm;
@@ -50,8 +50,8 @@ public class LoginForm extends JPanel {
 
         panel.putClientProperty(FlatClientProperties.STYLE,
                 "arc:20;" +
-                "[light]background:darken(@background,3%);" +
-                "[dark]background:lighten(@background,3%)");
+                        "[light]background:darken(@background,3%);" +
+                        "[dark]background:lighten(@background,3%)");
 
         panel.putClientProperty(FlatClientProperties.STYLE,
                 "arc:20;" +
@@ -85,7 +85,7 @@ public class LoginForm extends JPanel {
         );
         description.putClientProperty(FlatClientProperties.STYLE,
                 "[light]foreground:lighten(@foreground,30%);" +
-                "[dark]foreground:darken(@foreground,30%)");
+                        "[dark]foreground:darken(@foreground,30%)");
 
 
 

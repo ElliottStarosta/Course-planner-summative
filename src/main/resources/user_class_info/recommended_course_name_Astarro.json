@@ -1,0 +1,18 @@
+[
+    {
+        "courses": "ENL1W - English Grade 9, MTH1W - Grade 9 Mathematics, SNC1W - Grade 9 Science, CGC1W - Geography of Canada, FSF1D - Core French, PPL1O - Healthy Active Living, TAS1O - Exploring Technologies, PAF1O - Spark",
+        "grade": 9
+    },
+    {
+        "courses": "ENG2D - English Grade 10, MPM2D - Grade 10 Mathematics, SNC2D - Grade 10 Science, CHC2D - Canadian History, CHV2O - Civics and Careers, HFN2O - Food & Nutrition, BEP2O - Launching and Leading a Business, PPL2O - Healthy Active Living",
+        "grade": 10
+    },
+    {
+        "courses": "NBE3U - English Grade 11 - Understanding Contemporary First Nations, Métis, and Inuit Voices, MCR3U - Functions, HFC3M - Food & Culture, BTA3O - Info & Communication Technology, CHW3M - Ancient Civilizations, PPL3O - Healthy Active Living, SCH3U - Chemistry, AMG3M - Music - Guitar",
+        "grade": 11
+    },
+    {
+        "courses": "ENG4U - English Grade 12, MHF4U - Advanced Functions, MCV4U - Calculus and Vectors, HFA4U - Nutrition & Health, CLN4U - Canadian & International Law, CLU3M - Canadian Law, CPW4U - Politics, SES4U - Earth & Space Science",
+        "grade": 12
+    }
+]

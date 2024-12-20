@@ -2,7 +2,7 @@ package org.example.gui.pages.quiz;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
-import org.example.people.StudentInput;
+import org.example.people.UserInput;
 import org.example.utility.courses.Course;
 
 import javax.swing.*;
@@ -21,13 +21,13 @@ public class FillCourses extends JPanel {
     private JTextArea answerArea;
     private JButton nextButton;
 
-    private StudentInput student;
+    private UserInput student;
     private CountDownLatch latch;
 
 
 
 
-    public FillCourses(StudentInput student, CountDownLatch latch) {
+    public FillCourses(UserInput student, CountDownLatch latch) {
         this.student = student;
         this.latch = latch;
         init();

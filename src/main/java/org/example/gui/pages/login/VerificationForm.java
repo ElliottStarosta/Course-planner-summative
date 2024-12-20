@@ -5,7 +5,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.account.TwoFactorAuthentication;
-import org.example.utility.encrpytion.EncryptionUtil;
+import org.example.utility.EncryptionUtil;
 
 import javax.swing.*;
 import java.awt.*;

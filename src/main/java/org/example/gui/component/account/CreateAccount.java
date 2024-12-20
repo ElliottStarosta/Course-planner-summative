@@ -1,7 +1,7 @@
 package org.example.gui.component.account;
 
 import org.example.people.User;
-import org.example.utility.JSON.JsonUtil;
+import org.example.utility.JsonUtil;
 
 import java.util.List;
 

@@ -7,7 +7,7 @@ import org.example.gui.manager.FormsManager;
 import org.example.gui.pages.login.LoginForm;
 import org.example.people.Counselor;
 import org.example.people.User;
-import org.example.utility.JSON.JsonUtil;
+import org.example.utility.JsonUtil;
 import org.example.utility.api.APIClient;
 import org.example.utility.courses.Course;
 import org.example.utility.courses.CourseAssembly;
@@ -92,7 +92,7 @@ public class DashboardForm extends JPanel {
         JButton takeQuizButton = (JButton) createQuizButtonPanel();
 
         if (!hasRecommendations) {
-            APIClient.deployAPI();
+            APIClient.runAPI();
             panel.add(takeQuizButton, "gapy 40");
         } else {
             data = JsonUtil.readRecommendedCoursesToMatrix(this.username);

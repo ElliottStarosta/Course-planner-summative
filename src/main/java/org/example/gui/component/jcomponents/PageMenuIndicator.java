@@ -85,29 +85,4 @@ public class PageMenuIndicator extends JPanel {
             g2.dispose();
         }
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Page Menu Indicator");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            PageMenuIndicator indicator = new PageMenuIndicator();
-            frame.add(indicator);
-            frame.setSize(400, 100);
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-
-            // Demonstrate cycling through pages
-            for (int i = 0; i < 7; i++) {  // Try to exceed TOTAL_PAGES to see wrapping
-                int finalI = i;
-                SwingUtilities.invokeLater(() -> {
-                    indicator.setPageNumber(finalI);
-                });
-                try {
-                    Thread.sleep(1000);  // Wait 1 second between page changes
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 }

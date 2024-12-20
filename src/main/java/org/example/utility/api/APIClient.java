@@ -13,18 +13,30 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.concurrent.*;
 
-public class APIClient {
+/**
+ * APIClient class handles the interaction with external APIs to fetch course recommendations based on user interests.
+ * It supports concurrent API requests with timeout management and error handling.
+ * The class implements the Deployment interface to manage the deployment process.
+ */
+public class APIClient implements Deployment {
 
-    private static final int CONNECTION_TIMEOUT = 20000;
-    private static final int READ_TIMEOUT = 20000;
+    private static final int CONNECTION_TIMEOUT = 20000; // Timeout duration for establishing a connection
+    private static final int READ_TIMEOUT = 20000; // Timeout duration for reading data from the connection
 
+    /**
+     * Fetches course data based on user interests from external APIs.
+     * The method makes concurrent requests to two URLs (primary and backup) until it successfully receives data.
+     *
+     * @param interests The interests of the user to filter course recommendations.
+     * @return A list of course codes recommended based on the provided interests.
+     */
     public static ArrayList<String> getAPIDataClasses(String interests) {
 
         ArrayList<String> courses = new ArrayList<>();
 
-        // First URL
+        // First URL (primary API)
         String firstUrl = "http://127.0.0.1:8000/recommend-courses/";
-        // Second URL (backup)
+        // Second URL (backup API)
         String secondUrl = "https://coursesapi-84sd.onrender.com/recommend-courses/";
 
         // Create executor service for concurrent tasks
@@ -88,6 +100,12 @@ public class APIClient {
         return courses;
     }
 
+    /**
+     * Parses the JSON response from the API and extracts course codes into the provided list.
+     *
+     * @param responseData The raw JSON response as a string from the API.
+     * @param courses The list to populate with course codes.
+     */
     private static void parseJsonResponse(String responseData, ArrayList<String> courses) {
         try {
             JSONArray jsonArray = new JSONArray(responseData);
@@ -98,11 +116,18 @@ public class APIClient {
                 courses.add(courseCode);
             }
         } catch (Exception e) {
-            // If no data from the API (cant parse any data to JSON)
+            // If no data from the API (can't parse any data to JSON)
             System.out.println("No valid response");
         }
     }
 
+    /**
+     * Fetches data from a given URL using the GET method, with error handling and timeout management.
+     *
+     * @param apiUrl The URL to fetch data from.
+     * @param encodedInterests The encoded interests parameter to be included in the request.
+     * @return The raw response data as a string, or null if the request fails.
+     */
     private static String fetchDataFromUrlClasses(String apiUrl, String encodedInterests) {
         try {
             URL url = new URL(String.format("%s?interests=%s", apiUrl, URLEncoder.encode(encodedInterests, "UTF-8")));
@@ -145,8 +170,11 @@ public class APIClient {
         }
     }
 
-
-    public static void deployAPI() {
+    /**
+     * A method to perform a POST request to an API endpoint.
+     * The URL is fetched from the CourseAssembly class credentials file.
+     */
+    public static void runAPI() {
         String urlString = CourseAssembly.readCredentialsFromFile()[1];
         try {
             URL url = new URL(urlString);

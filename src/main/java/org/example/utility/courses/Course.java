@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.example.gui.manager.FormsManager;
 import org.example.gui.pages.quiz.FillCourses;
-import org.example.people.StudentInput;
+import org.example.people.UserInput;
 import org.example.utility.api.APIClient;
 
 import java.io.File;
@@ -19,7 +19,13 @@ import static org.example.utility.courses.CourseAssembly.*;
 import java.util.concurrent.CountDownLatch;
 
 
-
+/**
+ * The Course class represents a course within the system, providing functionality
+ * for managing course prerequisites, fulfilling graduation requirements,
+ * and tracking courses per grade level. It is a key part of a larger system
+ * that recommends courses based on the student's grade, track, and previous
+ * course history.
+ */
 public class Course {
     private String courseCode;
     private String courseName;
@@ -33,6 +39,17 @@ public class Course {
     private static ArrayList<String> apiCourses = null;
     private static AtomicBoolean hasAPI = new AtomicBoolean(false);
 
+    /**
+     * Constructor to initialize a course with the specified details.
+     *
+     * @param courseCode The code representing the course.
+     * @param courseName The name of the course.
+     * @param courseArea The area or category the course belongs to (e.g., Math, Science).
+     * @param prerequisites A comma-separated list of prerequisite course codes.
+     * @param gradeLevel The grade level required to take the course.
+     * @param track The track the course belongs to (e.g., Science, Arts).
+     * @param graduationRequirement The graduation requirement that this course fulfills.
+     */
     public Course(String courseCode, String courseName, String courseArea, String prerequisites, int gradeLevel, String track, String graduationRequirement) {
         this.courseCode = courseCode;
         this.courseName = courseName;
@@ -43,35 +60,77 @@ public class Course {
         this.graduationRequirement = graduationRequirement;
     }
 
+    /**
+     * Retrieves the course code of this course.
+     *
+     * @return The course code as a string.
+     */
     public String getCourseCode() {
         return courseCode;
     }
 
+    /**
+     * Retrieves the name of this course.
+     *
+     * @return The course name as a string.
+     */
     public String getCourseName() {
         return courseName;
     }
 
+    /**
+     * Retrieves the area or category this course belongs to.
+     *
+     * @return The course area as a string.
+     */
     public String getCourseArea() {
         return courseArea;
     }
 
+    /**
+     * Retrieves the prerequisites required for this course.
+     *
+     * @return The prerequisites as a string, or an empty string if none exist.
+     */
     public String getPrerequisites() {
         return prerequisites;
     }
 
+    /**
+     * Retrieves the grade level this course is designed for.
+     *
+     * @return The grade level as an integer.
+     */
     public int getGradeLevel() {
         return gradeLevel;
     }
 
+    /**
+     * Retrieves the track of this course (e.g., University, College, Open).
+     *
+     * @return The course track as a string.
+     */
     public String getTrack() {
         return track;
     }
 
+    /**
+     * Retrieves the graduation requirement this course fulfills, if any.
+     *
+     * @return The graduation requirement as a string, or an empty string if none exist.
+     */
     public String getGraduationRequirement() {
         return graduationRequirement;
     }
 
-    private void engine(StudentInput student) {
+
+    /**
+     * This method checks if a course meets the prerequisites and grade level requirements
+     * for a student, and adds the course to the student's course list if applicable. This is the main algorithm to assign courses to the user.
+     *
+     * @param student The student whose course eligibility is being checked.
+     */
+    private void engine(UserInput student) {
 
         // Checks if course is at or above your grade and if it is on your track
         if (track.equals("Open")) {
@@ -101,7 +160,13 @@ public class Course {
         }
     }
 
-    private void addCourse(StudentInput student) {
+    /**
+     * Adds a course to the student's list of recommended courses if the student
+     * meets the grade level requirements and there is space in the grade-level list.
+     *
+     * @param student The student to add the course to.
+     */
+    private void addCourse(UserInput student) {
         int studentGrade = student.getGrade();
         int courseGrade = getGradeLevel();
 
@@ -125,6 +190,10 @@ public class Course {
     }
 
 
+    /**
+     * Fulfills graduation requirements by adding recommended courses to the student's
+     * course list based on their grade and the graduation requirements.
+     */
     public static void fulfillGradRequirements() {
 
         String[] courses = findUnfulfilledCredits();
@@ -189,6 +258,17 @@ public class Course {
 
 
 
+    /**
+     * Finds the next course that has no prerequisites for a specified course area
+     * and grade level, avoiding duplicates in the recommended courses and graduation
+     * credits lists.
+     *
+     * @param courseArea The area of study (e.g., Math, Science).
+     * @param courseGrade The grade level of the course.
+     * @param recommendedCourses A set of already recommended courses.
+     * @param recommendedGradCredits A set of graduation requirements already fulfilled.
+     * @return The next available course without prerequisites.
+     */
     private static Course findNextCourseWithNoPrerequisites(String courseArea, int courseGrade, Set<String> recommendedCourses, Set<String> recommendedGradCredits) {
         for (Map.Entry<String, Course> entry : courseMap.entrySet()) {
             Course course = entry.getValue();
@@ -203,7 +283,12 @@ public class Course {
         return null;
     }
 
-
+    /**
+     * Finds the grades in which there are open spots in the recommended courses list.
+     * An open spot is represented by a null value in the course array for a specific grade.
+     *
+     * @return A list of grades that have at least one open spot for courses.
+     */
     private static List<Integer> findOpenSpotsInRecommendedCourses() {
         List<Integer> openGrades = new ArrayList<>();
 
@@ -221,7 +306,12 @@ public class Course {
         return openGrades;
     }
 
-
+    /**
+     * Identifies which credit areas have unfulfilled requirements.
+     * A credit is considered unfulfilled if its value is greater than zero in the credits map.
+     *
+     * @return An array of credit names that still need to be fulfilled.
+     */
     private static String[] findUnfulfilledCredits() {
         ArrayList<String> result = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : credits.entrySet()) {
@@ -232,8 +322,13 @@ public class Course {
         return result.toArray(new String[0]);
     }
 
-    public static void addNonFilledClasses(StudentInput student) {
-
+    /**
+     * Displays a form to allow the user to fill in missing classes in their recommended course list.
+     * If there are no missing courses, the method exits without action.
+     *
+     * @param student The student object containing user input data.
+     */
+    public static void addNonFilledClasses(UserInput student) {
         boolean hasNull = recommendedCoursesByGrade.values().stream()
                 .flatMap(Arrays::stream)
                 .anyMatch(Objects::isNull);
@@ -252,10 +347,15 @@ public class Course {
             Thread.currentThread().interrupt();
             e.printStackTrace();
         }
-
     }
 
-    public static void getNonFilledClassesResponse(StudentInput student, String studentResponse) {
+    /**
+     * Processes the response from the user to fill missing classes in the recommended course list.
+     *
+     * @param student         The student object containing user input data.
+     * @param studentResponse The response provided by the student to fill the missing courses.
+     */
+    public static void getNonFilledClassesResponse(UserInput student, String studentResponse) {
         System.out.println("filling");
 
         recommendedCoursesByGrade.forEach((grade, courses) -> {
@@ -274,20 +374,25 @@ public class Course {
         });
     }
 
-    private static String fillCourse(int grade, Set<String> recommendedCourses, Set<String> recommendedCourseArea, String[] courses, String response, StudentInput studentInput) {
+    /**
+     * Fills a course for a specific grade and updates the recommended courses.
+     * Tries to retrieve courses from the API or selects a random class if no valid API courses are available.
+     *
+     * @param grade                  The grade level for the course to be filled.
+     * @param recommendedCourses     A set of already recommended courses.
+     * @param recommendedCourseArea  A set of course areas that have been recommended.
+     * @param courses                The array of courses for the grade.
+     * @param response               The user's response for filling courses.
+     * @param studentInput           The student's input containing details like track.
+     * @return The course code of the filled course, or "E404" if no suitable course is found.
+     */
+    private static String fillCourse(int grade, Set<String> recommendedCourses, Set<String> recommendedCourseArea, String[] courses, String response, UserInput studentInput) {
         if (!response.isEmpty()) {
-            // Initialize apiCourses if it's null
             if (!hasAPI.get()) {
                 apiCourses = APIClient.getAPIDataClasses(response);
-                if (apiCourses.isEmpty()) {
-                    // If API returns no courses, we will provide random classes
-                    hasAPI.set(true);
-                } else {
-                    hasAPI.set(true);
-                }
+                hasAPI.set(!apiCourses.isEmpty());
             }
 
-            // If no courses are returned from the API
             List<String> filteredApiCourses = apiCourses.stream()
                     .filter(courseCode -> {
                         Course course = getCourse(courseCode);
@@ -297,7 +402,6 @@ public class Course {
                     })
                     .toList();
 
-            // If filtered API courses are available, return one
             if (!filteredApiCourses.isEmpty()) {
                 for (String courseCode : filteredApiCourses) {
                     Course course = getCourse(courseCode);
@@ -309,7 +413,6 @@ public class Course {
             }
         }
 
-        // Provide a random class if no valid API courses found
         Random random = new Random();
         List<String> filteredKeys = courseMap.entrySet().stream()
                 .filter(entry -> entry.getValue().getGradeLevel() == grade)
@@ -319,7 +422,7 @@ public class Course {
                 .toList();
 
         if (filteredKeys.isEmpty()) {
-            return "E404"; // Handle case where no courses match the grade level
+            return "E404";
         }
 
         String randomKey;
@@ -334,7 +437,13 @@ public class Course {
         return randomKey;
     }
 
-    public static void writeRecommendedCoursesToFileCourseName(StudentInput studentInput) {
+
+    /**
+     * Writes the recommended courses for a student to a file in JSON format.
+     *
+     * @param studentInput The student whose recommended courses are being written.
+     */
+    public static void writeRecommendedCoursesToFileCourseName(UserInput studentInput) {
         try {
             String username = studentInput.getUsername();
 
@@ -369,6 +478,15 @@ public class Course {
         }
     }
 
+    /**
+     * Reads the recommended courses for a student from a JSON file.
+     * The file is named based on the student's username and is located in
+     * the "src/main/resources/user_class_info" directory. The method populates
+     * the `recommendedCoursesByGrade` map with the data from the file.
+     *
+     * @param username The student's username used to construct the file path.
+     * @return true if the file was read successfully and contains valid data, false otherwise.
+     */
     public static boolean readRecommendedCoursesFromFile(String username) {
         String filePath = "src/main/resources/user_class_info/recommended_course_name_" + username + ".json";
         File file = new File(filePath);
@@ -399,7 +517,14 @@ public class Course {
         return true;
     }
 
-    public static void runEngine(ArrayList<String> courses, StudentInput student) {
+    /**
+     * Runs the engine for each course in the provided list of courses from the user interests.
+     * The engine processes the student's input for each course.
+     *
+     * @param courses The list of course names to be processed.
+     * @param student The student whose input will be used in the engine.
+     */
+    public static void runEngine(ArrayList<String> courses, UserInput student) {
         for (String c : courses) {
             Course course = getCourse(c);
             if (course != null) {
@@ -408,27 +533,50 @@ public class Course {
         }
     }
 
-
-
-    // Class made to do wrap the JSON data
+    /**
+     * A helper class to represent the course data in JSON format.
+     * This class is used for reading and writing course data in/from JSON files.
+     */
     public static class FileCourseData {
         private String courses;
         private int grade;
 
+        /**
+         * Gets the courses for the grade.
+         *
+         * @return A comma-separated string of courses.
+         */
         public String getCourses() {
             return courses;
         }
 
+        /**
+         * Sets the courses for the grade.
+         *
+         * @param courses A comma-separated string of courses.
+         */
         public void setCourses(String courses) {
             this.courses = courses;
         }
 
+        /**
+         * Gets the grade associated with the courses.
+         *
+         * @return The grade level.
+         */
         public int getGrade() {
             return grade;
         }
 
     }
 
+    /**
+     * Cleans a string representing previous courses by removing surrounding
+     * brackets and quotes, then returns the cleaned courses as an array of strings.
+     *
+     * @param previousClasses A string containing previous course names, possibly surrounded by brackets and quotes.
+     * @return An array of course names extracted from the input string.
+     */
     public static String[] cleanPreviousCourses(String previousClasses) {
         // Remove the surrounding brackets and quotes
         String cleanedString = previousClasses.replace("[", "").replace("]", "");

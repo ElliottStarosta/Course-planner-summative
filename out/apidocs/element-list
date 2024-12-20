@@ -1,0 +1,12 @@
+org.example.gui.component.account
+org.example.gui.component.jcomponents
+org.example.gui.manager
+org.example.gui.pages
+org.example.gui.pages.login
+org.example.gui.pages.main
+org.example.gui.pages.quiz
+org.example.people
+org.example.utility
+org.example.utility.api
+org.example.utility.api.email
+org.example.utility.courses
