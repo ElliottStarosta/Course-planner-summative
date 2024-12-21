@@ -13,9 +13,19 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Utility class for handling course data stored in an Excel file.
+ */
 public class ExcelUtility {
+    /**
+     * The path to the Excel file containing course data.
+     */
     protected static final String FILE_NAME = "src/main/resources/model/CoursesFinal.xlsx";
 
+    /**
+     * Loads course data from the Excel file and populates the {@code courseMap} in {@code CourseAssembly}.
+     * Each row in the Excel file represents a course with details such as course code, name, and other attributes.
+     */
     public static void loadCourseData() {
         try (InputStream inp = new FileInputStream(FILE_NAME)) {
             Workbook workbook = new XSSFWorkbook(inp); // Use XSSFWorkbook for .xlsx files
@@ -50,6 +60,11 @@ public class ExcelUtility {
         }
     }
 
+    /**
+     * Retrieves all course names from the Excel file, formatted as "CourseCode - CourseName".
+     *
+     * @return An array of formatted course names.
+     */
     public static String[] getAllCourseNames() {
         List<String> courseNames = new ArrayList<>();
         try (InputStream inp = new FileInputStream(FILE_NAME)) {
@@ -81,6 +96,12 @@ public class ExcelUtility {
         return courseNames.toArray(new String[0]);
     }
 
+    /**
+     * Extracts the string value from a given cell.
+     *
+     * @param cell The cell to extract the value from.
+     * @return The string value of the cell, or an empty string if the cell is null or not a string type.
+     */
     private static String getStringValue(Cell cell) {
         if (cell == null) {
             return "";
@@ -95,6 +116,12 @@ public class ExcelUtility {
         }
     }
 
+    /**
+     * Extracts the integer value from a given cell.
+     *
+     * @param cell The cell to extract the value from.
+     * @return The integer value of the cell, or 0 if the cell is null or not numeric.
+     */
     private static int getIntValue(Cell cell) {
         if (cell == null) {
             return 0;

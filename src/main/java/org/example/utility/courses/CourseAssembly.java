@@ -146,6 +146,7 @@ public class CourseAssembly {
         Course.fulfillGradRequirements();
         Course.runEngine(courses, student);
         Course.addNonFilledClasses(student);
+        Course.sortCoursesByGrade();
         Course.writeRecommendedCoursesToFileCourseName(student);
     }
 }

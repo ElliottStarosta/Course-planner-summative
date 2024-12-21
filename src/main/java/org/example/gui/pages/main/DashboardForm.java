@@ -100,7 +100,6 @@ public class DashboardForm extends JPanel {
                 panel.add(createGradePanel(gradeData),"gapy 10");
             }
 
-            //TODO: add two buttons @ the button that say: Send to counselors and save as PDF
             buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             buttonPanel.setOpaque(false);
             buttonPanel.add(additionalButtons());

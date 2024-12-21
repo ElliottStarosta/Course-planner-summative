@@ -8,8 +8,22 @@ import org.example.gui.pages.login.PasswordChangeForm;
 
 import javax.swing.*;
 
+/**
+ * Utility class for handling encryption, decryption, and code verification logic.
+ */
 public class EncryptionUtil {
+
+    /**
+     * The number of positions to shift for the Caesar cipher.
+     */
     private static final int SHIFT = 3;
+
+    /**
+     * Encrypts the input string using a Caesar cipher.
+     *
+     * @param input the string to be encrypted
+     * @return the encrypted string
+     */
     public static String encodePassword(String input) {
         StringBuilder encrypted = new StringBuilder();
         for (int i = 0; i < input.length(); i++) {
@@ -24,7 +38,12 @@ public class EncryptionUtil {
         return encrypted.toString();
     }
 
-    // Method to decode (decrypt) the password
+    /**
+     * Decrypts the input string using a reverse Caesar cipher.
+     *
+     * @param input the string to be decrypted
+     * @return the decrypted string
+     */
     public static String decodePassword(String input) {
         StringBuilder decrypted = new StringBuilder();
         for (int i = 0; i < input.length(); i++) {
@@ -39,6 +58,15 @@ public class EncryptionUtil {
         return decrypted.toString();
     }
 
+    /**
+     * Verifies the code entered the provided text fields against the generated code.
+     * Depending on the verification result, it performs actions such as showing forms or notifications.
+     *
+     * @param codeFields   an array of text fields containing the entered code
+     * @param generatedCode the expected generated code
+     * @param email        the email associated with the account
+     * @param is2FALogin   true if the action is related to 2FA login, false otherwise
+     */
     public static void isCorrectCode(JTextField[] codeFields, String generatedCode, String email, boolean is2FALogin) {
         boolean correctCode = TwoFactorAuthentication.verifyCodeAndClose(codeFields, generatedCode);
         if (correctCode) {
@@ -51,7 +79,6 @@ public class EncryptionUtil {
             NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Code verified successfully");
         } else {
             NotificationManager.showNotification(NotificationManager.NotificationType.ERROR, "Incorrect code. Please check to make sure the information was entered correctly");
-
         }
     }
 }

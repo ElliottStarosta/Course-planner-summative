@@ -1,3 +1,6 @@
+/**
+ * Utility class for converting JSON data into a formatted PDF document.
+ */
 package org.example.utility.courses;
 
 import com.itextpdf.io.image.ImageData;
@@ -21,8 +24,21 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * This class provides functionality to generate a PDF document from a JSON file
+ * containing recommended course information. The generated PDF includes a title,
+ * the EOM logo, and a table listing grades and corresponding courses.
+ */
 public class JsonToPdfConverter {
 
+    /**
+     * Converts JSON course recommendation data into a PDF document and saves it
+     * to a user-specified location.
+     *
+     * @param name     The name of the user for whom the PDF is being generated.
+     * @param username The username of the user, used to locate the JSON data file.
+     * @throws IOException If an error occurs while reading the JSON file or writing the PDF file.
+     */
     public static void convertJsonToPdf(String name, String username) throws IOException {
         // Prompt user to select the file path for the PDF
         JFileChooser fileChooser = new JFileChooser();
@@ -30,7 +46,7 @@ public class JsonToPdfConverter {
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
         // Set default file name
-        fileChooser.setSelectedFile(new java.io.File(String.format("%sCourseRecommendation.pdf",name)));
+        fileChooser.setSelectedFile(new java.io.File(String.format("%sCourseRecommendation.pdf", name)));
 
         int userSelection = fileChooser.showSaveDialog(null);
 

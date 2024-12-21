@@ -14,7 +14,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Utility class for reading and writing JSON data related to users and courses.
+ * This includes operations for saving user data to JSON files, reading course recommendations, and managing user information.
+ */
 public class JsonUtil {
+
+    /**
+     * Saves a list of users to a JSON file with encoded passwords.
+     * This method encodes the passwords before saving the users to ensure they are securely stored.
+     *
+     * @param users the list of users to be saved
+     */
     public static void saveUsersToJson(List<User> users) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -31,11 +42,15 @@ public class JsonUtil {
         }
     }
 
-
+    /**
+     * Saves a list of users to a JSON file without encoding passwords.
+     * This method saves the user data without making changes to the passwords.
+     *
+     * @param users the list of users to be saved
+     */
     public static void saveUsersToJsonPassword(List<User> users) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-
 
         try {
             objectMapper.writeValue(new File(User.USERS_FILE), users);
@@ -44,6 +59,14 @@ public class JsonUtil {
         }
     }
 
+    /**
+     * Reads the recommended courses for a given user and returns them as a 2D array.
+     * This method reads a JSON file containing course recommendations and converts the data into a 2D string array.
+     * It also handles exceptions for specific courses that have commas in their names.
+     *
+     * @param username the username of the user whose recommended courses are being read
+     * @return a 2D array where each row represents a grade and its associated courses
+     */
     public static String[][] readRecommendedCoursesToMatrix(String username) {
         JSONArray jsonArray;
         try {
@@ -90,8 +113,14 @@ public class JsonUtil {
         return data;
     }
 
-
-
+    /**
+     * Reads JSON data from a file containing the recommended courses for a user.
+     * This method reads the content of the file into a JSON array.
+     *
+     * @param username the username of the user whose recommended courses are being read
+     * @return a JSON array containing the user's recommended courses
+     * @throws IOException if there is an error reading the file
+     */
     private static JSONArray readJsonFromFile(String username) throws IOException {
         String filePath = "src/main/resources/user_class_info/recommended_course_name_" + username + ".json";
 
@@ -106,6 +135,12 @@ public class JsonUtil {
         return new JSONArray(jsonString.toString());
     }
 
+    /**
+     * Reads a list of users from a JSON file and returns it as a list.
+     * This method reads the users from the file and converts the data into a list of User objects.
+     *
+     * @return a list of users read from the JSON file
+     */
     public static List<User> readUsersFromJson() {
         ObjectMapper objectMapper = new ObjectMapper();
         try {

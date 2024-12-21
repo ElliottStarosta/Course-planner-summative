@@ -27,16 +27,54 @@ import java.util.concurrent.CountDownLatch;
  * course history.
  */
 public class Course {
+    /**
+     * The code uniquely identifying the course.
+     */
     private String courseCode;
+
+    /**
+     * The name of the course.
+     */
     private String courseName;
+
+    /**
+     * The academic area or department to which the course belongs.
+     */
     private String courseArea;
+
+    /**
+     * The prerequisites required to enroll in the course.
+     */
     private String prerequisites;
+
+    /**
+     * The grade level for which the course is designed.
+     */
     private int gradeLevel;
+
+    /**
+     * The track associated with the course (e.g., standard, honors, AP).
+     */
     private String track;
+
+    /**
+     * Indicates whether the course satisfies a graduation requirement.
+     */
     private String graduationRequirement;
+
+    /**
+     * The maximum number of courses a student can take per grade level.
+     */
     private static final int MAX_COURSES_PER_GRADE = 8;
 
+    /**
+     * A list of courses retrieved via an API. Initially set to null.
+     */
     private static ArrayList<String> apiCourses = null;
+
+    /**
+     * A flag indicating whether the API has been accessed.
+     */
     private static AtomicBoolean hasAPI = new AtomicBoolean(false);
 
     /**
@@ -475,6 +513,39 @@ public class Course {
             System.out.println("Recommended courses written to " + filePath);
         } catch (IOException e) {
             System.err.println("Error writing recommended courses to file: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Sorts each String array in the recommendedCoursesByGrade map in alphabetical order using Insertion Sort.
+     */
+    public static void sortCoursesByGrade() {
+        // Iterate through each entry in the map
+        for (Map.Entry<Integer, String[]> entry : recommendedCoursesByGrade.entrySet()) {
+            String[] courses = entry.getValue();
+            // Sort the array using Insertion Sort
+            insertionSort(courses);
+        }
+    }
+
+    /**
+     * Insertion Sort algorithm to sort a String array in alphabetical order.
+     *
+     * @param array The String array to be sorted.
+     */
+    public static void insertionSort(String[] array) {
+        for (int i = 1; i < array.length; i++) {
+            String key = array[i];
+            int j = i - 1;
+
+            // Move elements of array[0..i-1] that are greater than key, to one position ahead
+            while (j >= 0 && array[j].compareTo(key) > 0) {
+                array[j + 1] = array[j];
+                j = j - 1;
+            }
+
+            // Place the key in the correct position
+            array[j + 1] = key;
         }
     }
 

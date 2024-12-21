@@ -20,11 +20,26 @@ import java.util.Properties;
  * It includes methods for sending a 2FA code to users and sending recommended courses to counselors.
  */
 public class SendEmail {
-    // Sender's email address and SMTP server credentials
+    /**
+     * Sender's email address used for sending emails.
+     */
     final String SENDER_EMAIL = "starlliott@gmail.com";
+
+    /**
+     * Sender's email password, securely retrieved from credentials file.
+     */
     final String SENDER_PASSWORD = CourseAssembly.readCredentialsFromFile()[0];
+
+    /**
+     * SMTP server address for sending emails.
+     */
     final String EMAIL_SMTPSERVER = "smtp.gmail.com";
+
+    /**
+     * SMTP server port used for secure connections.
+     */
     final String EMAIL_SERVER_PORT = "465";
+
 
     /**
      * Sends a 2FA (Two Factor Authentication) code to a user.

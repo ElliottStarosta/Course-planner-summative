@@ -1,13 +1,13 @@
 [ {
-  "courses" : "ENL1W - English Grade 9, MTH1W - Grade 9 Mathematics, SNC1W - Grade 9 Science, CGC1W - Geography of Canada, FSF1D - Core French, PPL1O - Healthy Active Living, TAS1O - Exploring Technologies, PAF1O - Spark",
+  "courses" : "CGC1W - Geography of Canada, ENL1W - English Grade 9, FSF1D - Core French, MTH1W - Grade 9 Mathematics, PAF1O - Spark, PPL1O - Healthy Active Living, SNC1W - Grade 9 Science, TAS1O - Exploring Technologies",
   "grade" : 9
 }, {
-  "courses" : "ENG2D - English Grade 10, MPM2D - Grade 10 Mathematics, SNC2D - Grade 10 Science, CHC2D - Canadian History, CHV2O - Civics and Careers, HFN2O - Food & Nutrition, AVI2O - Visual Arts, ICD2O - Digital Technology and Innovations in the Changing World",
+  "courses" : "AVI2O - Visual Arts, CHC2D - Canadian History, CHV2O - Civics and Careers, ENG2D - English Grade 10, HFN2O - Food & Nutrition, MPM2D - Grade 10 Mathematics, SNC2D - Grade 10 Science, TMJ2O - Manufacturing Technology",
   "grade" : 10
 }, {
-  "courses" : "NBE3U - English Grade 11 - Understanding Contemporary First Nations, Métis, and Inuit Voices, MCR3U - Functions, SCH3U - Chemistry, SPH3U - Physics, AVI3M - Visual Arts, TEJ3M - Computer Engineering, CHW3M - Ancient Civilizations, CGF3M - Natural Disasters",
+  "courses" : "ADA3M - Drama, CGF3M - Natural Disasters, HRT3M - World Religions, MCR3U - Functions, NBE3U - English Grade 11 - Understanding Contemporary First Nations, Métis, and Inuit Voices, SBI3U - Biology, SCH3U - Chemistry, SPH3U - Physics",
   "grade" : 11
 }, {
-  "courses" : "ENG4U - English Grade 12, MHF4U - Advanced Functions, MCV4U - Calculus and Vectors, SCH4U - Chemistry, SPH4U - Physics, AVI4M - Visual Arts, PSK4U - Exercise Science, BBB4M - International Business",
+  "courses" : "AVI4M - Visual Arts, BOH4M - Business Leadership, ENG4U - English Grade 12, MCV4U - Calculus and Vectors, MHF4U - Advanced Functions, SBI4U - Biology, SCH4U - Chemistry, SPH4U - Physics",
   "grade" : 12
 } ]

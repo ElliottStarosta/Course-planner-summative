@@ -20,8 +20,15 @@ import java.util.concurrent.*;
  */
 public class APIClient implements Deployment {
 
-    private static final int CONNECTION_TIMEOUT = 20000; // Timeout duration for establishing a connection
-    private static final int READ_TIMEOUT = 20000; // Timeout duration for reading data from the connection
+    /**
+     * Timeout duration (in milliseconds) for establishing a connection.
+     */
+    private static final int CONNECTION_TIMEOUT = 20000;
+
+    /**
+     * Timeout duration (in milliseconds) for reading data from the connection.
+     */
+    private static final int READ_TIMEOUT = 20000;
 
     /**
      * Fetches course data based on user interests from external APIs.
