@@ -1,6 +1,5 @@
 package org.example.gui.component.jcomponents;
 
-
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.ui.FlatUIUtils;
@@ -12,17 +11,50 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 
+/**
+ * {@code PasswordStrengthStatus} is a custom {@link JPanel} that visually displays
+ * the strength of a password entered in a {@link JPasswordField}.
+ * It provides feedback on the password's strength by displaying a colored status bar
+ * and a corresponding label indicating whether the password is weak, moderate, or strong.
+ */
 public class PasswordStrengthStatus extends JPanel {
 
+    /**
+     * The JPasswordField where the user inputs their password. This field is monitored to track changes
+     * in the password for updating the strength status.
+     */
     private JPasswordField passwordField;
+
+    /**
+     * A DocumentListener attached to the password field to detect changes in the password input.
+     * It listens for insertions, deletions, or changes in the password field's content.
+     */
     private DocumentListener documentListener;
+
+    /**
+     * A JLabel that displays the password strength status (e.g., weak, moderate, or strong).
+     * It is dynamically updated as the password field content changes.
+     */
     private JLabel label;
+
+    /**
+     * An integer that represents the current strength of the password.
+     * The value is 1 for weak, 2 for moderate, and 3 for strong.
+     */
     private int type;
 
+    /**
+     * Initializes the {@code PasswordStrengthStatus} panel.
+     * Sets the layout, client properties, and label for password strength feedback.
+     */
     public PasswordStrengthStatus() {
         init();
     }
 
+    /**
+     * Initializes the layout and components of the password strength status panel.
+     * Configures the label to show the password strength status and sets up the layout.
+     */
     private void init() {
         putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:null");
@@ -33,16 +65,27 @@ public class PasswordStrengthStatus extends JPanel {
         add(label);
     }
 
+    /**
+     * Returns the color corresponding to the password strength type.
+     *
+     * @param type The strength type (1 for weak, 2 for moderate, 3 for strong).
+     * @return The {@link Color} representing the strength level.
+     */
     private Color getStrengthColor(int type) {
         if (type == 1) {
-            return Color.decode("#FF4D4D");
+            return Color.decode("#FF4D4D"); // Weak
         } else if (type == 2) {
-            return Color.decode("#FFB04D");
+            return Color.decode("#FFB04D"); // Moderate
         } else {
-            return Color.decode("#16a34a");
+            return Color.decode("#16a34a"); // Strong
         }
     }
 
+    /**
+     * Checks the password strength and updates the label and color accordingly.
+     *
+     * @param password The password to check for strength.
+     */
     private void checkPassword(String password) {
         this.type = password.isEmpty() ? 0 : checkPasswordStrength(password);
         if (type == 0) {
@@ -62,6 +105,12 @@ public class PasswordStrengthStatus extends JPanel {
         repaint();
     }
 
+    /**
+     * Initializes the password field for monitoring password changes.
+     * Sets up a document listener to track changes in the password field.
+     *
+     * @param txt The {@link JPasswordField} to monitor for password changes.
+     */
     public void initPasswordField(JPasswordField txt) {
         if (documentListener == null) {
             documentListener = new DocumentListener() {
@@ -88,6 +137,10 @@ public class PasswordStrengthStatus extends JPanel {
         passwordField = txt;
     }
 
+    /**
+     * A custom {@link JLabel} subclass that visually represents the password strength
+     * with a color-coded bar indicating the strength of the password.
+     */
     private class LabelStatus extends JLabel {
 
         @Override
@@ -102,18 +155,22 @@ public class PasswordStrengthStatus extends JPanel {
             int w = (width - gap * 2) / 3;
             int y = (height - size) / 2;
             Color disableColor = Color.decode(FlatLaf.isLafDark() ? "#404040" : "#CECECE");
+
+            // Draw color blocks based on password strength
             if (type >= 1) {
                 g2.setColor(getStrengthColor(1));
             } else {
                 g2.setColor(disableColor);
             }
             FlatUIUtils.paintComponentBackground(g2, 0, y, w, size, 0, 999);
+
             if (type >= 2) {
                 g2.setColor(getStrengthColor(2));
             } else {
                 g2.setColor(disableColor);
             }
             FlatUIUtils.paintComponentBackground(g2, w + gap, y, w, size, 0, 999);
+
             if (type >= 3) {
                 g2.setColor(getStrengthColor(3));
             } else {
@@ -124,6 +181,12 @@ public class PasswordStrengthStatus extends JPanel {
         }
     }
 
+    /**
+     * Checks the strength of a password and returns a strength score.
+     *
+     * @param password The password to evaluate.
+     * @return An integer representing the password strength (1 = weak, 2 = moderate, 3 = strong).
+     */
     public static int checkPasswordStrength(String password) {
         int score = 0; // Initialize score to 0
 

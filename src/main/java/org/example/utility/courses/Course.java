@@ -499,10 +499,9 @@ public class Course {
                     Course course = getCourse(c);
                     if (course != null) {
                         courseNames.add(String.format("%s - %s",course.getCourseCode(), course.getCourseName()));
-
                     }
                 }
-                String coursesString = String.join(", ", courseNames);
+                String coursesString = String.join(",** ", courseNames);
                 courseMap.put("grade", entry.getKey());
                 courseMap.put("courses", coursesString);
                 coursesList.add(courseMap);

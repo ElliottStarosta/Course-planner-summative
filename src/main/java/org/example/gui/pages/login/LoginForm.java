@@ -20,23 +20,54 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
+/**
+ * Represents the login form in the GUI application.
+ * This form handles user authentication, saving login information, and navigation to the dashboard upon successful login.
+ */
 public class LoginForm extends JPanel {
+
+    /**
+     * Field to capture the user's input for their username or email.
+     */
     private JTextField usernameField;
+
+    /**
+     * Field to capture the user's input for their password.
+     */
     private JPasswordField passwordField;
+
+    /**
+     * Button for initiating the login process.
+     */
     private JButton loginButton;
+
+    /**
+     * Checkbox for remembering the user's login information.
+     */
     private JCheckBox rememberMeCheck;
 
-
+    /**
+     * List of users available for authentication.
+     */
     private List<User> users;
 
+    /**
+     * Path to the properties file used for saving login information.
+     */
     private static final String PROPERTIES_FILE = "src/main/resources/login.properties";
 
+    /**
+     * Constructs a new LoginForm and initializes the user interface components.
+     */
     public LoginForm() {
         this.users = User.readUsersFromJson();
         init();
         loadSavedLoginInfo();
     }
 
+    /**
+     * Initializes the layout and components of the login form.
+     */
     private void init() {
         setLayout(new MigLayout("fill, insets 20","[center]","[center]"));
 
@@ -44,14 +75,8 @@ public class LoginForm extends JPanel {
         passwordField = new JPasswordField();
         loginButton = new JButton("Login");
 
-
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 35 45 30 45","fill, 250:280"));
         panel.setPreferredSize(new Dimension(450, 300));
-
-        panel.putClientProperty(FlatClientProperties.STYLE,
-                "arc:20;" +
-                        "[light]background:darken(@background,3%);" +
-                        "[dark]background:lighten(@background,3%)");
 
         panel.putClientProperty(FlatClientProperties.STYLE,
                 "arc:20;" +
@@ -70,11 +95,7 @@ public class LoginForm extends JPanel {
                 "borderWidth:0;" +
                 "innerFocusWidth:0;");
 
-
-
-
         loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
 
         JLabel title = new JLabel("Welcome Back Lion!");
         JLabel description = new JLabel("Please sign in below to access your account");
@@ -86,8 +107,6 @@ public class LoginForm extends JPanel {
         description.putClientProperty(FlatClientProperties.STYLE,
                 "[light]foreground:lighten(@foreground,30%);" +
                         "[dark]foreground:darken(@foreground,30%)");
-
-
 
         panel.add(title);
         panel.add(description);
@@ -114,12 +133,16 @@ public class LoginForm extends JPanel {
         loginButton.addActionListener(e -> handleLogin());
     }
 
+    /**
+     * Creates the "Remember Me" checkbox and "Forgot Password" link components.
+     *
+     * @return a component containing the checkbox and link.
+     */
     private Component rememberAndForgot() {
         JPanel panel = new JPanel(new BorderLayout());
 
         rememberMeCheck = new JCheckBox("Remember me");
         rememberMeCheck.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
 
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:null");
@@ -138,6 +161,11 @@ public class LoginForm extends JPanel {
         return panel;
     }
 
+    /**
+     * Creates the "Sign Up" link for new users.
+     *
+     * @return a component containing the "Sign Up" link.
+     */
     private Component createSignUp() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
@@ -159,10 +187,12 @@ public class LoginForm extends JPanel {
         return panel;
     }
 
+    /**
+     * Handles the login action by validating user credentials and navigating to the dashboard if successful.
+     */
     private void handleLogin() {
         String username = usernameField.getText().trim();
         String password = EncryptionUtil.encodePassword(String.valueOf(passwordField.getPassword()).trim());
-
 
         if (username.isEmpty() || password.isEmpty()) {
             NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Please ensure all fields are completed");
@@ -176,7 +206,6 @@ public class LoginForm extends JPanel {
         boolean userFound = foundUser.isPresent();
         User user = foundUser.orElse(null);
 
-
         if (userFound) {
             if (rememberMeCheck.isSelected()) {
                 saveLoginInfo(username, password);
@@ -185,17 +214,14 @@ public class LoginForm extends JPanel {
             }
             NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Login successful");
 
-            // Create a SwingWorker to handle the delay without blocking the UI thread
-            SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            SwingWorker<Void, Void> worker = new SwingWorker<>() {
                 @Override
                 protected Void doInBackground() throws Exception {
-                    // Introduce a delay
                     Thread.sleep(3000);
                     return null;
                 }
             };
 
-            // Execute the SwingWorker
             worker.execute();
             FormsManager.getInstance().showForm(new DashboardForm(user));
         } else {
@@ -203,7 +229,12 @@ public class LoginForm extends JPanel {
         }
     }
 
-
+    /**
+     * Saves login information to a properties file if "Remember Me" is selected.
+     *
+     * @param username the username to save.
+     * @param password the encrypted password to save.
+     */
     private void saveLoginInfo(String username, String password) {
         Properties properties = new Properties();
         try (FileOutputStream out = new FileOutputStream(PROPERTIES_FILE)) {
@@ -215,6 +246,9 @@ public class LoginForm extends JPanel {
         }
     }
 
+    /**
+     * Loads saved login information from a properties file if available.
+     */
     private void loadSavedLoginInfo() {
         Properties properties = new Properties();
         try (FileInputStream in = new FileInputStream(PROPERTIES_FILE)) {
@@ -231,20 +265,13 @@ public class LoginForm extends JPanel {
         }
     }
 
+    /**
+     * Clears saved login information from the properties file.
+     */
     private void clearLoginInfo() {
         File file = new File(PROPERTIES_FILE);
         if (file.exists()) {
             file.delete();
         }
     }
-
-//    private String encodePassword(String password) {
-//        return Base64.getEncoder().encodeToString(password.getBytes());
-//    }
-//
-//    private String decodePassword(String encodedPassword) {
-//        return new String(Base64.getDecoder().decode(encodedPassword));
-//    }
-
-
 }

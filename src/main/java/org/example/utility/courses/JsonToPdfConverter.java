@@ -124,7 +124,7 @@ public class JsonToPdfConverter {
         // Parse JSON and add to table
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
-            String courses = jsonObject.getString("courses");
+            String courses = jsonObject.getString("courses").replace("**", "");
             int grade = jsonObject.getInt("grade");
 
             table.addCell(new Paragraph(String.valueOf(grade)));

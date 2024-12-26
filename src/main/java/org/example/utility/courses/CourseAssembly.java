@@ -16,14 +16,30 @@ import java.util.stream.IntStream;
  */
 public class CourseAssembly {
     /**
-     * Map that stores course codes and their corresponding Course objects.
+     * A static map that holds courses by their course code.
+     * The course code is the key, and the course object is the value.
      */
     protected static Map<String, Course> courseMap = new HashMap<>();
+
+    /**
+     * A static map that stores recommended courses for each grade.
+     * The grade is the key, and the value is an array of recommended course names.
+     */
     public static Map<Integer, String[]> recommendedCoursesByGrade = new HashMap<>();
+
+    /**
+     * A constant string representing the file path where user credentials are stored.
+     * This file is used to validate user login credentials.
+     */
     public static final String CREDENTIALS_FILE = "C:\\Users\\fence\\OneDrive\\Desktop\\credentials.txt";
 
-    // Required Credits to Graduate
-    public static HashMap<String, Integer> credits = new HashMap<>() {{
+    /**
+     * A static HashMap that stores course categories and their corresponding credit values.
+     * Each entry in the map represents a specific course or course group and its associated credit value.
+     *
+     * The keys represent course categories (e.g., "Arts", "Health and Physical Education", etc.),
+     * and the values represent the number of credits awarded for completing the course or category.
+     */    public static HashMap<String, Integer> credits = new HashMap<>() {{
         put("Arts", 1); // 1 credit in the Arts
         put("Health & Physical Education", 1); // 1 credit in Health and Physical Education
         put("French", 1); // 1 credit in French as a Second Language

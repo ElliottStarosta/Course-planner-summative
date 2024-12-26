@@ -14,14 +14,54 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Listener for handling edit button functionality for editing and saving course data.
+ */
 public class EditButtonListener implements ActionListener {
+    /**
+     * Array representing the grade data for a specific grade level.
+     * Contains the grade and associated course information.
+     */
     private String[] gradeData;
+
+    /**
+     * Array of JComboBox components for selecting course names.
+     * Each JComboBox corresponds to a course slot in the grade data.
+     */
     private JComboBox[] courseName;
+
+    /**
+     * JButton used to toggle between edit and save modes for the course data.
+     */
     private JButton button;
+
+    /**
+     * Flag indicating whether the application is in edit mode.
+     * Set to true when editing is active, and false when saving is active.
+     */
     private boolean isEditing = false;
+
+    /**
+     * Username of the user associated with the course data being edited.
+     */
     private String username;
+
+    /**
+     * Two-dimensional array containing course data for all grade levels.
+     * Each row corresponds to a grade level, and columns contain course information.
+     */
     private String[][] data;
 
+
+    /**
+     * Constructor to initialize the EditButtonListener with required parameters.
+     *
+     * @param gradeData  Array representing the grade data for a specific grade level.
+     * @param courseName Array of JComboBoxes for course names to be edited.
+     * @param button     JButton for toggling between edit and save modes.
+     * @param username   Username associated with the course data.
+     * @param data       Two-dimensional array containing course data for all grades.
+     */
     public EditButtonListener(String[] gradeData, JComboBox<String>[] courseName, JButton button, String username, String[][] data) {
         this.gradeData = gradeData;
         this.courseName = courseName;
@@ -30,6 +70,11 @@ public class EditButtonListener implements ActionListener {
         this.data = data;
     }
 
+    /**
+     * Handles the action event triggered by the edit button.
+     *
+     * @param e ActionEvent representing the button click.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (isEditing) {
@@ -75,6 +120,13 @@ public class EditButtonListener implements ActionListener {
         }
     }
 
+    /**
+     * Checks for duplicate courses in the selected list and highlights duplicates.
+     *
+     * @param courses     Array of selected courses.
+     * @param comboBoxes  Array of JComboBoxes to update background color for duplicates.
+     * @return true if duplicates are found, false otherwise.
+     */
     private boolean hasDuplicates(String[] courses, JComboBox<String>[] comboBoxes) {
         Set<String> uniqueCourses = new HashSet<>();
         boolean hasDuplicates = false;
@@ -94,12 +146,24 @@ public class EditButtonListener implements ActionListener {
         return hasDuplicates;
     }
 
+    /**
+     * Resets the background colors of all JComboBoxes to the default color.
+     *
+     * @param comboBoxes Array of JComboBoxes to reset.
+     */
     private void resetComboBoxBackgrounds(JComboBox<String>[] comboBoxes) {
         for (JComboBox<String> cb : comboBoxes) {
             cb.setBackground(UIManager.getColor("ComboBox.background"));
         }
     }
 
+    /**
+     * Lightens the given color by a specified factor.
+     *
+     * @param color  Original color to lighten.
+     * @param factor Float factor to lighten the color (0.0 - 1.0).
+     * @return Lightened color.
+     */
     private Color lightenColor(Color color, float factor) {
         int r = (int) (color.getRed() * (1 - factor));
         int g = (int) (color.getGreen() * (1 - factor));
@@ -107,8 +171,12 @@ public class EditButtonListener implements ActionListener {
         return new Color(r, g, b);
     }
 
-
-
+    /**
+     * Writes the updated course data to a JSON file for a specific user.
+     *
+     * @param data     Two-dimensional array containing course data for all grades.
+     * @param username Username associated with the course data.
+     */
     public static void writeRecommendedCoursesToFile(String[][] data, String username) {
         String filename = "src/main/resources/user_class_info/recommended_course_name_" + username + ".json";
         JSONArray jsonArray = new JSONArray();

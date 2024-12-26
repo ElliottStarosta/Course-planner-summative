@@ -23,45 +23,103 @@ import java.util.stream.Collectors;
 
 import static org.example.utility.courses.ExcelUtility.getAllCourseNames;
 
-// TODO : Make the combo box only show courses in which your grade can take; Your grade and all the courses without preqs
-
+/**
+ * Form5 represents a panel that displays the fifth question -- selecting previous courses
+ *
+ * <p>The form provides buttons for navigation and handles user responses using checkboxes.
+ * It uses a dynamic layout and integrates with other components like the PageMenuIndicator, NotificationManager, ComoboBox.</p>
+ */
 public class Form5 extends JPanel {
 
+    /**
+     * A HashMap to store the user's responses to the quiz questions.
+     * The key is the question identifier, and the value is the user's response.
+     */
     private HashMap<String, String> userResponses;
+
+    /**
+     * The current question number in the quiz. It helps track the progression of the form.
+     */
     private int question;
+
+    /**
+     * The width of the panel where the quiz form will be displayed. This is used for layout purposes.
+     */
     private static final int PANEL_WIDTH = 600;
 
+    /**
+     * A PageMenuIndicator component that shows the current page number of the quiz.
+     * It helps users navigate through the form by visually indicating which page they are on.
+     */
     private PageMenuIndicator indicator;
 
-
+    /**
+     * A JLabel to display the title of the current question.
+     * The title will dynamically update based on the current question number.
+     */
     private JLabel questionTitle;
+
+    /**
+     * A ComboBox component used to display the dropdown menu of courses.
+     * This allows the user to select from a list of available courses.
+     */
     private ComboBox courseComboBox;
 
+    /**
+     * A JButton for navigating to the next page in the quiz.
+     * This button will be enabled or disabled based on user actions.
+     */
     private JButton nextButton;
+
+    /**
+     * A JButton for navigating to the previous page in the quiz.
+     * This button is used for going back to the previous question in the form.
+     */
     private JButton backButton;
 
+    /**
+     * A flag that tracks whether the "Submit" button has been clicked.
+     * It prevents multiple submissions by disabling the button once clicked.
+     */
     private boolean isSubmitClicked = false;
 
 
-
+    /**
+     * Constructs a new Form5 panel.
+     *
+     * @param userResponses A map containing user responses from previous questions.
+     * @param question The question number.
+     */
     public Form5(HashMap<String,String> userResponses, int question) {
         this.userResponses = userResponses;
         this.question = question;
         init();
     }
 
+    /**
+     * Initializes the form by setting up the layout and adding content to the panel.
+     */
     private void init() {
         setLayout(new MigLayout("fill, insets 20", "[center]", "[center]"));
-
 
         JPanel contentPanel = createContentPanel();
         add(contentPanel);
     }
 
+    /**
+     * Populates the given combo box with a list of all available course names.
+     *
+     * @param combo The combo box to populate.
+     */
     private void classData(JComboBox combo) {
         combo.setModel(new javax.swing.DefaultComboBoxModel<>(getAllCourseNames()));
     }
 
+    /**
+     * Creates the content panel for the form.
+     *
+     * @return The content panel.
+     */
     private JPanel createContentPanel() {
         JPanel contentPanel = new JPanel(new MigLayout("wrap, fillx, insets 35 45 30 45", "[grow]"));
         contentPanel.setPreferredSize(new Dimension(PANEL_WIDTH, 300));
@@ -84,8 +142,11 @@ public class Form5 extends JPanel {
         return contentPanel;
     }
 
-
-
+    /**
+     * Creates the title panel for the form.
+     *
+     * @return The title panel.
+     */
     private JPanel createTitlePanel() {
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.putClientProperty(FlatClientProperties.STYLE, "background:null");
@@ -98,6 +159,11 @@ public class Form5 extends JPanel {
         return topPanel;
     }
 
+    /**
+     * Creates the label displaying the question for the user.
+     *
+     * @return The question label.
+     */
     private JLabel createQuestionLabel() {
         JLabel questionLabel = new JLabel("Please select all of your previous classes from the dropdown menu below:");
         questionLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -110,6 +176,11 @@ public class Form5 extends JPanel {
         return questionLabel;
     }
 
+    /**
+     * Creates the panel that contains the course selection combo box.
+     *
+     * @return The course combo box panel.
+     */
     private JPanel createCourseComboBoxPanel() {
         JPanel comboBoxPanel = new JPanel();
         comboBoxPanel.setLayout(new BorderLayout());
@@ -127,8 +198,8 @@ public class Form5 extends JPanel {
 
         comboBoxPanel.putClientProperty(FlatClientProperties.STYLE,
                 "arc:10;" +
-                        "[light]background:darken(@background,5%);" +
-                        "[dark]background:lighten(@background,5%)");
+                        "[light]background:darken(@earlYellow,5%);" +
+                        "[dark]background:lighten(@earlYellow,5%)");
         comboBoxPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         if (userResponses.containsKey("previousClasses")) {
@@ -140,16 +211,16 @@ public class Form5 extends JPanel {
             for (String c: classesArray) {
                 courseComboBox.setSelectedItem(c);
             }
-
         }
 
         return comboBoxPanel;
     }
 
-
-
-
-
+    /**
+     * Creates the panel with a single arrow button (used for navigation).
+     *
+     * @return The button panel.
+     */
     private JPanel createButtonPanelSingleArrow() {
         nextButton = new JButton("→");
         nextButton.setFont(new Font("Arial", Font.BOLD, 30));
@@ -162,21 +233,22 @@ public class Form5 extends JPanel {
                         "foreground: @earlYellow;" +
                         "innerFocusWidth:0;");
 
-
         JPanel buttonPanel = new JPanel(new BorderLayout());
         buttonPanel.setOpaque(false);
         buttonPanel.add(nextButton, BorderLayout.EAST);
 
         nextButton.addActionListener(e -> handlePage(true));
 
-
         return buttonPanel;
     }
 
+    /**
+     * Creates the panel with both back and next buttons (used for navigation).
+     *
+     * @return The button panel.
+     */
     private JPanel createButtonPanelDoubleArrow() {
-
         nextButton = new JButton("Submit");
-
 
         nextButton.putClientProperty(FlatClientProperties.STYLE, "" +
                 "[light]background:darken(@background,10%);" +
@@ -188,7 +260,6 @@ public class Form5 extends JPanel {
         nextButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         nextButton.setPreferredSize(new Dimension(100, 30));
-
 
         backButton = new JButton("←");
         backButton.setFont(new Font("Arial", Font.BOLD, 30));
@@ -204,7 +275,6 @@ public class Form5 extends JPanel {
         nextButton.addActionListener(e -> handlePage(true));
         backButton.addActionListener(e -> handlePage(false));
 
-
         JPanel buttonPanel = new JPanel(new BorderLayout());
         buttonPanel.setPreferredSize(new Dimension(900, 30));
         buttonPanel.setOpaque(false);
@@ -215,8 +285,11 @@ public class Form5 extends JPanel {
         return buttonPanel;
     }
 
-
-
+    /**
+     * Handles the navigation between pages based on user interaction (next or back).
+     *
+     * @param isNext A flag indicating whether the user pressed the next button (true) or the back button (false).
+     */
     private void handlePage(boolean isNext) {
         List<Object> selectedItems = courseComboBox.getSelectedItems();
 
@@ -235,8 +308,6 @@ public class Form5 extends JPanel {
 
         // Combine interests1 and interests2
         String combinedInterests = interests1 + ", " + interests2;
-
-
 
         int requiredClasses = 0;
 

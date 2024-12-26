@@ -1,6 +1,9 @@
 package org.example.gui.pages.login;
 
-
+/**
+ * This package contains classes and components related to user authentication
+ * and account management within the graphical user interface.
+ */
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import org.example.gui.component.account.CreateAccount;
@@ -20,23 +23,62 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 
-
+/**
+ * The {@code RegisterForm} class represents a user registration form in the GUI.
+ * It allows users to enter their details, validate inputs, and create an account.
+ */
 public class RegisterForm extends JPanel {
 
+    /**
+     * Field for entering the user's first name.
+     */
     private JTextField firstName;
+
+    /**
+     * Field for entering the user's last name.
+     */
     private JTextField lastName;
+
+    /**
+     * Field for entering the username.
+     */
     private JTextField username;
+
+    /**
+     * Field for entering the password.
+     */
     private JPasswordField passwordField;
+
+    /**
+     * Field for confirming the password.
+     */
     private JPasswordField confirmPasswordField;
+
+    /**
+     * Button to submit the registration form.
+     */
     private JButton registerBtn;
+
+    /**
+     * Component for displaying password strength status.
+     */
     private PasswordStrengthStatus passwordStrengthStatus;
+
+    /**
+     * Field for entering the user's email address.
+     */
     private JTextField emailField;
 
+    /**
+     * Constructs a new {@code RegisterForm} and initializes the components.
+     */
     public RegisterForm() {
         init();
     }
 
-
+    /**
+     * Initializes the components and layout of the registration form.
+     */
     private void init() {
         setLayout(new MigLayout("fill,insets 20", "[center]", "[center]"));
         firstName = new JTextField();
@@ -140,7 +182,9 @@ public class RegisterForm extends JPanel {
         add(panel);
     }
 
-
+    /**
+     * Handles the registration process by validating inputs and creating an account.
+     */
     private void handleRegister() {
         if (!isFilled()) {
             if ((username.getText().length() < 5)) {
@@ -189,7 +233,13 @@ public class RegisterForm extends JPanel {
         }
     }
 
-
+    /**
+     * Creates a JPanel containing a label and a login button.
+     * The label asks the user if they already have an account, and the button directs
+     * them to the login form when clicked.
+     *
+     * @return a JPanel containing the label and login button.
+     */
     private Component createLoginLabel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
@@ -211,14 +261,22 @@ public class RegisterForm extends JPanel {
         return panel;
     }
 
-
+    /**
+     * Checks if the entered passwords match.
+     *
+     * @return {@code true} if passwords match; {@code false} otherwise.
+     */
     public boolean isMatchPassword() {
         String password = String.valueOf(passwordField.getPassword());
         String confirmPassword = String.valueOf(confirmPasswordField.getPassword());
         return password.equals(confirmPassword);
     }
 
-
+    /**
+     * Checks if all required fields are filled.
+     *
+     * @return {@code true} if all fields are filled; {@code false} otherwise.
+     */
     public boolean isFilled() {
         // Get the text from each field
         String usernameTxt = username.getText();
@@ -237,7 +295,11 @@ public class RegisterForm extends JPanel {
                 !email.trim().isEmpty();
     }
 
-
+    /**
+     * Sets a maximum character length for the specified text field.
+     *
+     * @param textField the text field to apply the limit to.
+     */
     private void setMaximumLength(JTextField textField) {
         ((AbstractDocument) textField.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override

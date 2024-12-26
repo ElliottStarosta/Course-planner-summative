@@ -23,72 +23,104 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * DashboardForm represents the main dashboard interface for a user.
+ * It displays user-specific content such as courses, recommendations, and quiz functionality.
+ */
 public class DashboardForm extends JPanel {
+
+    /** Current question index for quiz functionality. */
     private int question = 0;
+
+    /** The logged-in user. */
     private User user;
+
+    /** Main content panel of the dashboard. */
     private JPanel panel;
+
+    /** Welcome label displayed at the top of the dashboard. */
     private JLabel welcomeLabel;
+
+    /** Button to initiate the quiz. */
     private JButton takeQuizButton;
+
+    /** Panel containing action buttons. */
     private JPanel buttonPanel;
+
+    /** User's responses stored as key-value pairs. */
     private HashMap<String, String> userResponses = new HashMap<>();
+
+    /** Logout button for exiting the dashboard. */
     private JButton logoutBtn;
 
+    /** Username of the logged-in user. */
     private String username;
+
+    /** Full name of the logged-in user. */
     private String name;
+
+    /** Matrix representation of recommended courses. */
     private String[][] data;
 
+    /** ComboBox array for course name selection. */
     private JComboBox[] courseName;
 
+    /** List of all available courses. */
     private final String[] courses = ExcelUtility.getAllCourseNames();
 
+    /** Flag to determine if editing mode is active. */
     private boolean isEditing = false;
+
+    /** Button to toggle edit mode. */
     private JButton editButton;
+
+    /** Map to associate edit buttons with grade data. */
     private Map<JButton, String[]> gradeEditMap = new HashMap<>();
 
-
-
+    /**
+     * Constructs a DashboardForm with the given username and name.
+     *
+     * @param username the username of the user
+     * @param name the full name of the user
+     */
     public DashboardForm(String username, String name) {
         this.username = username;
         this.name = name;
-
         new CourseAssembly();
-
         init();
     }
 
+    /**
+     * Constructs a DashboardForm for the given user.
+     *
+     * @param user the User object representing the logged-in user
+     */
     public DashboardForm(User user) {
         this.user = user;
         this.username = user.getUsername();
         this.name = user.getFirstName();
-
         userResponses.put("username", username);
-
         new CourseAssembly();
-
         init();
     }
 
-
+    /**
+     * Initializes the layout and components of the dashboard.
+     */
     private void init() {
         setLayout(new BorderLayout());
 
-
-        // Create and configure the settings button
         logoutBtn = (JButton) createLogoutButton();
         boolean hasRecommendations = Course.readRecommendedCoursesFromFile(username);
 
-        // Panel for main content
-
         panel = new JPanel(new MigLayout("wrap,fillx,insets 35 45 30 45", "fill, 400:600"));
-        panel.setOpaque(false); // Make the panel background transparent
+        panel.setOpaque(false);
         panel.putClientProperty(FlatClientProperties.STYLE,
                 "arc:20;" +
                         "[light]background:darken(@background,3%);" +
                         "[dark]background:lighten(@background,3%)");
 
         createTopWelcome(panel, hasRecommendations);
-
         JButton takeQuizButton = (JButton) createQuizButtonPanel();
 
         if (!hasRecommendations) {
@@ -97,7 +129,7 @@ public class DashboardForm extends JPanel {
         } else {
             data = JsonUtil.readRecommendedCoursesToMatrix(this.username);
             for (String[] gradeData : data) {
-                panel.add(createGradePanel(gradeData),"gapy 10");
+                panel.add(createGradePanel(gradeData), "gapy 10");
             }
 
             buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -107,42 +139,33 @@ public class DashboardForm extends JPanel {
             panel.add(buttonPanel, "align right");
         }
 
-        JPanel wrapper = new JPanel(new GridBagLayout()); // Use GridBagLayout for flexible layout
+        JPanel wrapper = new JPanel(new GridBagLayout());
         wrapper.setOpaque(false);
 
-        // Create GridBagConstraints with adjustments
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;   // Center horizontally
-        gbc.gridy = 0;   // This controls vertical positioning
-        gbc.anchor = GridBagConstraints.CENTER; // Center the panel horizontally
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
         if (!hasRecommendations) {
             gbc.insets = new Insets(-150, 0, 0, 0);
         } else {
             gbc.insets = new Insets(-45, 0, 0, 0);
         }
 
-
         wrapper.add(panel, gbc);
-
         add(wrapper, BorderLayout.CENTER);
 
-
-
-        // Create a top-right panel to hold the settings button
         JPanel topRightPanel = new JPanel(new BorderLayout());
-        topRightPanel.setOpaque(false); // Make it transparent
+        topRightPanel.setOpaque(false);
         topRightPanel.add(logoutBtn, BorderLayout.EAST);
         topRightPanel.setPreferredSize(new Dimension(0, 40));
 
         JPanel wrapperTopPanel = new JPanel(new BorderLayout());
-        wrapperTopPanel.setOpaque(false); // Make it transparent
-        wrapperTopPanel.setBorder(new EmptyBorder(15, 0, 0, 20)); // Top and right margin
+        wrapperTopPanel.setOpaque(false);
+        wrapperTopPanel.setBorder(new EmptyBorder(15, 0, 0, 20));
         wrapperTopPanel.add(topRightPanel, BorderLayout.CENTER);
-
-        // Add the top-right panel to the top of the MainPage
         add(wrapperTopPanel, BorderLayout.NORTH);
 
-        // Add KeyListener to the panel
         KeyAdapter enterKeyListener = new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -154,7 +177,6 @@ public class DashboardForm extends JPanel {
         addKeyListener(enterKeyListener);
         takeQuizButton.addActionListener(e -> handleLogin());
 
-        // FocusListener to automatically request focus
         addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -167,7 +189,6 @@ public class DashboardForm extends JPanel {
             }
         });
 
-        // Ensure the panel is focused
         requestFocusInWindow();
 
         addComponentListener(new ComponentAdapter() {
@@ -188,10 +209,13 @@ public class DashboardForm extends JPanel {
         });
     }
 
+    /**
+     * Creates the logout button.
+     *
+     * @return the logout button component
+     */
     private Component createLogoutButton() {
-
         logoutBtn = new JButton("Logout");
-
         logoutBtn.putClientProperty(FlatClientProperties.STYLE, "" +
                 "[light]background:darken(@background,10%);" +
                 "[dark]background:lighten(@background,10%);" +
@@ -199,16 +223,16 @@ public class DashboardForm extends JPanel {
                 "innerFocusWidth:0;" + "font: bold +2" );
 
         logoutBtn.setPreferredSize(new Dimension(logoutBtn.getPreferredSize().width, 45));
-
         logoutBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         logoutBtn.addActionListener(e -> FormsManager.getInstance().showForm(new LoginForm()));
-
         return logoutBtn;
     }
-
-
-
-
+    /**
+     * Creates a grade panel for the given grade data.
+     *
+     * @param gradeData the grade data to display
+     * @return the panel displaying the grade data
+     */
     private JPanel createGradePanel(String[] gradeData) {
         JPanel gradePanel = new JPanel(new MigLayout("wrap 1", "[left]"));
         gradePanel.putClientProperty(FlatClientProperties.STYLE, "" +
@@ -264,7 +288,13 @@ public class DashboardForm extends JPanel {
     }
 
 
-
+    /**
+     * Filters courses by grade level.
+     *
+     * @param courses the array of course strings
+     * @param targetGrade the target grade level to filter by
+     * @return the array of filtered course strings
+     */
     public String[] filterCoursesByGrade(String[] courses, int targetGrade) {
 
         // Use streams to filter and map courses
@@ -331,7 +361,9 @@ public class DashboardForm extends JPanel {
 
     }
 
-
+    /**
+     * Method when login button is triggered
+     */
     private void handleLogin() {
         question++;
         Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
@@ -341,6 +373,10 @@ public class DashboardForm extends JPanel {
         }
     }
 
+    /**
+     *
+     * @return the component for displaying the take quiz button
+     */
     private Component createQuizButtonPanel() {
         JButton takeQuizButton = new JButton("Take Recommendation Course Quiz");
         takeQuizButton.putClientProperty(FlatClientProperties.STYLE, "" +
@@ -357,6 +393,12 @@ public class DashboardForm extends JPanel {
         return takeQuizButton;
     }
 
+    /**
+     * Creates the welcome sign on the dashboard
+     *
+     * @param panel
+     * @param hasRecs
+     */
     private void createTopWelcome(JPanel panel, boolean hasRecs) {
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.putClientProperty(FlatClientProperties.STYLE, "background:null");

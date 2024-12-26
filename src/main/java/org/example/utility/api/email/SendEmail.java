@@ -179,7 +179,7 @@ public class SendEmail {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 int grade = jsonObject.getInt("grade");
-                String courses = jsonObject.getString("courses");
+                String courses = jsonObject.getString("courses").replace("**", "");
                 htmlBody += "<tr><td>" + grade + "</td><td>" + courses + "</td></tr>";
             }
 

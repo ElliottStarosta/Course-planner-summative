@@ -75,11 +75,6 @@ public class JsonUtil {
             return new String[0][0]; // Return an empty array on error
         }
 
-        // List of exception courses
-        List<String> exceptionCourses = Arrays.asList(
-                "NBE3U - English Grade 11 - Understanding Contemporary First Nations, Métis, and Inuit Voices"
-        );
-
         // Create a 2D array with the required number of rows and columns
         int numRows = jsonArray.length();
         String[][] data = new String[numRows][9];
@@ -90,17 +85,10 @@ public class JsonUtil {
             int grade = jsonObject.getInt("grade");
             String courses = jsonObject.getString("courses");
 
-            // Replace commas in exception courses with a placeholder
-            for (String exception : exceptionCourses) {
-                courses = courses.replace(exception, exception.replace(",", "<comma>"));
-            }
+            String[] courseArray = Arrays.stream(courses.split(",\\*\\*"))
+                    .map(String::trim)
+                    .toArray(String[]::new);
 
-            String[] courseArray = courses.split(", ");
-
-            // Replace placeholders back with commas
-            for (int j = 0; j < courseArray.length; j++) {
-                courseArray[j] = courseArray[j].replace("<comma>", ",");
-            }
 
             // Set the grade in the first column
             data[i][0] = "Grade " + grade;

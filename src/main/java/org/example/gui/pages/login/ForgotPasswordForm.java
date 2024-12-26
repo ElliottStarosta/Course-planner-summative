@@ -12,15 +12,31 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-
+/**
+ * This class represents the Forgot Password form UI, allowing users to reset their password by entering their email.
+ */
 public class ForgotPasswordForm extends JPanel {
+
+    /**
+     * Input field for the user to enter their email address.
+     */
     private JTextField emailField;
+
+    /**
+     * Button to trigger the email sending process.
+     */
     private JButton emailBtn;
 
+    /**
+     * Constructs the ForgotPasswordForm and initializes the UI components.
+     */
     public ForgotPasswordForm() {
         init();
     }
 
+    /**
+     * Initializes the layout and components of the Forgot Password form.
+     */
     private void init() {
         setLayout(new MigLayout("fill, insets 20", "[center]", "[center]"));
 
@@ -51,7 +67,6 @@ public class ForgotPasswordForm extends JPanel {
         emailField.putClientProperty(FlatClientProperties.STYLE, "arc:5;");
         emailField.setPreferredSize(new Dimension(emailField.getPreferredSize().width, 45));
 
-
         emailBtn = new JButton("Send Email");
         emailBtn.putClientProperty(FlatClientProperties.STYLE, "" +
                 "[light]background:darken(@background,10%);" +
@@ -78,18 +93,18 @@ public class ForgotPasswordForm extends JPanel {
             } else {
                 String username = EmailUtil.getUsernameWithEmail(email);
 
-                SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+                SwingWorker<Void, Void> worker = new SwingWorker<>() {
                     @Override
-                    protected Void doInBackground() throws Exception {
+                    protected Void doInBackground() {
                         String generatedCode = TwoFactorAuthentication.generateAndSendCode(email, username);
-                        FormsManager.getInstance().showForm(new VerificationForm(generatedCode, emailField.getText(),false));
+                        FormsManager.getInstance().showForm(new VerificationForm(generatedCode, emailField.getText(), false));
                         return null;
                     }
                 };
                 worker.execute();
-
             }
         });
+
         emailField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -97,7 +112,6 @@ public class ForgotPasswordForm extends JPanel {
                     emailBtn.doClick();
                 }
             }
-
         });
 
         panel.add(title);
@@ -110,10 +124,16 @@ public class ForgotPasswordForm extends JPanel {
         add(panel);
     }
 
+    /**
+     * Creates the "Remember your Password?" section with a link to navigate to the login form.
+     *
+     * @return a component containing the "Remember your Password?" section.
+     */
     private Component createRememberPassword() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:null");
+
         JButton registerBtn = new JButton("<html><a href=\"#\">Sign in</a></html>");
         registerBtn.putClientProperty(FlatClientProperties.STYLE, "" +
                 "border:3,3,3,3");
@@ -122,13 +142,14 @@ public class ForgotPasswordForm extends JPanel {
         registerBtn.addActionListener(e -> {
             FormsManager.getInstance().showForm(new LoginForm());
         });
+
         JLabel label = new JLabel("Remember your Password ?");
         label.putClientProperty(FlatClientProperties.STYLE, "" +
                 "[light]foreground:lighten(@foreground,30%);" +
                 "[dark]foreground:darken(@foreground,30%)");
+
         panel.add(label);
         panel.add(registerBtn);
         return panel;
     }
-
 }

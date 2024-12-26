@@ -25,13 +25,54 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.plaf.basic.ComboPopup;
 import net.miginfocom.swing.MigLayout;
 
-
+/**
+ * A custom multi-select ComboBox implementation for selecting multiple items.
+ * It supports custom rendering and editing to manage selected items visually.
+ */
 public class ComboBox extends JComboBox {
 
+    /**
+     * The list of selected items in the combo box.
+     * <p>
+     * This list stores all the items currently selected by the user. The selected items are used
+     * to update the editor panel and the renderer dynamically.
+     * </p>
+     */
+    private final List<Object> selectedItems = new ArrayList<>();
+
+    /**
+     * The custom editor for the combo box.
+     * <p>
+     * This editor is responsible for displaying the selected items in a scrollable panel.
+     * It provides methods to add and remove items dynamically based on user actions.
+     * </p>
+     */
+    private final ComboBoxMultiCellEditor comboBoxMultiCellEditor;
+
+    /**
+     * A reference to the {@code JList} component used for rendering the dropdown list of items.
+     * <p>
+     * This component is updated whenever the combo box's list cell renderer is accessed.
+     * </p>
+     */
+    private Component comboList;
+
+
+    /**
+     * Returns the list of selected items.
+     *
+     * @return the list of selected objects.
+     */
     public List<Object> getSelectedItems() {
         return selectedItems;
     }
 
+    /**
+     * Sets the selected items in the combo box.
+     * Items not present in the combo box are ignored.
+     *
+     * @param selectedItems the list of objects to be selected.
+     */
     public void setSelectedItems(List<Object> selectedItems) {
         List<Object> comboItem = new ArrayList<>();
         int count = getItemCount();
@@ -46,6 +87,9 @@ public class ComboBox extends JComboBox {
         comboItem.clear();
     }
 
+    /**
+     * Clears all selected items from the combo box.
+     */
     public void clearSelectedItems() {
         selectedItems.clear();
         Component editorCom = getEditor().getEditorComponent();
@@ -59,10 +103,11 @@ public class ComboBox extends JComboBox {
         }
     }
 
-    private final List<Object> selectedItems = new ArrayList<>();
-    private final ComboBoxMultiCellEditor comboBoxMultiCellEditor;
-    private Component comboList;
-
+    /**
+     * Removes the specified item from the selected items list.
+     *
+     * @param obj the object to be removed.
+     */
     private void removeItemObject(Object obj) {
         selectedItems.remove(obj);
         comboBoxMultiCellEditor.removeItem(obj);
@@ -71,6 +116,11 @@ public class ComboBox extends JComboBox {
         }
     }
 
+    /**
+     * Adds the specified item to the selected items list.
+     *
+     * @param obj the object to be added.
+     */
     private void addItemObject(Object obj) {
         selectedItems.add(obj);
         comboBoxMultiCellEditor.addItem(obj);
@@ -79,6 +129,9 @@ public class ComboBox extends JComboBox {
         }
     }
 
+    /**
+     * Creates a new ComboBox instance with a custom UI, renderer, and editor.
+     */
     public ComboBox() {
         setUI(new ComboBoxMultiUI());
         comboBoxMultiCellEditor = new ComboBoxMultiCellEditor();
@@ -103,6 +156,9 @@ public class ComboBox extends JComboBox {
 
     }
 
+    /**
+     * A custom UI implementation for the multi-select ComboBox.
+     */
     private class ComboBoxMultiUI extends FlatComboBoxUI {
 
         @Override
@@ -125,6 +181,9 @@ public class ComboBox extends JComboBox {
 
     }
 
+    /**
+     * A custom renderer for displaying items in the ComboBox with checkbox icons.
+     */
     private class ComboBoxMultiCellRenderer extends BasicComboBoxRenderer {
 
         @Override
@@ -138,11 +197,36 @@ public class ComboBox extends JComboBox {
         }
     }
 
+    /**
+     * A custom editor for the ComboBox supporting a scrollable panel for selected items.
+     */
     private class ComboBoxMultiCellEditor extends BasicComboBoxEditor {
 
+        /**
+         * The {@code JScrollPane} that serves as the container for the panel displaying selected items.
+         * <p>
+         * This scroll pane is customized to provide horizontal scrolling for the selected items
+         * and to maintain a compact height. It includes FlatLaf styling for consistent integration
+         * with the application's theme.
+         * </p>
+         */
         protected final JScrollPane scroll;
+
+        /**
+         * The {@code JPanel} used to display the selected items in the combo box editor.
+         * <p>
+         * This panel is initialized with a MigLayout, allowing flexible arrangement of the items.
+         * Each selected item is dynamically added or removed from this panel based on user interactions.
+         * </p>
+         */
         protected final JPanel panel;
 
+
+        /**
+         * Adds an item to the editor panel.
+         *
+         * @param obj the item to be added.
+         */
         protected void addItem(Object obj) {
             Item item = new Item(obj);
             panel.add(item);
@@ -150,6 +234,11 @@ public class ComboBox extends JComboBox {
             panel.revalidate();
         }
 
+        /**
+         * Removes an item from the editor panel.
+         *
+         * @param obj the item to be removed.
+         */
         protected void removeItem(Object obj) {
             int count = panel.getComponentCount();
             for (int i = 0; i < count; i++) {
@@ -163,6 +252,20 @@ public class ComboBox extends JComboBox {
             }
         }
 
+        /**
+         * Constructs a new {@code ComboBoxMultiCellEditor}.
+         * This editor is customized to display multiple selected items within a scrollable panel.
+         * <p>
+         * The editor contains a {@link JScrollPane} that holds a {@link JPanel}. The panel is used
+         * to dynamically display the selected items. Styling is applied using FlatLaf properties
+         * for a consistent look and feel with the application's theme.
+         * </p>
+         * <ul>
+         * <li>The scroll pane has a fixed height of 20 pixels and horizontal scrolling enabled.</li>
+         * <li>Custom styles are applied to the scroll bar to match the FlatLaf design guidelines.</li>
+         * <li>The panel is initialized with a MigLayout for flexible arrangement of items.</li>
+         * </ul>
+         */
         public ComboBoxMultiCellEditor() {
             this.panel = new JPanel(new MigLayout("insets 0,filly,gapx 2", "", "fill"));
             this.scroll = new JScrollPane(panel);
@@ -189,10 +292,18 @@ public class ComboBox extends JComboBox {
 
     }
 
+    /**
+     * A custom icon representing a checkbox state for ComboBox items.
+     */
     private class CheckBoxIcon extends FlatCheckBoxIcon {
 
         private final boolean selected;
 
+        /**
+         * Creates a new CheckBoxIcon instance.
+         *
+         * @param selected true if the checkbox is selected, false otherwise.
+         */
         public CheckBoxIcon(boolean selected) {
             this.selected = selected;
         }
@@ -203,20 +314,36 @@ public class ComboBox extends JComboBox {
         }
     }
 
+    /**
+     * Represents an individual selected item in the ComboBox editor.
+     */
     private class Item extends JLabel {
 
+        /**
+         * Returns the associated object for this item.
+         *
+         * @return the associated object.
+         */
         public Object getItem() {
             return item;
         }
 
         private final Object item;
 
+        /**
+         * Creates a new Item instance for the specified object.
+         *
+         * @param item the object to be represented.
+         */
         public Item(Object item) {
             super(item.toString());
             this.item = item;
             init();
         }
 
+        /**
+         * Initializes the item with a close button and custom styling.
+         */
         private void init() {
             putClientProperty(FlatClientProperties.STYLE, ""
                     + "border:0,5,0,20;"

@@ -11,31 +11,79 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
-
+/**
+ * Form4 represents a panel that displays the fourth question -- typing a future career
+ *
+ * <p>The form provides buttons for navigation and handles user responses using checkboxes.
+ * It uses a dynamic layout and integrates with other components like the PageMenuIndicator and NotificationManager.</p>
+ */
 public class Form4 extends JPanel {
+    /**
+     * The initial height for the answer scroll pane.
+     */
     private static final int INITIAL_HEIGHT = 185;
+
+    /**
+     * The maximum height for the answer scroll pane.
+     */
     private static final int MAX_HEIGHT = 400;
+
+    /**
+     * A map that stores the user responses, with the question identifiers as keys and the responses as values.
+     */
     private HashMap<String, String> userResponses;
+
+    /**
+     * The current question number in the form sequence.
+     */
     private int question;
+
+    /**
+     * The width of the panel that holds the form content.
+     */
     private static final int PANEL_WIDTH = 600;
 
+    /**
+     * The page menu indicator that shows the current page number in the form.
+     */
     private PageMenuIndicator indicator;
 
-
+    /**
+     * The label that displays the current question title (e.g., "Question #1").
+     */
     private JLabel questionTitle;
+
+    /**
+     * The text area where the user can enter their answer for the current question.
+     */
     private JTextArea answerArea;
+
+    /**
+     * The button that allows the user to move to the next question.
+     */
     private JButton nextButton;
+
+    /**
+     * The button that allows the user to move to the previous question.
+     */
     private JButton backButton;
 
 
-
-
-    public Form4 (HashMap<String,String> userResponses, int question) {
+    /**
+     * Constructs a new Form4 instance.
+     *
+     * @param userResponses A HashMap containing the user's responses from previous questions.
+     * @param question The current question number.
+     */
+    public Form4(HashMap<String, String> userResponses, int question) {
         this.userResponses = userResponses;
         this.question = question;
         init();
     }
 
+    /**
+     * Initializes the components of the form.
+     */
     private void init() {
         setLayout(new MigLayout("fill, insets 20", "[center]", "[center]"));
 
@@ -43,6 +91,11 @@ public class Form4 extends JPanel {
         add(contentPanel);
     }
 
+    /**
+     * Creates the content panel containing all UI components of the form.
+     *
+     * @return The content panel.
+     */
     private JPanel createContentPanel() {
         JPanel contentPanel = new JPanel(new MigLayout("wrap, fillx, insets 35 45 30 45", "[grow]"));
         contentPanel.setPreferredSize(new Dimension(PANEL_WIDTH, 450));
@@ -65,6 +118,11 @@ public class Form4 extends JPanel {
         return contentPanel;
     }
 
+    /**
+     * Creates the panel that displays the title of the question.
+     *
+     * @return The title panel.
+     */
     private JPanel createTitlePanel() {
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.putClientProperty(FlatClientProperties.STYLE, "background:null");
@@ -77,6 +135,11 @@ public class Form4 extends JPanel {
         return topPanel;
     }
 
+    /**
+     * Creates a label displaying the question text.
+     *
+     * @return The question label.
+     */
     private JLabel createQuestionLabel() {
         JLabel questionLabel = new JLabel("What career aspirations do you have for the future?");
         questionLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -89,6 +152,11 @@ public class Form4 extends JPanel {
         return questionLabel;
     }
 
+    /**
+     * Creates a scrollable area for the user to input their response.
+     *
+     * @return The scroll pane containing the answer text area.
+     */
     private JScrollPane createAnswerScrollPane() {
         answerArea = new JTextArea();
 
@@ -112,6 +180,11 @@ public class Form4 extends JPanel {
         return scrollPane;
     }
 
+    /**
+     * Creates the button panel with a single arrow for navigation to the next question.
+     *
+     * @return The button panel.
+     */
     private JPanel createButtonPanelSingleArrow() {
         nextButton = new JButton("→");
         nextButton.setFont(new Font("Arial", Font.BOLD, 30));
@@ -124,17 +197,20 @@ public class Form4 extends JPanel {
                         "foreground: @earlYellow;" +
                         "innerFocusWidth:0;");
 
-
         JPanel buttonPanel = new JPanel(new BorderLayout());
         buttonPanel.setOpaque(false);
         buttonPanel.add(nextButton, BorderLayout.EAST);
 
         nextButton.addActionListener(e -> handlePage(true));
 
-
         return buttonPanel;
     }
 
+    /**
+     * Creates the button panel with both back and next arrows for navigation between questions.
+     *
+     * @return The button panel.
+     */
     private JPanel createButtonPanelDoubleArrow() {
         nextButton = new JButton("→");
         nextButton.setFont(new Font("Arial", Font.BOLD, 30));
@@ -161,7 +237,6 @@ public class Form4 extends JPanel {
         nextButton.addActionListener(e -> handlePage(true));
         backButton.addActionListener(e -> handlePage(false));
 
-
         JPanel buttonPanel = new JPanel(new BorderLayout());
         buttonPanel.setPreferredSize(new Dimension(900, 30));
         buttonPanel.setOpaque(false);
@@ -172,14 +247,19 @@ public class Form4 extends JPanel {
         return buttonPanel;
     }
 
-
-
+    /**
+     * Handles the navigation between questions.
+     * If moving to the next question, checks if the user has provided a valid response.
+     * If moving to the previous question, simply goes back.
+     *
+     * @param isNext A boolean indicating whether to move to the next question (true) or back to the previous one (false).
+     */
     private void handlePage(boolean isNext) {
         String answerText = answerArea.getText().trim();
         userResponses.put("interests2", answerText);
 
         nextButton.setEnabled(false);
-        if(isNext) {
+        if (isNext) {
             // Check if the text has at least 3 characters
             if (answerText.length() >= 3) {
                 question++;
@@ -201,5 +281,4 @@ public class Form4 extends JPanel {
             }
         }
     }
-
 }

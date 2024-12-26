@@ -20,7 +20,6 @@ public class PythonAPI implements Deployment {
      * that the process is terminated when the Java application is stopped or exits.
      * </p>
      *
-     * @throws IOException If an error occurs while starting the Python script process.
      */
     public static void runAPI() {
         try {
