@@ -58,7 +58,7 @@ public class Application extends JFrame {
         setLocationRelativeTo(null);
 
         // Set the initial content pane to the login form
-        setContentPane(new LoginForm());
+        FormsManager.getInstance().showForm(new LoginForm());
 
         // Configure the Notifications framework with the main JFrame
         Notifications.getInstance().setJFrame(this);
