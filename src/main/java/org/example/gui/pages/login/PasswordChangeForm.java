@@ -7,6 +7,7 @@ import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.jcomponents.PasswordStrengthStatus;
 import org.example.gui.component.account.ForgotPasswordUtil;
 import org.example.gui.manager.FormsManager;
+import org.example.gui.pages.Application;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,11 +45,17 @@ public class PasswordChangeForm extends JPanel {
     private String email;
 
     /**
+     * JFrame reference
+     */
+    private JFrame frame = Application.getInstance();
+
+    /**
      * Constructor for creating a PasswordChangeForm.
      *
      * @param email The email of the user whose password is being reset.
      */
     public PasswordChangeForm(String email) {
+        frame.setMinimumSize(new Dimension(400, 400));
         this.email = email;
         init();
     }

@@ -2,6 +2,7 @@ package org.example.gui.pages.login;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
+import org.example.gui.pages.Application;
 import org.example.utility.EncryptionUtil;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.manager.FormsManager;
@@ -55,11 +56,16 @@ public class LoginForm extends JPanel {
      * Path to the properties file used for saving login information.
      */
     private static final String PROPERTIES_FILE = "src/main/resources/login.properties";
+    /**
+     * JFrame reference
+     */
+    private JFrame frame = Application.getInstance();
 
     /**
      * Constructs a new LoginForm and initializes the user interface components.
      */
     public LoginForm() {
+        frame.setMinimumSize(new Dimension(500, 475));
         this.users = User.readUsersFromJson();
         init();
         loadSavedLoginInfo();
@@ -69,6 +75,7 @@ public class LoginForm extends JPanel {
      * Initializes the layout and components of the login form.
      */
     private void init() {
+        frame.setResizable(true);
         setLayout(new MigLayout("fill, insets 20","[center]","[center]"));
 
         usernameField = new JTextField();

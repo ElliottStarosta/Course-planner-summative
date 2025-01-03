@@ -5,41 +5,32 @@ package org.example.people;
  * including their interests, previous courses, grade level, track, and username.
  */
 public class UserInput {
-    private String interests;
+    private String[] interests;
     private String previousCourses;
     private int grade;
     private String track;
     private String username;
 
-    /**
-     * Constructs a new UserInput object with a given username.
-     * The interests, previous courses, track, and grade are set to default values.
-     *
-     * @param username The username of the student.
-     */
-    public UserInput(String username) {
-        this.interests = "";
-        this.previousCourses = "";
-        this.grade = 9;
-        this.track = "";
-        this.username = username;
-    }
 
     /**
      * Constructs a new UserInput object with all the provided details.
      *
-     * @param interests       The student's interests.
+     * @param interests The student's interests.
      * @param previousCourses The student's previous courses.
-     * @param grade           The grade level of the student.
-     * @param track           The student's track (e.g., science, arts, etc.).
-     * @param username        The student's username.
+     * @param grade The grade level of the student.
+     * @param track The student's track (e.g., science, arts, etc.).
+     * @param username The student's username.
      */
-    public UserInput(String interests, String previousCourses, int grade, String track, String username) {
+    public UserInput(String[] interests, String previousCourses, int grade, String track, String username) {
         this.interests = interests;
         this.previousCourses = previousCourses;
         this.grade = grade;
         this.track = track;
         this.username = username;
+    }
+
+    public UserInput() {
+        this.interests = new String[2];
     }
 
     /**
@@ -48,16 +39,44 @@ public class UserInput {
      * @return The student's interests.
      */
     public String getInterests() {
-        return interests;
+        return interests[0] + " " + interests[1];
+    }
+
+
+    /**
+     * Returns the interests1 of the student.
+     *
+     * @return The student's interests.
+     */
+    public String getInterest1() {
+        return this.interests[0];
     }
 
     /**
-     * Sets the interests of the student.
+     * Returns the interests2 of the student.
+     *
+     * @return The student's interests.
+     */
+    public String getInterest2() {
+        return this.interests[1];
+    }
+
+    /**
+     * Sets the interests1 of the student.
      *
      * @param interests The student's interests to set.
      */
-    public void setInterests(String interests) {
-        this.interests = interests;
+    public void setInterests1(String interests) {
+        this.interests[0] = interests;
+    }
+
+    /**
+     * Sets the interests2 of the student.
+     *
+     * @param interests The student's interests to set.
+     */
+    public void setInterests2(String interests) {
+        this.interests[1] = interests;
     }
 
     /**

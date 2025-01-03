@@ -7,6 +7,7 @@ import org.example.gui.manager.DynamicFormLoader;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.jcomponents.PageMenuIndicator;
 import org.example.gui.manager.FormsManager;
+import org.example.gui.pages.Application;
 import org.example.gui.pages.main.DashboardForm;
 import org.example.people.UserInput;
 import org.example.people.User;
@@ -32,10 +33,9 @@ import static org.example.utility.courses.ExcelUtility.getAllCourseNames;
 public class Form5 extends JPanel {
 
     /**
-     * A HashMap to store the user's responses to the quiz questions.
-     * The key is the question identifier, and the value is the user's response.
+     * The user object that contains all of their inputted data
      */
-    private HashMap<String, String> userResponses;
+    private UserInput user;
 
     /**
      * The current question number in the quiz. It helps track the progression of the form.
@@ -83,15 +83,20 @@ public class Form5 extends JPanel {
      */
     private boolean isSubmitClicked = false;
 
+    /**
+     * JFrame reference
+     */
+    private JFrame frame = Application.getInstance();
 
     /**
      * Constructs a new Form5 panel.
      *
-     * @param userResponses A map containing user responses from previous questions.
+     * @param user UserInput obj that passes the user's data
      * @param question The question number.
      */
-    public Form5(HashMap<String,String> userResponses, int question) {
-        this.userResponses = userResponses;
+    public Form5(UserInput user, int question) {
+        frame.setMinimumSize(new Dimension(750, 450));
+        this.user = user;
         this.question = question;
         init();
     }
@@ -202,8 +207,8 @@ public class Form5 extends JPanel {
                         "[dark]background:lighten(@earlYellow,5%)");
         comboBoxPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        if (userResponses.containsKey("previousClasses")) {
-            String previousClasses = userResponses.get("previousClasses");
+        if (user.getPreviousCourses() != null) {
+            String previousClasses = user.getPreviousCourses();
 
             // Convert list to array if needed
             String[] classesArray = Course.cleanPreviousCourses(previousClasses);
@@ -297,17 +302,10 @@ public class Form5 extends JPanel {
                 .map(item -> "\"" + item + "\"")
                 .collect(Collectors.toList());
 
-        userResponses.put("previousClasses", selectedClasses.toString());
+        user.setPreviousCourses(selectedClasses.toString());
 
-        // Retrieve values from userResponses hashmap
-        String interests1 = userResponses.get("interests1");
-        String interests2 = userResponses.get("interests2");
-        String track = userResponses.get("track");
-        int grade = Integer.parseInt(userResponses.get("grade"));
-        String username = userResponses.get("username");
 
-        // Combine interests1 and interests2
-        String combinedInterests = interests1 + ", " + interests2;
+        int grade = user.getGrade();
 
         int requiredClasses = 0;
 
@@ -335,14 +333,13 @@ public class Form5 extends JPanel {
                 isSubmitClicked = true;
                 nextButton.setEnabled(false);
 
-                // Create StudentInput object
-                UserInput student = new UserInput(combinedInterests, selectedClasses.toString(), grade, track, username);
+
 
                 // Run the assessment in a separate thread
                 SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
                     @Override
                     protected Void doInBackground() throws Exception {
-                        CourseAssembly.runAssessment(student);
+                        CourseAssembly.runAssessment(user);
                         return null;
                     }
 
@@ -353,16 +350,16 @@ public class Form5 extends JPanel {
                         isSubmitClicked = false;
 
                         // Switch to the main page
-                        User user = UsersUtil.getUserWithUsername(username);
-                        String name = user.getFirstName();
-                        FormsManager.getInstance().showForm(new DashboardForm(username,name));
+                        User userMain = UsersUtil.getUserWithUsername(user.getUsername());
+                        String name = userMain.getFirstName();
+                        FormsManager.getInstance().showForm(new DashboardForm(user.getUsername(),name));
                     }
                 };
                 worker.execute();
             }
         } else {
             question--;
-            Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
+            Object formInstance = DynamicFormLoader.loadForm(question, user);
             if (formInstance != null) {
                 FormsManager.getInstance().showForm((JComponent) formInstance);
             }

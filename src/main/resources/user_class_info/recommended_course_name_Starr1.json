@@ -1,0 +1,13 @@
+[ {
+  "courses" : "CGC1W - Geography of Canada,** ENL1W - English Grade 9,** FSF1D - Core French,** MTH1W - Grade 9 Mathematics,** PAF1O - Spark,** PPL1O - Healthy Active Living,** SNC1W - Grade 9 Science,** TAS1O - Exploring Technologies",
+  "grade" : 9
+}, {
+  "courses" : "ATC2O - Developing Dance Techniques,** BEP2O - Launching and Leading a Business,** CHC2D - Canadian History,** CHV2O - Civics and Careers,** ENG2D - English Grade 10,** HFN2O - Food & Nutrition,** MPM2D - Grade 10 Mathematics,** SNC2D - Grade 10 Science",
+  "grade" : 10
+}, {
+  "courses" : "AWE3M - Yearbook,** BAF3M - Financial Accounting,** BMI3C - Marketing: Goods, Services, Events,** HSP3U - Anthropology, Psychology, Sociology,** MCR3U - Functions,** NBE3U - English Grade 11 - Understanding Contemporary First Nations, Métis, and Inuit Voices,** SBI3U - Biology,** TMJ3M - Manufacturing Technology",
+  "grade" : 11
+}, {
+  "courses" : "AWC4M - Ceramics,** CLN4U - Canadian & International Law,** ENG4U - English Grade 12,** ICS4U - Computer Science (University) - Grade 12,** MCV4U - Calculus and Vectors,** MHF4U - Advanced Functions,** SCH4U - Chemistry,** TDJ4M - Technological Design",
+  "grade" : 12
+} ]

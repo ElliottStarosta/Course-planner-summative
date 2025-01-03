@@ -6,6 +6,8 @@ import org.example.gui.manager.DynamicFormLoader;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.jcomponents.PageMenuIndicator;
 import org.example.gui.manager.FormsManager;
+import org.example.gui.pages.Application;
+import org.example.people.UserInput;
 
 import javax.swing.*;
 import java.awt.*;
@@ -72,9 +74,9 @@ public class Form1 extends JPanel {
     private JButton backButton;
 
     /**
-     * A map to store user responses, where the key is the question identifier and the value is the user's answer.
+     * The user object that contains all of their inputted data
      */
-    private HashMap<String, String> userResponses;
+    private UserInput user;
 
     /**
      * The page menu indicator that visually represents the current question number in the form.
@@ -83,13 +85,20 @@ public class Form1 extends JPanel {
 
 
     /**
+     * JFrame reference
+     */
+    private JFrame frame = Application.getInstance();
+
+
+    /**
      * Constructs a Form1 panel.
      *
-     * @param userResponses a HashMap containing the user's responses
+     * @param user UserInput obj that passes the user's data
      * @param question the current question number
      */
-    public Form1(HashMap<String, String> userResponses, int question) {
-        this.userResponses = userResponses;
+    public Form1(UserInput user, int question) {
+        frame.setMinimumSize(new Dimension(650, 500));
+        this.user = user;
         this.question = question;
         init();
     }
@@ -201,8 +210,8 @@ public class Form1 extends JPanel {
         grade11Button.addActionListener(new ButtonClickListener());
         grade12Button.addActionListener(new ButtonClickListener());
 
-        if (userResponses.containsKey("grade")) {
-            String grade = userResponses.get("grade");
+        if (user.getGrade() != 0) {
+            int grade = user.getGrade();
             selectButton(grade);
         }
 
@@ -231,14 +240,14 @@ public class Form1 extends JPanel {
      *
      * @param grade the grade to select
      */
-    private void selectButton(String grade) {
-        if ("9".equalsIgnoreCase(grade)) {
+    private void selectButton(int grade) {
+        if (grade == 9) {
             grade9Button.setSelected(true);
-        } else if ("10".equalsIgnoreCase(grade)) {
+        } else if (10 == grade) {
             grade10Button.setSelected(true);
-        } else if ("11".equalsIgnoreCase(grade)) {
+        } else if (11 == grade) {
             grade11Button.setSelected(true);
-        } else if ("12".equalsIgnoreCase(grade)) {
+        } else if (12 == grade) {
             grade12Button.setSelected(true);
         }
     }
@@ -317,13 +326,13 @@ public class Form1 extends JPanel {
                 return;
             }
             question++;
-            Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
+            Object formInstance = DynamicFormLoader.loadForm(question, user);
             if (formInstance != null) {
                 FormsManager.getInstance().showForm((JComponent) formInstance);
             }
         } else {
             question--;
-            Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
+            Object formInstance = DynamicFormLoader.loadForm(question, user);
             if (formInstance != null) {
                 FormsManager.getInstance().showForm((JComponent) formInstance);
             }
@@ -339,13 +348,13 @@ public class Form1 extends JPanel {
             JCheckBox clickedButton = (JCheckBox) e.getSource();
 
             if (clickedButton == grade9Button) {
-                userResponses.put("grade", "9");
+                user.setGrade(9);
             } else if (clickedButton == grade10Button) {
-                userResponses.put("grade", "10");
+                user.setGrade(10);
             } else if (clickedButton == grade11Button) {
-                userResponses.put("grade", "11");
+                user.setGrade(11);
             } else if (clickedButton == grade12Button) {
-                userResponses.put("grade", "12");
+                user.setGrade(12);
             }
         }
     }

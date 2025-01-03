@@ -6,6 +6,8 @@ import org.example.gui.manager.DynamicFormLoader;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.jcomponents.PageMenuIndicator;
 import org.example.gui.manager.FormsManager;
+import org.example.gui.pages.Application;
+import org.example.people.UserInput;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,23 +72,28 @@ public class Form2 extends JPanel {
     private JButton backButton;
 
     /**
-     * A map to store user responses, where the key is the question identifier and the value is the user's answer.
+     * The user object that contains all of their inputted data
      */
-    private HashMap<String, String> userResponses;
+    private UserInput user;
 
     /**
      * The page menu indicator that visually represents the current question number in the form.
      */
     private PageMenuIndicator indicator;
+    /**
+     * JFrame reference
+     */
+    private JFrame frame = Application.getInstance();
 
     /**
      * Constructor for Form2.
      *
-     * @param userResponses The map that stores the user's responses to previous questions.
+     * @param user UserInput obj that passes the user's data
      * @param question The current question number.
      */
-    public Form2(HashMap<String, String> userResponses, int question) {
-        this.userResponses = userResponses;
+    public Form2(UserInput user, int question) {
+        frame.setMinimumSize(new Dimension(650, 500));
+        this.user = user;
         this.question = question;
         init();
     }
@@ -205,8 +212,8 @@ public class Form2 extends JPanel {
 
         String track = "";
 
-        if (userResponses.containsKey("track")) {
-            track = userResponses.get("track");
+        if (user.getTrack() != null) {
+            track = user.getTrack();
             selectButton(track);
         }
 
@@ -242,13 +249,13 @@ public class Form2 extends JPanel {
 
             // Perform action based on the clicked button
             if (clickedButton == universityButton) {
-                userResponses.put("track", "University");
+                user.setTrack("University");
             } else if (clickedButton == collegeButton) {
-                userResponses.put("track", "College");
+                user.setTrack("College");
             } else if (clickedButton == tradeButton) {
-                userResponses.put("track", "Open");
+                user.setTrack("Open");
             } else if (clickedButton == dontKnowButton) {
-                userResponses.put("track", "null");
+                user.setTrack("null");
             }
         }
     }
@@ -354,14 +361,14 @@ public class Form2 extends JPanel {
                 return; 
             }
             question++;
-            Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
+            Object formInstance = DynamicFormLoader.loadForm(question, user);
             if (formInstance != null) {
                 // Assuming FormsManager can handle form instances without a specific base class
                 FormsManager.getInstance().showForm((JComponent) formInstance);
             }
         } else {
             question--;
-            Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
+            Object formInstance = DynamicFormLoader.loadForm(question, user);
             if (formInstance != null) {
                 // Assuming FormsManager can handle form instances without a specific base class
                 FormsManager.getInstance().showForm((JComponent) formInstance);

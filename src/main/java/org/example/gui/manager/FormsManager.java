@@ -5,27 +5,19 @@ import org.example.gui.pages.Application;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 
-/**
- * Manages the display of forms within the application, ensuring a smooth transition
- * with animations using FlatLaf's animation features.
- */
 public class FormsManager {
-    /**
-     * The application instance where forms are displayed.
-     */
-    private Application application;
+    private Application application; // Reference to the main application frame
+    private static FormsManager instance; // Singleton instance
 
-    /**
-     * Singleton instance of the FormsManager.
-     */
-    private static FormsManager instance;
+    // Cache to store form instances
+    private final Map<Class<? extends JComponent>, JComponent> formCache = new HashMap<>();
 
-    /**
-     * Provides the singleton instance of the FormsManager. If it does not exist, it is created.
-     *
-     * @return The singleton instance of the FormsManager.
-     */
+    private FormsManager() {}
+
     public static FormsManager getInstance() {
         if (instance == null) {
             instance = new FormsManager();
@@ -33,33 +25,40 @@ public class FormsManager {
         return instance;
     }
 
-    /**
-     * Private constructor to enforce the singleton pattern.
-     */
-    private FormsManager() {
-    }
-
-    /**
-     * Initializes the FormsManager with the given application instance.
-     * This sets up the application where forms will be displayed.
-     *
-     * @param application The application instance to manage forms for.
-     */
     public void initApplication(Application application) {
         this.application = application;
     }
 
     /**
-     * Displays the given form (a {@link JComponent}) in the application,
-     * replacing the current content pane. Uses FlatLaf animations to provide
-     * a smooth transition effect.
+     * Displays the given form by reusing a cached instance if it exists.
+     * If the form doesn't exist in the cache, create a new one and cache it,
+     * unless the form's class name contains "Form#" (in which case it will not be cached).
      *
-     * @param form The form to be displayed, represented as a {@link JComponent}.
+     * @param form The form instance to display.
      */
     public void showForm(JComponent form) {
+        // Check if the form class name contains "Form#"
+        boolean shouldCache = !(Pattern.matches("Form\\d+", form.getClass().getSimpleName()) || form.getClass().getSimpleName().equals("DashboardForm"));
+
+        // If caching is enabled and form is not already cached, add to the cache
+        JComponent cachedForm = null;
+        if (shouldCache) {
+            cachedForm = formCache.get(form.getClass());
+            if (cachedForm == null) {
+                // If form is not in cache, cache the new form instance
+                formCache.put(form.getClass(), form);
+                cachedForm = form;
+            }
+        } else {
+            // If "Form #" is in the class name, don't cache it, use the fresh instance
+            cachedForm = form;
+        }
+
+        // Display the form (whether from cache or newly created)
+        JComponent finalCachedForm = cachedForm;
         EventQueue.invokeLater(() -> {
             FlatAnimatedLafChange.showSnapshot();
-            application.setContentPane(form);
+            application.setContentPane(finalCachedForm);
             application.revalidate();
             application.repaint();
             FlatAnimatedLafChange.hideSnapshotWithAnimation();

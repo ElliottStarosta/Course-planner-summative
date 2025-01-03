@@ -4,9 +4,11 @@ import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import org.example.gui.manager.DynamicFormLoader;
 import org.example.gui.manager.FormsManager;
+import org.example.gui.pages.Application;
 import org.example.gui.pages.login.LoginForm;
 import org.example.people.Counselor;
 import org.example.people.User;
+import org.example.people.UserInput;
 import org.example.utility.JsonUtil;
 import org.example.utility.api.APIClient;
 import org.example.utility.courses.Course;
@@ -47,8 +49,10 @@ public class DashboardForm extends JPanel {
     /** Panel containing action buttons. */
     private JPanel buttonPanel;
 
-    /** User's responses stored as key-value pairs. */
-    private HashMap<String, String> userResponses = new HashMap<>();
+    /**
+     * The user object that contains all of their inputted data
+     */
+    private UserInput userInput;
 
     /** Logout button for exiting the dashboard. */
     private JButton logoutBtn;
@@ -76,6 +80,10 @@ public class DashboardForm extends JPanel {
 
     /** Map to associate edit buttons with grade data. */
     private Map<JButton, String[]> gradeEditMap = new HashMap<>();
+    /**
+     * JFrame reference
+     */
+    private JFrame frame = Application.getInstance();
 
     /**
      * Constructs a DashboardForm with the given username and name.
@@ -99,7 +107,8 @@ public class DashboardForm extends JPanel {
         this.user = user;
         this.username = user.getUsername();
         this.name = user.getFirstName();
-        userResponses.put("username", username);
+        this.userInput = new UserInput();
+        userInput.setUsername(username);
         new CourseAssembly();
         init();
     }
@@ -108,6 +117,8 @@ public class DashboardForm extends JPanel {
      * Initializes the layout and components of the dashboard.
      */
     private void init() {
+        frame.setSize(new Dimension(1500, 900));
+        frame.setResizable(false);
         setLayout(new BorderLayout());
 
         logoutBtn = (JButton) createLogoutButton();
@@ -124,7 +135,6 @@ public class DashboardForm extends JPanel {
         JButton takeQuizButton = (JButton) createQuizButtonPanel();
 
         if (!hasRecommendations) {
-            APIClient.runAPI();
             panel.add(takeQuizButton, "gapy 40");
         } else {
             data = JsonUtil.readRecommendedCoursesToMatrix(this.username);
@@ -366,7 +376,7 @@ public class DashboardForm extends JPanel {
      */
     private void handleLogin() {
         question++;
-        Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
+        Object formInstance = DynamicFormLoader.loadForm(question, userInput);
         if (formInstance != null) {
             FormsManager.getInstance().showForm((JComponent) formInstance);
 //            FormsManager.getInstance().showForm((new Form5(userResponses, question)));

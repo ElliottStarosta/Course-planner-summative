@@ -510,6 +510,7 @@ public class Course {
             // Write to the JSON file based on the constructed file path
             mapper.writeValue(new File(filePath), coursesList);
             System.out.println("Recommended courses written to " + filePath);
+
         } catch (IOException e) {
             System.err.println("Error writing recommended courses to file: " + e.getMessage());
         }

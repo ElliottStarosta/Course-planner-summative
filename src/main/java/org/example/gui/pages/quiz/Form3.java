@@ -6,6 +6,8 @@ import org.example.gui.manager.DynamicFormLoader;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.jcomponents.PageMenuIndicator;
 import org.example.gui.manager.FormsManager;
+import org.example.gui.pages.Application;
+import org.example.people.UserInput;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,10 +31,9 @@ public class Form3 extends JPanel {
     private static final int MAX_HEIGHT = 400;
 
     /**
-     * A map to store the user's responses to the questions.
-     * The key is the question identifier, and the value is the user's response.
+     * The user object that contains all of their inputted data
      */
-    private HashMap<String, String> userResponses;
+    private UserInput user;
 
     /**
      * The current question number being displayed.
@@ -70,13 +71,19 @@ public class Form3 extends JPanel {
     private JButton backButton;
 
     /**
+     * JFrame reference
+     */
+    private JFrame frame = Application.getInstance();
+
+    /**
      * Constructor for Form3.
      *
-     * @param userResponses HashMap containing the user's responses so far.
-     * @param question      The current question number.
+     * @param user UserInput obj that passes the user's data
+     * @param question The current question number.
      */
-    public Form3(HashMap<String, String> userResponses, int question) {
-        this.userResponses = userResponses;
+    public Form3(UserInput user, int question) {
+        frame.setMinimumSize(new Dimension(900, 550));
+        this.user = user;
         this.question = question;
         init();
     }
@@ -169,8 +176,8 @@ public class Form3 extends JPanel {
         answerArea.setLineWrap(true);
         answerArea.setWrapStyleWord(true);
 
-        if (userResponses.containsKey("interests1")) {
-            answerArea.setText(userResponses.get("interests1"));
+        if (user.getInterest1() != null) {
+            answerArea.setText(user.getInterest1());
         }
 
         JScrollPane scrollPane = new JScrollPane(answerArea);
@@ -256,12 +263,12 @@ public class Form3 extends JPanel {
      */
     private void handlePage(boolean isNext) {
         String answerText = answerArea.getText().trim();
-        userResponses.put("interests1", answerText);
+        user.setInterests1(answerText);
         if (isNext) {
             // Check if the text has at least 3 characters
             if (answerText.length() >= 3) {
                 question++;
-                Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
+                Object formInstance = DynamicFormLoader.loadForm(question, user);
                 if (formInstance != null) {
                     // Assuming FormsManager can handle form instances without a specific base class
                     FormsManager.getInstance().showForm((JComponent) formInstance);
@@ -271,7 +278,7 @@ public class Form3 extends JPanel {
             }
         } else {
             question--;
-            Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
+            Object formInstance = DynamicFormLoader.loadForm(question, user);
             if (formInstance != null) {
                 // Assuming FormsManager can handle form instances without a specific base class
                 FormsManager.getInstance().showForm((JComponent) formInstance);

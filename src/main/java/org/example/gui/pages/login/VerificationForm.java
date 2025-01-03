@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.account.TwoFactorAuthentication;
+import org.example.gui.pages.Application;
 import org.example.utility.EncryptionUtil;
 
 import javax.swing.*;
@@ -48,6 +49,11 @@ public class VerificationForm extends JPanel {
     private boolean is2FALogin;
 
     /**
+     * JFrame reference
+     */
+    private JFrame frame = Application.getInstance();
+
+    /**
      * Constructor to initialize the verification form.
      *
      * @param generatedCode The generated verification code to be matched.
@@ -55,6 +61,7 @@ public class VerificationForm extends JPanel {
      * @param is2FALogin A flag indicating whether this is part of a two-factor authentication login.
      */
     public VerificationForm(String generatedCode, String email, boolean is2FALogin) {
+        frame.setMinimumSize(new Dimension(600, 350));
         this.generatedCode = generatedCode;
         this.email = email;
         this.is2FALogin = is2FALogin;

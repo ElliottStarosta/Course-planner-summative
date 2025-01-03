@@ -5,6 +5,7 @@ import net.miginfocom.swing.MigLayout;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.account.TwoFactorAuthentication;
 import org.example.gui.manager.FormsManager;
+import org.example.gui.pages.Application;
 import org.example.utility.api.email.EmailUtil;
 
 import javax.swing.*;
@@ -26,11 +27,16 @@ public class ForgotPasswordForm extends JPanel {
      * Button to trigger the email sending process.
      */
     private JButton emailBtn;
+    /**
+     * JFrame reference
+     */
+    private JFrame frame = Application.getInstance();
 
     /**
      * Constructs the ForgotPasswordForm and initializes the UI components.
      */
     public ForgotPasswordForm() {
+        frame.setMinimumSize(new Dimension(400, 400));
         init();
     }
 

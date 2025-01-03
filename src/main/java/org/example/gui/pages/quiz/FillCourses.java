@@ -2,6 +2,7 @@ package org.example.gui.pages.quiz;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
+import org.example.gui.pages.Application;
 import org.example.people.UserInput;
 import org.example.utility.courses.Course;
 
@@ -56,12 +57,18 @@ public class FillCourses extends JPanel {
     private CountDownLatch latch;
 
     /**
+     * JFrame reference
+     */
+    private JFrame frame = Application.getInstance();
+
+    /**
      * Constructs a FillCourses panel with the provided student and latch.
      *
      * @param student The student whose courses are being filled.
      * @param latch   The CountDownLatch used to synchronize tasks.
      */
     public FillCourses(UserInput student, CountDownLatch latch) {
+        frame.setMinimumSize(new Dimension(875, 525));
         this.student = student;
         this.latch = latch;
         init();

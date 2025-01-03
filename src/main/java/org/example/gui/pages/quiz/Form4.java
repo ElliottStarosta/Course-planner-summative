@@ -6,6 +6,8 @@ import org.example.gui.manager.DynamicFormLoader;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.jcomponents.PageMenuIndicator;
 import org.example.gui.manager.FormsManager;
+import org.example.gui.pages.Application;
+import org.example.people.UserInput;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,9 +31,9 @@ public class Form4 extends JPanel {
     private static final int MAX_HEIGHT = 400;
 
     /**
-     * A map that stores the user responses, with the question identifiers as keys and the responses as values.
+     * The user object that contains all of their inputted data
      */
-    private HashMap<String, String> userResponses;
+    private UserInput user;
 
     /**
      * The current question number in the form sequence.
@@ -68,15 +70,20 @@ public class Form4 extends JPanel {
      */
     private JButton backButton;
 
+    /**
+     * JFrame reference
+     */
+    private JFrame frame = Application.getInstance();
 
     /**
      * Constructs a new Form4 instance.
      *
-     * @param userResponses A HashMap containing the user's responses from previous questions.
+     * @param user UserInput obj that passes the user's data.
      * @param question The current question number.
      */
-    public Form4(HashMap<String, String> userResponses, int question) {
-        this.userResponses = userResponses;
+    public Form4(UserInput user, int question) {
+        frame.setMinimumSize(new Dimension(675, 550));
+        this.user = user;
         this.question = question;
         init();
     }
@@ -168,8 +175,8 @@ public class Form4 extends JPanel {
         answerArea.setLineWrap(true);
         answerArea.setWrapStyleWord(true);
 
-        if (userResponses.containsKey("interests2")) {
-            answerArea.setText(userResponses.get("interests2"));
+        if (user.getInterest2() != null) {
+            answerArea.setText(user.getInterest2());
         }
 
         JScrollPane scrollPane = new JScrollPane(answerArea);
@@ -256,16 +263,15 @@ public class Form4 extends JPanel {
      */
     private void handlePage(boolean isNext) {
         String answerText = answerArea.getText().trim();
-        userResponses.put("interests2", answerText);
+        user.setInterests2(answerText);
 
         nextButton.setEnabled(false);
         if (isNext) {
             // Check if the text has at least 3 characters
             if (answerText.length() >= 3) {
                 question++;
-                Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
+                Object formInstance = DynamicFormLoader.loadForm(question, user);
                 if (formInstance != null) {
-                    // Assuming FormsManager can handle form instances without a specific base class
                     FormsManager.getInstance().showForm((JComponent) formInstance);
                 }
             } else {
@@ -274,9 +280,8 @@ public class Form4 extends JPanel {
             }
         } else {
             question--;
-            Object formInstance = DynamicFormLoader.loadForm(question, userResponses);
+            Object formInstance = DynamicFormLoader.loadForm(question, user);
             if (formInstance != null) {
-                // Assuming FormsManager can handle form instances without a specific base class
                 FormsManager.getInstance().showForm((JComponent) formInstance);
             }
         }

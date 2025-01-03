@@ -6,6 +6,7 @@ import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import org.example.gui.pages.login.LoginForm;
 import org.example.gui.manager.FormsManager;
+import org.example.utility.api.APIClient;
 import org.example.utility.api.PythonAPI;
 import raven.toast.Notifications;
 
@@ -17,13 +18,22 @@ import java.awt.*;
  * Extends JFrame to provide a windowed interface for the application.
  */
 public class Application extends JFrame {
-
+    private static Application instance;
     /**
      * Constructor for the Application class.
      * Initializes the application by calling the init() method.
      */
     public Application() {
+        instance = this;
         init();
+    }
+
+    /**
+     * Getter for the current application instance.
+     * @return the Application instance
+     */
+    public static Application getInstance() {
+        return instance;
     }
 
     /**
@@ -69,8 +79,9 @@ public class Application extends JFrame {
         UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13));
         FlatMacDarkLaf.setup();
 
-        // Start the Python API server for ML
+        // Start the Python API server (local and cloud) for ML
         PythonAPI.runAPI();
+        APIClient.runAPI();
 
         // Schedule the GUI to be created and displayed on the Event Dispatch Thread
         EventQueue.invokeLater(() -> new Application().setVisible(true));

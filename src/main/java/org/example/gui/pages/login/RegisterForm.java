@@ -11,6 +11,7 @@ import org.example.gui.component.account.TwoFactorAuthentication;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.jcomponents.PasswordStrengthStatus;
 import org.example.gui.manager.FormsManager;
+import org.example.gui.pages.Application;
 import org.example.utility.api.email.EmailUtil;
 
 import javax.swing.*;
@@ -70,9 +71,15 @@ public class RegisterForm extends JPanel {
     private JTextField emailField;
 
     /**
+     * JFrame reference
+     */
+    private JFrame frame = Application.getInstance();
+
+    /**
      * Constructs a new {@code RegisterForm} and initializes the components.
      */
     public RegisterForm() {
+        frame.setMinimumSize(new Dimension(800, 650));
         init();
     }
 
