@@ -25,6 +25,7 @@ from categories import categories
 # <===++ Load pre-trained data ++==>
 nltk.download("punkt")
 nltk.download("stopwords")
+nltk.download("punkt_tab")
 
 # <===++ FastAPI setup ++===>
 app = FastAPI()
