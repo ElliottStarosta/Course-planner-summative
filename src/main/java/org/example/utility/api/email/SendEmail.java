@@ -20,6 +20,7 @@ import java.util.Properties;
  * It includes methods for sending a 2FA code to users and sending recommended courses to counselors.
  */
 public class SendEmail {
+    // Used this resource to send emails: https://www.tutorialspoint.com/java/java_sending_email.htm
     /**
      * Sender's email address used for sending emails.
      */

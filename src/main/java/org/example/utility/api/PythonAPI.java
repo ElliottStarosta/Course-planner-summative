@@ -22,6 +22,7 @@ public class PythonAPI implements Deployment {
      *
      */
     public static void runAPI() {
+        // Used https://www.baeldung.com/java-lang-processbuilder-api to run py script
         try {
             // Specify the command to run the Python script
             ProcessBuilder processBuilder = new ProcessBuilder("py", "main.py"); // location of the script

@@ -5,6 +5,7 @@ import org.example.gui.manager.FormsManager;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.pages.login.LoginForm;
 import org.example.gui.pages.login.PasswordChangeForm;
+import org.example.gui.pages.login.RegisterForm;
 
 import javax.swing.*;
 
@@ -74,6 +75,7 @@ public class EncryptionUtil {
                 FormsManager.getInstance().showForm(new PasswordChangeForm(email));
             } else {
                 FormsManager.getInstance().showForm(new LoginForm());
+                FormsManager.getInstance().deleteCache(RegisterForm.class);
                 NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Account Created");
             }
             NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Code verified successfully");

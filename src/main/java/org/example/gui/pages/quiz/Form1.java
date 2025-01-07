@@ -7,6 +7,7 @@ import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.jcomponents.PageMenuIndicator;
 import org.example.gui.manager.FormsManager;
 import org.example.gui.pages.Application;
+import org.example.gui.pages.main.DashboardForm;
 import org.example.people.UserInput;
 
 import javax.swing.*;
@@ -107,9 +108,13 @@ public class Form1 extends JPanel {
      * Initializes the layout and components of the Form1 panel.
      */
     private void init() {
+        // General form set up
         setLayout(new MigLayout("fill, insets 20", "[center]", "[center]"));
         contentPanel = createContentPanel();
         add(contentPanel);
+
+        // Delete dashboard cache to have different screen on quiz completion
+        FormsManager.getInstance().deleteCache(DashboardForm.class);
     }
 
     /**

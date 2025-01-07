@@ -10,6 +10,7 @@ import java.time.Instant;
  * between consecutive notifications of the same type.
  */
 public class NotificationManager {
+    // Used GitHub library for toast notifications https://github.com/DJ-Raven/swing-toast-notifications.git but made this extension to make not repeated notifications
     /**
      * Cooldown period in milliseconds between notifications of the same type.
      */

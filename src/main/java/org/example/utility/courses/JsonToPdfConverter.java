@@ -40,6 +40,7 @@ public class JsonToPdfConverter {
      * @throws IOException If an error occurs while reading the JSON file or writing the PDF file.
      */
     public static void convertJsonToPdf(String name, String username) throws IOException {
+        // Used to convert JSON to PDF https://www.baeldung.com/java-pdf-creation
         // Prompt user to select the file path for the PDF
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Specify where to save the PDF file");

@@ -38,7 +38,7 @@ public class FormsManager {
      */
     public void showForm(JComponent form) {
         // Check if the form class name contains "Form#"
-        boolean shouldCache = !(Pattern.matches("Form\\d+", form.getClass().getSimpleName()) || form.getClass().getSimpleName().equals("DashboardForm"));
+        boolean shouldCache = !(Pattern.matches("Form\\d+", form.getClass().getSimpleName()));
 
         // If caching is enabled and form is not already cached, add to the cache
         JComponent cachedForm = null;
@@ -64,4 +64,14 @@ public class FormsManager {
             FlatAnimatedLafChange.hideSnapshotWithAnimation();
         });
     }
+
+    /**
+     * Deletes a specific form from the cache based on its class type.
+     *
+     * @param formClass The class of the form to be deleted from the cache.
+     */
+    public void deleteCache(Class<? extends JComponent> formClass) {
+        formCache.remove(formClass);
+    }
+
 }
