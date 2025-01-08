@@ -151,6 +151,7 @@ public class LoginForm extends JPanel {
         rememberMeCheck = new JCheckBox("Remember me");
         rememberMeCheck.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:null");
         JButton forgotBtn = new JButton("<html><a href=\"#\">Forgot Password?</a></html>");

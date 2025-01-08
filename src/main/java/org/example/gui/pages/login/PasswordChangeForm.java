@@ -8,6 +8,7 @@ import org.example.gui.component.jcomponents.PasswordStrengthStatus;
 import org.example.gui.component.account.ForgotPasswordUtil;
 import org.example.gui.manager.FormsManager;
 import org.example.gui.pages.Application;
+import org.example.gui.pages.main.DashboardForm;
 
 import javax.swing.*;
 import java.awt.*;
@@ -55,6 +56,7 @@ public class PasswordChangeForm extends JPanel {
      * @param email The email of the user whose password is being reset.
      */
     public PasswordChangeForm(String email) {
+        FormsManager.getInstance().deleteCache(VerificationForm.class);
         frame.setMinimumSize(new Dimension(400, 400));
         this.email = email;
         init();
@@ -85,8 +87,8 @@ public class PasswordChangeForm extends JPanel {
                 } else {
                     ForgotPasswordUtil.forgotPassword(email, Password.getText());
                     NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Your password has been successfully updated");
-
                     FormsManager.getInstance().showForm(new LoginForm());
+                    FormsManager.getInstance().deleteCache(PasswordChangeForm.class);
                 }
             }
         });

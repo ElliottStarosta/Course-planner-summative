@@ -2,9 +2,11 @@ package org.example.gui.pages.login;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
+import org.example.gui.manager.FormsManager;
 import org.example.gui.manager.NotificationManager;
 import org.example.gui.component.account.TwoFactorAuthentication;
 import org.example.gui.pages.Application;
+import org.example.gui.pages.main.DashboardForm;
 import org.example.utility.EncryptionUtil;
 
 import javax.swing.*;
@@ -65,6 +67,7 @@ public class VerificationForm extends JPanel {
         this.generatedCode = generatedCode;
         this.email = email;
         this.is2FALogin = is2FALogin;
+        FormsManager.getInstance().deleteCache(ForgotPasswordForm.class);
         init();
     }
 
