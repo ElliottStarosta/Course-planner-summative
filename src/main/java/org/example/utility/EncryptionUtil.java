@@ -74,6 +74,7 @@ public class EncryptionUtil {
             if (!is2FALogin) {
                 FormsManager.getInstance().showForm(new PasswordChangeForm(email));
             } else {
+                FormsManager.getInstance().deleteCache(LoginForm.class);
                 FormsManager.getInstance().showForm(new LoginForm());
                 FormsManager.getInstance().deleteCache(RegisterForm.class);
                 NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Account Created");
