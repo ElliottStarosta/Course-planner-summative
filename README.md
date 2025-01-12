@@ -36,7 +36,7 @@ Follow these steps to get your development environment set up:
 First, clone this repository to your local machine:
 
 ```bash
-git clone https://github.com/ElliottStarosta/CoursesSummative.git
+git clone https://github.com/ElliottStarosta/Course-planner-summative.git
 ```
 
 ### Maven Dependency Installation
