@@ -20,7 +20,7 @@ Follow these steps to get your development environment set up:
 
 1. Clone this repository to your local machine:
 ```bash
-git clone https://github.com/ElliottStarosta/CoursesSummative.git
+git clone https://github.com/ElliottStarosta/Course-planner-summative.git
 ```
 2. Navigate to the project directory:
 ```bash
