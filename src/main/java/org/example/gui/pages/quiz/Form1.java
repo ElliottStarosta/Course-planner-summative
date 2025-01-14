@@ -204,6 +204,7 @@ public class Form1 extends JPanel {
         styleCheckBox(grade11Button);
         styleCheckBox(grade12Button);
 
+        // Put it in a group to not have multi-select logic
         ButtonGroup group = new ButtonGroup();
         group.add(grade9Button);
         group.add(grade10Button);
@@ -246,6 +247,7 @@ public class Form1 extends JPanel {
      * @param grade the grade to select
      */
     private void selectButton(int grade) {
+        // Select btn based on user input
         if (grade == 9) {
             grade9Button.setSelected(true);
         } else if (10 == grade) {
@@ -351,7 +353,7 @@ public class Form1 extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             JCheckBox clickedButton = (JCheckBox) e.getSource();
-
+            // Add user input to obj
             if (clickedButton == grade9Button) {
                 user.setGrade(9);
             } else if (clickedButton == grade10Button) {

@@ -59,6 +59,7 @@ public class PasswordChangeForm extends JPanel {
         FormsManager.getInstance().deleteCache(VerificationForm.class);
         frame.setMinimumSize(new Dimension(400, 400));
         this.email = email;
+        FormsManager.getInstance().deleteCache(LoginForm.class);
         init();
     }
 
@@ -92,6 +93,7 @@ public class PasswordChangeForm extends JPanel {
                 }
             }
         });
+
 
         passwordStrengthStatus = new PasswordStrengthStatus();
 

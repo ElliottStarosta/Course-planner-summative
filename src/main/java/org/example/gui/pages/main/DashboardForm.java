@@ -205,7 +205,7 @@ public class DashboardForm extends JPanel {
             @Override
             public void componentResized(ComponentEvent e) {
                 int parentWidth = getWidth();
-
+                // Change frame based on if the user has recommendations to optimize space
                 if (!hasRecommendations) {
                     int panelWidth = parentWidth - 300;
                     panel.setPreferredSize(new Dimension(panelWidth, 250));
@@ -269,7 +269,7 @@ public class DashboardForm extends JPanel {
         int grade = Integer.parseInt(gradeData[0].replaceAll("\\D", ""));
 
         String[] gradeCourses = filterCoursesByGrade(courses, grade);
-
+        // Add each course to each combo box
         for (int i = 0; i < 8; i++) {
             courseName[i] = new JComboBox<>(gradeCourses);
             courseName[i].setSelectedItem(gradeData[i + 1]);
@@ -379,12 +379,11 @@ public class DashboardForm extends JPanel {
         Object formInstance = DynamicFormLoader.loadForm(question, userInput);
         if (formInstance != null) {
             FormsManager.getInstance().showForm((JComponent) formInstance);
-//            FormsManager.getInstance().showForm((new Form5(userResponses, question)));
         }
     }
 
     /**
-     *
+     * Creates the take quiz btn if user has not taken the quiz
      * @return the component for displaying the take quiz button
      */
     private Component createQuizButtonPanel() {

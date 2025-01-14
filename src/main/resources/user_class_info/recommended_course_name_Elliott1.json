@@ -1,0 +1,13 @@
+[ {
+  "courses" : "CGC1W - Geography of Canada,** ENL1W - English Grade 9,** FSF1D - Core French,** MTH1W - Grade 9 Mathematics,** PAF1O - Spark,** PPL1O - Healthy Active Living,** SNC1W - Grade 9 Science,** TAS1O - Exploring Technologies",
+  "grade" : 9
+}, {
+  "courses" : "CHC2D - Canadian History,** CHV2O - Civics and Careers,** ENG2D - English Grade 10,** HFN2O - Food & Nutrition,** MPM2D - Grade 10 Mathematics,** PPL2O - Healthy Active Living,** SNC2D - Grade 10 Science,** TEJ2O - Computer Engineering",
+  "grade" : 10
+}, {
+  "courses" : "AVI3M - Visual Arts,** ICS3U - Computer Science (University) - Grade 11,** MCR3U - Functions,** NBE3U - English Grade 11 - Understanding Contemporary First Nations, Métis, and Inuit Voices,** PPL3O - Healthy Active Living,** SPH3U - Physics,** TDJ3M - Technological Design,** TEJ3M - Computer Engineering",
+  "grade" : 11
+}, {
+  "courses" : "ENG4U - English Grade 12,** ICS4U - Computer Science (University) - Grade 12,** MCV4U - Calculus and Vectors,** MHF4U - Advanced Functions,** PPL4O - Healthy Active Living,** SPH4U - Physics,** TDJ4M - Technological Design,** TEJ4M - Computer Engineering",
+  "grade" : 12
+} ]

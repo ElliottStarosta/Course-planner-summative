@@ -363,14 +363,12 @@ public class Form2 extends JPanel {
             question++;
             Object formInstance = DynamicFormLoader.loadForm(question, user);
             if (formInstance != null) {
-                // Assuming FormsManager can handle form instances without a specific base class
                 FormsManager.getInstance().showForm((JComponent) formInstance);
             }
         } else {
             question--;
             Object formInstance = DynamicFormLoader.loadForm(question, user);
             if (formInstance != null) {
-                // Assuming FormsManager can handle form instances without a specific base class
                 FormsManager.getInstance().showForm((JComponent) formInstance);
             }
         }

@@ -1,6 +1,18 @@
 [ {
   "username" : "Elliott",
-  "password" : "Uhpbgrj2024!",
+  "password" : "iLoveCode1!",
+  "email" : "EarlCompSci@gmail.com",
+  "firstName" : "Elliott",
+  "lastName" : "Starosta"
+}, {
+  "username" : "Earl12",
+  "password" : "iLoveCspode?",
+  "email" : "estar10@ocdsb.ca",
+  "firstName" : "Earl",
+  "lastName" : "March"
+}, {
+  "username" : "Elliott1",
+  "password" : "Frglqj2!",
   "email" : "fenceryounger@gmail.com",
   "firstName" : "Elliott",
   "lastName" : "Starosta"

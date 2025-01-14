@@ -206,7 +206,7 @@ public class LoginForm extends JPanel {
             NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Please ensure all fields are completed");
             return;
         }
-
+        // Stream through the users list, and checks if the user exists
         Optional<User> foundUser = users.stream()
                 .filter(user -> (user.getUsername().equals(username) && user.getPassword().equals(password)) || user.getEmail().equals(username) && user.getPassword().equals(password))
                 .findFirst();
@@ -221,7 +221,7 @@ public class LoginForm extends JPanel {
                 clearLoginInfo();
             }
             NotificationManager.showNotification(NotificationManager.NotificationType.SUCCESS, "Login successful");
-
+            // Wait for information to develop -- takes a second to load
             SwingWorker<Void, Void> worker = new SwingWorker<>() {
                 @Override
                 protected Void doInBackground() throws Exception {
@@ -263,9 +263,10 @@ public class LoginForm extends JPanel {
             properties.load(in);
             String savedUsername = properties.getProperty("username");
             String savedPassword = properties.getProperty("password");
+
             if (savedUsername != null && savedPassword != null) {
                 usernameField.setText(savedUsername);
-                passwordField.setText(EncryptionUtil.decodePassword(savedPassword));
+                passwordField.setText(EncryptionUtil.decodePassword(savedPassword)); // Encrypt password so there is no double encryption
                 rememberMeCheck.setSelected(true);
             }
         } catch (IOException e) {

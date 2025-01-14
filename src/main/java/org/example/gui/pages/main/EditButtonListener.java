@@ -190,7 +190,7 @@ public class EditButtonListener implements ActionListener {
             for (int j = 1; j < data[i].length; j++) {
                 if (data[i][j] != null && !data[i][j].isEmpty()) {
                     if (courses.length() > 0) {
-                        courses.append(", ");
+                        courses.append(",** ");
                     }
                     courses.append(data[i][j]);
                 }

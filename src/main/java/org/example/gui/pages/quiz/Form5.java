@@ -210,7 +210,7 @@ public class Form5 extends JPanel {
         if (user.getPreviousCourses() != null) {
             String previousClasses = user.getPreviousCourses();
 
-            // Convert list to array if needed
+            // Convert list to array
             String[] classesArray = Course.cleanPreviousCourses(previousClasses);
 
             for (String c: classesArray) {
