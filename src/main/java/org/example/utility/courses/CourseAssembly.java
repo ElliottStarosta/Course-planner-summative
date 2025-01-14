@@ -57,6 +57,7 @@ public class CourseAssembly {
      * @param student The UserInput object representing the student.
      */
     public static void addInitialCourses(UserInput student) {
+        // Adds must take courses depending on track
         if ("university".equals(student.getTrack().toLowerCase())) {
             recommendedCoursesByGrade = new HashMap<>() {{
                 put(9, new String[]{"ENL1W", "MTH1W", "SNC1W", "CGC1W", null, null, null, null});
@@ -72,7 +73,7 @@ public class CourseAssembly {
                 put(12, new String[]{"ENG4C", null, null, null, null, null, null, null});
             }};
         }
-
+        // Adds previous courses
         List<String> previousCoursesTemp = new ArrayList<>(Arrays.asList(Course.cleanPreviousCourses(student.getPreviousCourses())));
         ArrayList<String> previousCourses = new ArrayList<>();
         for (String course : previousCoursesTemp) {
@@ -87,18 +88,19 @@ public class CourseAssembly {
                 String courseType = course.getCourseArea();
                 String gradRequirement = course.getGraduationRequirement();
 
+                // Finds courses that would fill a credit
                 String[] coursesArray = recommendedCoursesByGrade.get(courseGradeLevel);
                 if (coursesArray != null) {
                     boolean courseAlreadyAdded = Arrays.stream(coursesArray)
                             .filter(Objects::nonNull)
                             .anyMatch(existingCourseCode -> existingCourseCode.equals(course.getCourseCode()));
-
+                    // Add the course to the first spot in the array
                     if (!courseAlreadyAdded) {
                         IntStream.range(0, coursesArray.length)
                                 .filter(i -> coursesArray[i] == null)
                                 .findFirst()
                                 .ifPresent(index -> coursesArray[index] = course.getCourseCode());
-
+                        // Change the course credit
                         if (credits.containsKey(courseType) && credits.get(courseType) > 0) {
                             credits.put(courseType, credits.get(courseType) - 1);
                         } else if (credits.containsKey(gradRequirement) && credits.get(gradRequirement) > 0) {
@@ -137,7 +139,7 @@ public class CourseAssembly {
         try (BufferedReader reader = new BufferedReader(new FileReader(CREDENTIALS_FILE))) {
             String passwordLine = reader.readLine();
             String APILine = reader.readLine();
-
+            // Gets the API key (url)
             String password = passwordLine.split(":")[1].trim();
             String[] API = APILine.split(":");
             String APIJoined = API[1].trim() + ":" + API[2].trim();

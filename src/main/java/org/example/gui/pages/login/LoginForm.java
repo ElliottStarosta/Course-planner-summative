@@ -201,7 +201,6 @@ public class LoginForm extends JPanel {
     private void handleLogin() {
         String username = usernameField.getText().trim();
         String password = EncryptionUtil.encodePassword(String.valueOf(passwordField.getPassword()).trim());
-
         if (username.isEmpty() || password.isEmpty()) {
             NotificationManager.showNotification(NotificationManager.NotificationType.WARNING, "Please ensure all fields are completed");
             return;

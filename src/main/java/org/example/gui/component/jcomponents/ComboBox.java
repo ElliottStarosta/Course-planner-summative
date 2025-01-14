@@ -151,6 +151,10 @@ public class ComboBox extends JComboBox {
         });
     }
 
+    /**
+     *
+     * @param v if {@code true} shows the popup, otherwise, hides the popup.
+     */
     @Override
     public void setPopupVisible(boolean v) {
 

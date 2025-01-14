@@ -7,6 +7,9 @@
 ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white
 )
 
+#### Date Completed: Jan 20, 2025
+#### Author: Elliott Starosta 
+
 ## Description
 
 The **EOM Course Recommender** is a Java-based application designed to help students find suitable courses based on their preferences and requirements. The application uses a machine learning recommendation algorithm to suggest courses that align with user interests, previous classes, and future career goals, providing a personalized learning experience.
@@ -18,6 +21,7 @@ The **EOM Course Recommender** is a Java-based application designed to help stud
 - [Usage](#usage)
 - [Features](#features)
 - [UML Diagram](#uml-diagram)
+- [Project Structure](#project-structure)
 - [License](#license)
 
 
@@ -58,6 +62,8 @@ Run **org.example.gui.pages.Application** to start the program.
 
 ## UML Diagram
 
+
+## Project Structure
 
 ## License
 

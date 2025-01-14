@@ -91,7 +91,6 @@ public class APIClient implements Deployment {
                         fetched = true; // Set fetched to true on success
                     } else {
                         System.out.println("Failed to fetch data from both URLs.");
-//                        fetched = true; // Set fetched to true to break out of the loop
                     }
                 }
 

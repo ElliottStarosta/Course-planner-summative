@@ -17,6 +17,7 @@ import java.util.List;
  * Utility class for handling course data stored in an Excel file.
  */
 public class ExcelUtility {
+    // Used this resource to parse excel data: https://www.baeldung.com/java-microsoft-excel
     /**
      * The path to the Excel file containing course data.
      */
