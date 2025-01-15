@@ -61,10 +61,69 @@ Run **org.example.gui.pages.Application** to start the program.
 - Counselor contact to arrange your classes.
 
 ## UML Diagram
-
-
+You can view the UML diagrams [here](https://docs.google.com/document/d/1RnHR5U51fuQDec1-17yL2D_yQI_z8zwKZ3HttHLKJSo/edit?usp=sharing).
 ## Project Structure
-
+```
+EOMCourseRecommender
+├── src
+│   └── main
+│       └── java
+│           └── org
+│               └── example
+│                   ├── gui
+│                   │   ├── component
+│                   │   │   ├── account
+│                   │   │   │   ├── CreateAccount.java
+│                   │   │   │   ├── ForgotPasswordUtil.java
+│                   │   │   │   └── TwoFactorAuthentication.java
+│                   │   │   ├── jcomponents
+│                   │   │   │   ├── ComboBox.java
+│                   │   │   │   ├── PageMenuIndicator.java
+│                   │   │   │   └── PasswordStrengthStatus.java
+│                   │   ├── manager
+│                   │   │   ├── DynamicFormLoader.java
+│                   │   │   ├── FormsManager.java
+│                   │   │   └── NotificationManager.java
+│                   │   ├── pages
+│                   │   │   ├── Application.java
+│                   │   │   ├── login
+│                   │   │   │   ├── ForgotPasswordForm.java
+│                   │   │   │   ├── LoginForm.java
+│                   │   │   │   ├── PasswordChangeForm.java
+│                   │   │   │   ├── RegisterForm.java
+│                   │   │   │   └── VerificationForm.java
+│                   │   │   ├── main
+│                   │   │   │   ├── DashboardForm.java
+│                   │   │   │   └── EditButtonListener.java
+│                   │   │   └── quiz
+│                   │   │       ├── FillCourses.java
+│                   │   │       ├── Form1.java
+│                   │   │       ├── Form2.java
+│                   │   │       ├── Form3.java
+│                   │   │       ├── Form4.java
+│                   │   │       └── Form5.java
+│                   ├── people
+│                   │   ├── Counselor.java
+│                   │   ├── StudentCounselor.java
+│                   │   ├── User.java
+│                   │   └── UserInput.java
+│                   └── utility
+│                       ├── EncryptionUtil.java
+│                       ├── JsonUtil.java
+│                       ├── UsersUtil.java
+│                       └── api
+│                           ├── APIClient.java
+│                           ├── Deployment.java
+│                           ├── PythonAPI.java
+│                           └── email
+│                               ├── EmailUtil.java
+│                               └── SendEmail.java
+│                       └── courses
+│                           ├── Course.java
+│                           ├── CourseAssembly.java
+│                           ├── ExcelUtility.java
+│                           └── JsonToPdfConverter.java
+```
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
