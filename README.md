@@ -42,3 +42,8 @@ cd /path/to/your/CoursesSummative
 ```python
 python main.py
 ```
+
+## API Endpoint
+```bash
+http://127.0.0.1:8000/recommend-courses/?interests=
+```
