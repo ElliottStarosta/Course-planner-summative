@@ -25,7 +25,7 @@ public class PythonAPI implements Deployment {
         // Used https://www.baeldung.com/java-lang-processbuilder-api to run py script
         try {
             // Specify the command to run the Python script
-            ProcessBuilder processBuilder = new ProcessBuilder("py", "main.py"); // location of the script
+            ProcessBuilder processBuilder = new ProcessBuilder("python", "main.py"); // location of the script
 
             // Set the directory where the Python script is located
             processBuilder.directory(new java.io.File("C:\\Users\\fence\\Desktop\\APICourseSummative\\CoursesSummative"));
