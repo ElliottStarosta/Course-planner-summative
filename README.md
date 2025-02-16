@@ -27,7 +27,7 @@ git clone https://github.com/ElliottStarosta/Course-planner-summative.git
 cd /path/to/your/CoursesSummative
 ```
 3. Install the required dependencies:
-```bash
+```python
 pip install -r requirements.txt
 ```
 This will install all the necessary packages in the `requirements.txt` file.
