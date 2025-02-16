@@ -1,0 +1,4 @@
+[submodule "API"]
+	path = API
+	url = https://github.com/ElliottStarosta/Course-planner-summative.git
+	branch = API
