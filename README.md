@@ -30,7 +30,7 @@ cd /path/to/your/CoursesSummative
 ```bash
 pip install -r requirements.txt
 ```
-This will install all the necessary packages listed in the `requirements.txt` file.
+This will install all the necessary packages in the `requirements.txt` file.
 
 ### Running the API
 #### Navigate to the project directory:
