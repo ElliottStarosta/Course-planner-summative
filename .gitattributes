@@ -1,3 +1,11 @@
-*.java linguist-detectable=true
-*.html linguist-detectable=true
+# For Python files
+*.py linguist-language=Python
+
+# For Java files
+*.java linguist-language=Java
+
+# For HTML files
+*.html linguist-language=HTML
+
+# For documentation
 docs/** linguist-documentation
