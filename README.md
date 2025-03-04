@@ -61,7 +61,7 @@ Run **org.example.gui.pages.Application** to start the program.
 
 Here is a demo video showing how the **EOM Course Recommender** works:
 
-[Watch the demo video](assets/demo-video.mp4)
+[Watch the demo video]([assets/demo-video.mp4](https://drive.google.com/drive/u/3/folders/1Co_HhtkVjdCwb4H6XKH_bHVVDBRkJkog))
 
 
 ## 📊 UML Diagram
