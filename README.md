@@ -57,6 +57,13 @@ Run **org.example.gui.pages.Application** to start the program.
 - 🖥️ User-friendly interface for easy interaction and navigation.
 - 📞 Counselor contact to arrange your classes.
 
+## 🎥 Demo Video
+
+Here is a demo video showing how the **EOM Course Recommender** works:
+
+[Watch the demo video](assets/demo-video.mp4)
+
+
 ## 📊 UML Diagram
 
 You can view the UML diagrams [here](https://docs.google.com/document/d/1RnHR5U51fuQDec1-17yL2D_yQI_z8zwKZ3HttHLKJSo/edit?usp=sharing).
