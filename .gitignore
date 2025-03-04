@@ -36,3 +36,10 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+
+# PYTHON -- Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
