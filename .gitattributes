@@ -3,9 +3,8 @@
 
 # For Java files
 *.java linguist-language=Java
-
 # For HTML files
 *.html linguist-language=HTML
-
 # For documentation
 docs/** linguist-documentation
+assets/Elliott[[:space:]]Starosta[[:space:]]Summative.mp4 filter=lfs diff=lfs merge=lfs -text
