@@ -1,6 +1,5 @@
 # For Python files
 *.py linguist-language=Python
-
 # For Java files
 *.java linguist-language=Java
 # For HTML files
